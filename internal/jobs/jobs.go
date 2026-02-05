@@ -12,10 +12,10 @@ import (
 	"github.com/jinzhu/now"
 	log "github.com/sirupsen/logrus"
 
+	"github.com/bimmerbailey/rill/internal/config"
+	"github.com/bimmerbailey/rill/internal/db"
+	"github.com/bimmerbailey/rill/internal/utils"
 	"github.com/google/uuid"
-	"github.com/jordanknott/taskcafe/internal/config"
-	"github.com/jordanknott/taskcafe/internal/db"
-	"github.com/jordanknott/taskcafe/internal/utils"
 )
 
 type NotifiedData struct {

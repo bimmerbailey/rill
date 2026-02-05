@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jordanknott/taskcafe/internal/config"
-	"github.com/jordanknott/taskcafe/internal/db"
+	"github.com/bimmerbailey/rill/internal/config"
+	"github.com/bimmerbailey/rill/internal/db"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 

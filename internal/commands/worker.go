@@ -7,10 +7,10 @@ import (
 
 	"github.com/RichardKnop/machinery/v1"
 	queueLog "github.com/RichardKnop/machinery/v1/log"
+	"github.com/bimmerbailey/rill/internal/config"
+	repo "github.com/bimmerbailey/rill/internal/db"
+	"github.com/bimmerbailey/rill/internal/jobs"
 	"github.com/jmoiron/sqlx"
-	"github.com/jordanknott/taskcafe/internal/config"
-	repo "github.com/jordanknott/taskcafe/internal/db"
-	"github.com/jordanknott/taskcafe/internal/jobs"
 	log "github.com/sirupsen/logrus"
 )
 

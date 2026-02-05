@@ -3,8 +3,8 @@ package logger
 import (
 	"context"
 
+	"github.com/bimmerbailey/rill/internal/utils"
 	"github.com/google/uuid"
-	"github.com/jordanknott/taskcafe/internal/utils"
 	log "github.com/sirupsen/logrus"
 )
 

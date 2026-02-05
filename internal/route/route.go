@@ -5,18 +5,18 @@ import (
 	"time"
 
 	"github.com/RichardKnop/machinery/v1"
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-redis/redis/v8"
 	"github.com/jmoiron/sqlx"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/jordanknott/taskcafe/internal/config"
-	"github.com/jordanknott/taskcafe/internal/db"
-	"github.com/jordanknott/taskcafe/internal/graph"
-	"github.com/jordanknott/taskcafe/internal/jobs"
-	"github.com/jordanknott/taskcafe/internal/logger"
+	"github.com/bimmerbailey/rill/internal/config"
+	"github.com/bimmerbailey/rill/internal/db"
+	"github.com/bimmerbailey/rill/internal/graph"
+	"github.com/bimmerbailey/rill/internal/jobs"
+	"github.com/bimmerbailey/rill/internal/logger"
 )
 
 // TaskcafeHandler contains all the route handlers

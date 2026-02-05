@@ -3,7 +3,7 @@ package utils
 import (
 	"crypto/tls"
 
-	"github.com/jordanknott/taskcafe/internal/config"
+	"github.com/bimmerbailey/rill/internal/config"
 	hermes "github.com/matcornic/hermes/v2"
 	gomail "gopkg.in/mail.v2"
 )

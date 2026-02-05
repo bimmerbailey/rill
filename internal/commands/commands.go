@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/jordanknott/taskcafe/internal/config"
-	"github.com/jordanknott/taskcafe/internal/utils"
+	"github.com/bimmerbailey/rill/internal/config"
+	"github.com/bimmerbailey/rill/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

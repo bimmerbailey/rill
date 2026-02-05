@@ -1,9 +1,10 @@
+//go:build prod
 // +build prod
 
 package commands
 
 import (
-	"github.com/jordanknott/taskcafe/internal/migrations"
+	"github.com/bimmerbailey/rill/internal/migrations"
 )
 
 func init() {

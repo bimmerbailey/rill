@@ -8,7 +8,7 @@ import (
 	"github.com/brianvoe/gofakeit/v5"
 	"github.com/manifoldco/promptui"
 
-	"github.com/jordanknott/taskcafe/internal/db"
+	"github.com/bimmerbailey/rill/internal/db"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 

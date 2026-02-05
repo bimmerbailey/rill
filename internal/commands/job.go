@@ -9,9 +9,9 @@ import (
 	mTasks "github.com/RichardKnop/machinery/v1/tasks"
 
 	queueLog "github.com/RichardKnop/machinery/v1/log"
+	"github.com/bimmerbailey/rill/internal/config"
+	"github.com/bimmerbailey/rill/internal/jobs"
 	"github.com/jmoiron/sqlx"
-	"github.com/jordanknott/taskcafe/internal/config"
-	"github.com/jordanknott/taskcafe/internal/jobs"
 	log "github.com/sirupsen/logrus"
 )
 

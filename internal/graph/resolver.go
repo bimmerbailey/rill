@@ -7,12 +7,12 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/bimmerbailey/rill/internal/config"
+	"github.com/bimmerbailey/rill/internal/db"
+	"github.com/bimmerbailey/rill/internal/jobs"
+	"github.com/bimmerbailey/rill/internal/utils"
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
-	"github.com/jordanknott/taskcafe/internal/config"
-	"github.com/jordanknott/taskcafe/internal/db"
-	"github.com/jordanknott/taskcafe/internal/jobs"
-	"github.com/jordanknott/taskcafe/internal/utils"
 	log "github.com/sirupsen/logrus"
 )
 

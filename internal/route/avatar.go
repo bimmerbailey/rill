@@ -11,8 +11,8 @@ import (
 	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/jordanknott/taskcafe/internal/db"
-	"github.com/jordanknott/taskcafe/internal/utils"
+	"github.com/bimmerbailey/rill/internal/db"
+	"github.com/bimmerbailey/rill/internal/utils"
 )
 
 // ProfileImageUpload handles a user uploading a new avatar profile image

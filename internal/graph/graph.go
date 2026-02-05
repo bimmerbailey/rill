@@ -17,14 +17,15 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/bimmerbailey/rill/internal/config"
+	"github.com/bimmerbailey/rill/internal/db"
+	"github.com/bimmerbailey/rill/internal/jobs"
+	"github.com/bimmerbailey/rill/internal/logger"
+	"github.com/bimmerbailey/rill/internal/utils"
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
-	"github.com/jordanknott/taskcafe/internal/config"
-	"github.com/jordanknott/taskcafe/internal/db"
-	"github.com/jordanknott/taskcafe/internal/jobs"
-	"github.com/jordanknott/taskcafe/internal/logger"
-	"github.com/jordanknott/taskcafe/internal/utils"
 	log "github.com/sirupsen/logrus"
+	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -181,10 +182,10 @@ func NewHandler(repo db.Repository, appConfig config.AppConfig, jobQueue jobs.Jo
 	srv.AddTransport(transport.POST{})
 	srv.AddTransport(transport.MultipartForm{})
 
-	srv.SetQueryCache(lru.New(1000))
+	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000))
 
 	srv.Use(extension.AutomaticPersistedQuery{
-		Cache: lru.New(100),
+		Cache: lru.New[string](100),
 	})
 	if isProd := os.Getenv("PRODUCTION") == "true"; isProd {
 		srv.Use(extension.FixedComplexityLimit(10))

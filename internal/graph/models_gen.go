@@ -3,13 +3,14 @@
 package graph
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"strconv"
 	"time"
 
+	"github.com/bimmerbailey/rill/internal/db"
 	"github.com/google/uuid"
-	"github.com/jordanknott/taskcafe/internal/db"
 )
 
 type AddTaskLabelInput struct {
@@ -25,7 +26,7 @@ type AssignTaskInput struct {
 type CausedBy struct {
 	ID          uuid.UUID    `json:"id"`
 	FullName    string       `json:"fullName"`
-	ProfileIcon *ProfileIcon `json:"profileIcon"`
+	ProfileIcon *ProfileIcon `json:"profileIcon,omitempty"`
 }
 
 type ChecklistBadge struct {
@@ -196,7 +197,7 @@ type DeleteTeam struct {
 type DeleteTeamMember struct {
 	TeamID     uuid.UUID  `json:"teamID"`
 	UserID     uuid.UUID  `json:"userID"`
-	NewOwnerID *uuid.UUID `json:"newOwnerID"`
+	NewOwnerID *uuid.UUID `json:"newOwnerID,omitempty"`
 }
 
 type DeleteTeamMemberPayload struct {
@@ -213,7 +214,7 @@ type DeleteTeamPayload struct {
 
 type DeleteUserAccount struct {
 	UserID     uuid.UUID  `json:"userID"`
-	NewOwnerID *uuid.UUID `json:"newOwnerID"`
+	NewOwnerID *uuid.UUID `json:"newOwnerID,omitempty"`
 }
 
 type DeleteUserAccountPayload struct {
@@ -222,7 +223,7 @@ type DeleteUserAccountPayload struct {
 }
 
 type DueDate struct {
-	At            *time.Time            `json:"at"`
+	At            *time.Time            `json:"at,omitempty"`
 	Notifications []DueDateNotification `json:"notifications"`
 }
 
@@ -244,13 +245,13 @@ type DuplicateTaskGroupPayload struct {
 }
 
 type FindProject struct {
-	ProjectID      *uuid.UUID `json:"projectID"`
-	ProjectShortID *string    `json:"projectShortID"`
+	ProjectID      *uuid.UUID `json:"projectID,omitempty"`
+	ProjectShortID *string    `json:"projectShortID,omitempty"`
 }
 
 type FindTask struct {
-	TaskID      *uuid.UUID `json:"taskID"`
-	TaskShortID *string    `json:"taskShortID"`
+	TaskID      *uuid.UUID `json:"taskID,omitempty"`
+	TaskShortID *string    `json:"taskShortID,omitempty"`
 }
 
 type FindTeam struct {
@@ -295,7 +296,7 @@ type LogoutUser struct {
 
 type MePayload struct {
 	User         *db.UserAccount `json:"user"`
-	Organization *RoleCode       `json:"organization"`
+	Organization *RoleCode       `json:"organization,omitempty"`
 	TeamRoles    []TeamRole      `json:"teamRoles"`
 	ProjectRoles []ProjectRole   `json:"projectRoles"`
 }
@@ -311,8 +312,8 @@ type Member struct {
 }
 
 type MemberInvite struct {
-	UserID *uuid.UUID `json:"userID"`
-	Email  *string    `json:"email"`
+	UserID *uuid.UUID `json:"userID,omitempty"`
+	Email  *string    `json:"email,omitempty"`
 }
 
 type MemberList struct {
@@ -322,14 +323,17 @@ type MemberList struct {
 
 type MemberSearchFilter struct {
 	SearchFilter string     `json:"searchFilter"`
-	ProjectID    *uuid.UUID `json:"projectID"`
+	ProjectID    *uuid.UUID `json:"projectID,omitempty"`
 }
 
 type MemberSearchResult struct {
 	Similarity int             `json:"similarity"`
 	ID         string          `json:"id"`
-	User       *db.UserAccount `json:"user"`
+	User       *db.UserAccount `json:"user,omitempty"`
 	Status     ShareStatus     `json:"status"`
+}
+
+type Mutation struct {
 }
 
 type MyTasks struct {
@@ -343,21 +347,21 @@ type MyTasksPayload struct {
 }
 
 type NewProject struct {
-	TeamID *uuid.UUID `json:"teamID"`
+	TeamID *uuid.UUID `json:"teamID,omitempty"`
 	Name   string     `json:"name"`
 }
 
 type NewProjectLabel struct {
 	ProjectID    uuid.UUID `json:"projectID"`
 	LabelColorID uuid.UUID `json:"labelColorID"`
-	Name         *string   `json:"name"`
+	Name         *string   `json:"name,omitempty"`
 }
 
 type NewTask struct {
 	TaskGroupID uuid.UUID   `json:"taskGroupID"`
 	Name        string      `json:"name"`
 	Position    float64     `json:"position"`
-	Assigned    []uuid.UUID `json:"assigned"`
+	Assigned    []uuid.UUID `json:"assigned,omitempty"`
 }
 
 type NewTaskGroup struct {
@@ -414,12 +418,12 @@ type Notified struct {
 	ID           uuid.UUID        `json:"id"`
 	Notification *db.Notification `json:"notification"`
 	Read         bool             `json:"read"`
-	ReadAt       *time.Time       `json:"readAt"`
+	ReadAt       *time.Time       `json:"readAt,omitempty"`
 }
 
 type NotifiedInput struct {
 	Limit  int                `json:"limit"`
-	Cursor *string            `json:"cursor"`
+	Cursor *string            `json:"cursor,omitempty"`
 	Filter NotificationFilter `json:"filter"`
 }
 
@@ -440,14 +444,14 @@ type OwnersList struct {
 }
 
 type PageInfo struct {
-	EndCursor   *string `json:"endCursor"`
+	EndCursor   *string `json:"endCursor,omitempty"`
 	HasNextPage bool    `json:"hasNextPage"`
 }
 
 type ProfileIcon struct {
-	URL      *string `json:"url"`
-	Initials *string `json:"initials"`
-	BgColor  *string `json:"bgColor"`
+	URL      *string `json:"url,omitempty"`
+	Initials *string `json:"initials,omitempty"`
+	BgColor  *string `json:"bgColor,omitempty"`
 }
 
 type ProjectPermission struct {
@@ -467,7 +471,10 @@ type ProjectTaskMapping struct {
 }
 
 type ProjectsFilter struct {
-	TeamID *uuid.UUID `json:"teamID"`
+	TeamID *uuid.UUID `json:"teamID,omitempty"`
+}
+
+type Query struct {
 }
 
 type RemoveTaskLabelInput struct {
@@ -495,14 +502,17 @@ type SortTaskGroupPayload struct {
 	Tasks       []db.Task `json:"tasks"`
 }
 
+type Subscription struct {
+}
+
 type TaskActivityData struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 }
 
 type TaskBadges struct {
-	Checklist *ChecklistBadge `json:"checklist"`
-	Comments  *CommentsBadge  `json:"comments"`
+	Checklist *ChecklistBadge `json:"checklist,omitempty"`
+	Comments  *CommentsBadge  `json:"comments,omitempty"`
 }
 
 type TaskPositionUpdate struct {
@@ -629,7 +639,7 @@ type UpdateTaskDescriptionInput struct {
 type UpdateTaskDueDate struct {
 	TaskID  uuid.UUID  `json:"taskID"`
 	HasTime bool       `json:"hasTime"`
-	DueDate *time.Time `json:"dueDate"`
+	DueDate *time.Time `json:"dueDate,omitempty"`
 }
 
 type UpdateTaskDueDateNotification struct {
@@ -725,7 +735,7 @@ func (e ActionLevel) String() string {
 	return string(e)
 }
 
-func (e *ActionLevel) UnmarshalGQL(v interface{}) error {
+func (e *ActionLevel) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -740,6 +750,20 @@ func (e *ActionLevel) UnmarshalGQL(v interface{}) error {
 
 func (e ActionLevel) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ActionLevel) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ActionLevel) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type ActionType string
@@ -792,7 +816,7 @@ func (e ActionType) String() string {
 	return string(e)
 }
 
-func (e *ActionType) UnmarshalGQL(v interface{}) error {
+func (e *ActionType) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -807,6 +831,20 @@ func (e *ActionType) UnmarshalGQL(v interface{}) error {
 
 func (e ActionType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ActionType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ActionType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type ActivityType string
@@ -849,7 +887,7 @@ func (e ActivityType) String() string {
 	return string(e)
 }
 
-func (e *ActivityType) UnmarshalGQL(v interface{}) error {
+func (e *ActivityType) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -864,6 +902,20 @@ func (e *ActivityType) UnmarshalGQL(v interface{}) error {
 
 func (e ActivityType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ActivityType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ActivityType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type DueDateNotificationDuration string
@@ -894,7 +946,7 @@ func (e DueDateNotificationDuration) String() string {
 	return string(e)
 }
 
-func (e *DueDateNotificationDuration) UnmarshalGQL(v interface{}) error {
+func (e *DueDateNotificationDuration) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -909,6 +961,20 @@ func (e *DueDateNotificationDuration) UnmarshalGQL(v interface{}) error {
 
 func (e DueDateNotificationDuration) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *DueDateNotificationDuration) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e DueDateNotificationDuration) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type MyTasksSort string
@@ -937,7 +1003,7 @@ func (e MyTasksSort) String() string {
 	return string(e)
 }
 
-func (e *MyTasksSort) UnmarshalGQL(v interface{}) error {
+func (e *MyTasksSort) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -952,6 +1018,20 @@ func (e *MyTasksSort) UnmarshalGQL(v interface{}) error {
 
 func (e MyTasksSort) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *MyTasksSort) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e MyTasksSort) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type MyTasksStatus string
@@ -990,7 +1070,7 @@ func (e MyTasksStatus) String() string {
 	return string(e)
 }
 
-func (e *MyTasksStatus) UnmarshalGQL(v interface{}) error {
+func (e *MyTasksStatus) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -1005,6 +1085,20 @@ func (e *MyTasksStatus) UnmarshalGQL(v interface{}) error {
 
 func (e MyTasksStatus) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *MyTasksStatus) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e MyTasksStatus) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type NotificationFilter string
@@ -1035,7 +1129,7 @@ func (e NotificationFilter) String() string {
 	return string(e)
 }
 
-func (e *NotificationFilter) UnmarshalGQL(v interface{}) error {
+func (e *NotificationFilter) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -1050,6 +1144,20 @@ func (e *NotificationFilter) UnmarshalGQL(v interface{}) error {
 
 func (e NotificationFilter) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *NotificationFilter) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e NotificationFilter) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type ObjectType string
@@ -1086,7 +1194,7 @@ func (e ObjectType) String() string {
 	return string(e)
 }
 
-func (e *ObjectType) UnmarshalGQL(v interface{}) error {
+func (e *ObjectType) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -1101,6 +1209,20 @@ func (e *ObjectType) UnmarshalGQL(v interface{}) error {
 
 func (e ObjectType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ObjectType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ObjectType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type RoleCode string
@@ -1131,7 +1253,7 @@ func (e RoleCode) String() string {
 	return string(e)
 }
 
-func (e *RoleCode) UnmarshalGQL(v interface{}) error {
+func (e *RoleCode) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -1146,6 +1268,20 @@ func (e *RoleCode) UnmarshalGQL(v interface{}) error {
 
 func (e RoleCode) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *RoleCode) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e RoleCode) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type RoleLevel string
@@ -1172,7 +1308,7 @@ func (e RoleLevel) String() string {
 	return string(e)
 }
 
-func (e *RoleLevel) UnmarshalGQL(v interface{}) error {
+func (e *RoleLevel) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -1187,6 +1323,20 @@ func (e *RoleLevel) UnmarshalGQL(v interface{}) error {
 
 func (e RoleLevel) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *RoleLevel) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e RoleLevel) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type ShareStatus string
@@ -1213,7 +1363,7 @@ func (e ShareStatus) String() string {
 	return string(e)
 }
 
-func (e *ShareStatus) UnmarshalGQL(v interface{}) error {
+func (e *ShareStatus) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -1228,4 +1378,18 @@ func (e *ShareStatus) UnmarshalGQL(v interface{}) error {
 
 func (e ShareStatus) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ShareStatus) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ShareStatus) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
