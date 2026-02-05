@@ -35,6 +35,7 @@ func runWith(env map[string]string, cmd string, inArgs ...interface{}) error {
 var Aliases = map[string]interface{}{
 	"s":  Backend.Schema,
 	"up": Docker.Up,
+	"w":  Dev.Watch,
 }
 
 // Frontend is the namespace for all commands that interact with the frontend
@@ -209,6 +210,18 @@ type Dev mg.Namespace
 // Up starts the docker-compose file using the current files
 func (Dev) Up() error {
 	return sh.RunV("docker-compose", "-p", "taskcafe-dev", "-f", "testing/docker-compose.dev.yml", "up")
+}
+
+// Watch starts Air for hot-reloading the web server (local development)
+func (Dev) Watch() error {
+	return sh.RunV("go", "tool", "air", "-c", ".air.toml")
+}
+
+// DockerWatch starts the backend-dev service with Air in Docker
+func (Dev) DockerWatch() error {
+	fmt.Println("Starting Docker development environment with Air hot-reload...")
+	fmt.Println("Backend will be available at http://localhost:3334")
+	return sh.RunV("docker-compose", "-p", "taskcafe-dev", "up", "backend-dev", "postgres", "redis")
 }
 
 // Docker is namespace for commands interacting with docker

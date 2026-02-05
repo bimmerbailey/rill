@@ -1,7 +1,9 @@
 services:
+  # Development backend with Air hot-reload
   backend:
     build:
       dockerfile: Dockerfile
+      target: dev
     ports:
       - "3333:3333"
     depends_on:
@@ -14,6 +16,13 @@ services:
       TASKCAFE_MIGRATE: "true"
       TASKCAFE_MESSAGE_QUEUE: redis:6379
     volumes:
+      # Mount source code for hot-reload
+      - .:/app
+      # Mount go mod cache to persist between container restarts
+      - go-mod-cache:/go/pkg/mod
+      # Named volume for tmp directory (Air's build output)
+      - air-tmp:/app/tmp
+      # Named volume for uploads
       - uploads:/root/uploads
 
   redis:
@@ -53,3 +62,5 @@ volumes:
   postgres:
   uploads:
   redis:
+  go-mod-cache:
+  air-tmp:

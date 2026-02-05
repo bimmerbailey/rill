@@ -6,3 +6,7 @@ internal/frontend/frontend_generated.go
 internal/migrations/migrations_generated.go
 taskcafe
 conf/taskcafe.toml
+
+# Air live-reload temporary files
+tmp/
+air.log
