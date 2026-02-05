@@ -1,0 +1,70 @@
+# Air configuration - Live reload for Go worker
+# https://github.com/air-verse/air
+
+# Working directory
+root = "."
+tmp_dir = "tmp-worker"
+
+[build]
+# Build command - compile the Go binary
+cmd = "go build -o ./tmp-worker/taskcafe cmd/taskcafe/main.go"
+
+# Binary file path (legacy field for backward compatibility)
+bin = "./tmp-worker/taskcafe"
+
+# Full command to run the binary with arguments
+full_bin = "./tmp-worker/taskcafe worker"
+
+# Entrypoint - how to run the compiled binary (newer field, may not work in all versions)
+# entrypoint = ["./tmp-worker/taskcafe", "worker"]
+
+# Watch these filename extensions
+include_ext = ["go"]
+
+# Ignore these directories
+exclude_dir = ["dist", "frontend", "tmp", "migrations", "testing", "templates", "uploads", "internal/migrations"]
+
+# Ignore these specific files
+exclude_file = ["*_test.go", "*.gen.go"]
+
+# Watch these directories (empty means watch all under root)
+include_dir = []
+
+# It's not necessary to trigger build each time file changes if it's too frequent
+delay = 1000 # ms
+
+# Stop running old binary when build errors occur
+stop_on_error = true
+
+# Send Interrupt signal before killing process (allows graceful shutdown)
+send_interrupt = true
+
+# Delay after sending Interrupt signal
+kill_delay = 500 # ms
+
+# Log file location (relative to tmp_dir)
+log = "air.log"
+
+[log]
+# Show log time
+time = true
+
+[color]
+# Customize each part's color
+main = "magenta"
+watcher = "cyan"
+build = "yellow"
+runner = "green"
+
+[misc]
+# Delete tmp directory on exit
+clean_on_exit = true
+
+# Run air in quiet mode (logs only build and run)
+# quiet = false
+
+# Enable proxy for browser auto-reload (optional)
+# [proxy]
+# enabled = true
+# proxy_port = 3333
+# app_port = 3333

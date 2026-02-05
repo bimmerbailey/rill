@@ -36,7 +36,8 @@ COPY . .
 EXPOSE 3333
 
 # Run Air for hot-reloading
-CMD ["air", "-c", ".air.toml"]
+ENTRYPOINT ["air", "-c"]
+CMD [".air.toml"]
 
 FROM alpine:3.21 AS production
 

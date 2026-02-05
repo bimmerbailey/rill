@@ -25,6 +25,27 @@ services:
       # Named volume for uploads
       - uploads:/root/uploads
 
+  worker:
+    build:
+      dockerfile: Dockerfile
+      target: dev
+    command:
+      - ".air-worker.toml"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      TASKCAFE_DATABASE_HOST: postgres
+      TASKCAFE_DATABASE_NAME: taskcafe
+      TASKCAFE_DATABASE_USER: taskcafe
+      TASKCAFE_DATABASE_PASSWORD: taskcafe_test
+      TASKCAFE_JOB_BROKER: "redis://redis:6379"
+      TASKCAFE_JOB_STORE: "redis://redis:6379"
+      TASKCAFE_JOB_ENABLED: "true"
+      TASKCAFE_MESSAGE_QUEUE: "redis:6379"
+
   redis:
     image: redis:8.4.0-alpine
     ports:
