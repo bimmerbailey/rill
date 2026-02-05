@@ -12,55 +12,12 @@ import (
 	"github.com/jmoiron/sqlx"
 	log "github.com/sirupsen/logrus"
 
-	"os"
-	"path/filepath"
-
 	"github.com/jordanknott/taskcafe/internal/config"
 	"github.com/jordanknott/taskcafe/internal/db"
-	"github.com/jordanknott/taskcafe/internal/frontend"
 	"github.com/jordanknott/taskcafe/internal/graph"
 	"github.com/jordanknott/taskcafe/internal/jobs"
 	"github.com/jordanknott/taskcafe/internal/logger"
 )
-
-// FrontendHandler serves an embed React client through chi
-type FrontendHandler struct {
-	staticPath string
-	indexPath  string
-}
-
-// IsDir checks if the given file is a directory
-func IsDir(f http.File) bool {
-	fi, err := f.Stat()
-	if err != nil {
-		return false
-	}
-	return fi.IsDir()
-}
-
-// ServeHTTP attempts to serve a requested file for the embedded React client
-func (h FrontendHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	path, err := filepath.Abs(r.URL.Path)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	f, err := frontend.Frontend.Open(path)
-	if os.IsNotExist(err) || IsDir(f) {
-		index, err := frontend.Frontend.Open("index.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		http.ServeContent(w, r, "index.html", time.Now(), index)
-		return
-	} else if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	http.ServeContent(w, r, path, time.Now(), f)
-}
 
 // TaskcafeHandler contains all the route handlers
 type TaskcafeHandler struct {
@@ -119,9 +76,6 @@ func NewRouter(dbConnection *sqlx.DB, redisClient *redis.Client, jobServer *mach
 		mux.Post("/users/me/avatar", taskcafeHandler.ProfileImageUpload)
 		mux.Mount("/graphql", graph.NewHandler(*repository, appConfig, jobQueue, redisClient))
 	})
-
-	frontend := FrontendHandler{staticPath: "build", indexPath: "index.html"}
-	r.Handle("/*", frontend)
 
 	return r, nil
 }

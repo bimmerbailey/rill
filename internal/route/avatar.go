@@ -6,29 +6,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 
 	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 
-	"time"
-
 	"github.com/jordanknott/taskcafe/internal/db"
-	"github.com/jordanknott/taskcafe/internal/frontend"
 	"github.com/jordanknott/taskcafe/internal/utils"
 )
-
-// Frontend serves the index.html file
-func (h *TaskcafeHandler) Frontend(w http.ResponseWriter, r *http.Request) {
-	f, err := frontend.Frontend.Open("index.h")
-	if os.IsNotExist(err) {
-		log.Warning("does not exist")
-	} else if err != nil {
-		log.WithError(err).Error("frontend")
-	}
-	http.ServeContent(w, r, "index.html", time.Now(), f)
-}
 
 // ProfileImageUpload handles a user uploading a new avatar profile image
 func (h *TaskcafeHandler) ProfileImageUpload(w http.ResponseWriter, r *http.Request) {

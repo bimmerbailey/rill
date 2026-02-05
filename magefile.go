@@ -1,4 +1,5 @@
-//+build mage
+//go:build mage
+// +build mage
 
 package main
 
@@ -84,23 +85,6 @@ func (Backend) GenMigrations() error {
 	return nil
 }
 
-// GenFrontend embeds built frontend client into Go source code
-func (Backend) GenFrontend() error {
-	if _, err := os.Stat("internal/frontend/"); os.IsNotExist(err) {
-		os.Mkdir("internal/frontend/", 0755)
-	}
-	var fs http.FileSystem = http.Dir("frontend/build")
-	err := vfsgen.Generate(fs, vfsgen.Options{
-		Filename:     "internal/frontend/frontend_generated.go",
-		PackageName:  "frontend",
-		VariableName: "Frontend",
-	})
-	if err != nil {
-		panic(err)
-	}
-	return nil
-}
-
 func flagEnv() map[string]string {
 	hash, err := sh.Output("git", "rev-parse", "--short", "HEAD")
 	if err != nil {
@@ -170,9 +154,9 @@ func Install() {
 	mg.SerialDeps(Frontend.Install)
 }
 
-// Build runs frontend:build, backend:genMigrations, backend:genFrontend, backend:build
+// Build runs backend:genMigrations, backend:build
 func Build() {
-	mg.SerialDeps(Frontend.Build, Backend.GenMigrations, Backend.GenFrontend, Backend.Build)
+	mg.SerialDeps(Backend.GenMigrations, Backend.Build)
 }
 
 // Release tags, builds, and upload a new release docker image
