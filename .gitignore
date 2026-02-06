@@ -10,3 +10,4 @@ conf/taskcafe.toml
 # Air live-reload temporary files
 tmp/
 air.log
+frontend_parity.md
