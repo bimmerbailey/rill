@@ -24,6 +24,7 @@ export interface AuthResponse {
 export interface ValidateResponse {
   valid: boolean;
   userID: string;
+  role?: string;
 }
 
 export interface SettingsResponse {

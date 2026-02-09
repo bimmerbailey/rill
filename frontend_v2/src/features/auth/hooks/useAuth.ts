@@ -8,7 +8,11 @@ export function useAuth() {
   const login = useCallback(
     async (username: string, password: string) => {
       const response = await authApi.login({ username, password });
-      setUser(response.userID);
+      // After login, validate to get the full user info including role
+      const validateResponse = await authApi.validate();
+      if (validateResponse.valid) {
+        setUser(validateResponse.userID, validateResponse.role);
+      }
       return response;
     },
     [setUser],

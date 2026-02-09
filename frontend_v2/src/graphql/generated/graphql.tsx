@@ -1562,6 +1562,25 @@ export type LegacyCreateTaskGroupMutationVariables = Exact<{
 
 export type LegacyCreateTaskGroupMutation = { __typename?: 'Mutation', createTaskGroup: { __typename?: 'TaskGroup', id: string, name: string, position: number } };
 
+export type CreateUserAccountMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+  fullName: Scalars['String']['input'];
+  initials: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  roleCode: Scalars['String']['input'];
+}>;
+
+
+export type CreateUserAccountMutation = { __typename?: 'Mutation', createUserAccount: { __typename?: 'UserAccount', id: string, email: string, fullName: string, username: string, role: { __typename?: 'Role', code: string, name: string }, profileIcon: { __typename?: 'ProfileIcon', url?: string | null, initials?: string | null, bgColor?: string | null } } };
+
+export type DeleteInvitedUserAccountMutationVariables = Exact<{
+  invitedUserID: Scalars['UUID']['input'];
+}>;
+
+
+export type DeleteInvitedUserAccountMutation = { __typename?: 'Mutation', deleteInvitedUserAccount: { __typename?: 'DeleteInvitedUserAccountPayload', invitedUser: { __typename?: 'InvitedUserAccount', id: string, email: string } } };
+
 export type DeleteProjectLabelMutationVariables = Exact<{
   projectLabelID: Scalars['UUID']['input'];
 }>;
@@ -1589,6 +1608,14 @@ export type DeleteTaskGroupTasksMutationVariables = Exact<{
 
 
 export type DeleteTaskGroupTasksMutation = { __typename?: 'Mutation', deleteTaskGroupTasks: { __typename?: 'DeleteTaskGroupTasksPayload', tasks: Array<string>, taskGroupID: string } };
+
+export type DeleteUserAccountMutationVariables = Exact<{
+  userID: Scalars['UUID']['input'];
+  newOwnerID?: InputMaybe<Scalars['UUID']['input']>;
+}>;
+
+
+export type DeleteUserAccountMutation = { __typename?: 'Mutation', deleteUserAccount: { __typename?: 'DeleteUserAccountPayload', userAccount: { __typename?: 'UserAccount', id: string, email: string, fullName: string } } };
 
 export type DuplicateTaskGroupMutationVariables = Exact<{
   taskGroupID: Scalars['UUID']['input'];
@@ -2501,6 +2528,94 @@ export function useLegacyCreateTaskGroupMutation(baseOptions?: Apollo.MutationHo
 export type LegacyCreateTaskGroupMutationHookResult = ReturnType<typeof useLegacyCreateTaskGroupMutation>;
 export type LegacyCreateTaskGroupMutationResult = Apollo.MutationResult<LegacyCreateTaskGroupMutation>;
 export type LegacyCreateTaskGroupMutationOptions = Apollo.BaseMutationOptions<LegacyCreateTaskGroupMutation, LegacyCreateTaskGroupMutationVariables>;
+export const CreateUserAccountDocument = gql`
+    mutation createUserAccount($email: String!, $username: String!, $fullName: String!, $initials: String!, $password: String!, $roleCode: String!) {
+  createUserAccount(
+    input: {email: $email, username: $username, fullName: $fullName, initials: $initials, password: $password, roleCode: $roleCode}
+  ) {
+    id
+    email
+    fullName
+    username
+    role {
+      code
+      name
+    }
+    profileIcon {
+      url
+      initials
+      bgColor
+    }
+  }
+}
+    `;
+export type CreateUserAccountMutationFn = Apollo.MutationFunction<CreateUserAccountMutation, CreateUserAccountMutationVariables>;
+
+/**
+ * __useCreateUserAccountMutation__
+ *
+ * To run a mutation, you first call `useCreateUserAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserAccountMutation, { data, loading, error }] = useCreateUserAccountMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      username: // value for 'username'
+ *      fullName: // value for 'fullName'
+ *      initials: // value for 'initials'
+ *      password: // value for 'password'
+ *      roleCode: // value for 'roleCode'
+ *   },
+ * });
+ */
+export function useCreateUserAccountMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserAccountMutation, CreateUserAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserAccountMutation, CreateUserAccountMutationVariables>(CreateUserAccountDocument, options);
+      }
+export type CreateUserAccountMutationHookResult = ReturnType<typeof useCreateUserAccountMutation>;
+export type CreateUserAccountMutationResult = Apollo.MutationResult<CreateUserAccountMutation>;
+export type CreateUserAccountMutationOptions = Apollo.BaseMutationOptions<CreateUserAccountMutation, CreateUserAccountMutationVariables>;
+export const DeleteInvitedUserAccountDocument = gql`
+    mutation deleteInvitedUserAccount($invitedUserID: UUID!) {
+  deleteInvitedUserAccount(input: {invitedUserID: $invitedUserID}) {
+    invitedUser {
+      id
+      email
+    }
+  }
+}
+    `;
+export type DeleteInvitedUserAccountMutationFn = Apollo.MutationFunction<DeleteInvitedUserAccountMutation, DeleteInvitedUserAccountMutationVariables>;
+
+/**
+ * __useDeleteInvitedUserAccountMutation__
+ *
+ * To run a mutation, you first call `useDeleteInvitedUserAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteInvitedUserAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteInvitedUserAccountMutation, { data, loading, error }] = useDeleteInvitedUserAccountMutation({
+ *   variables: {
+ *      invitedUserID: // value for 'invitedUserID'
+ *   },
+ * });
+ */
+export function useDeleteInvitedUserAccountMutation(baseOptions?: Apollo.MutationHookOptions<DeleteInvitedUserAccountMutation, DeleteInvitedUserAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteInvitedUserAccountMutation, DeleteInvitedUserAccountMutationVariables>(DeleteInvitedUserAccountDocument, options);
+      }
+export type DeleteInvitedUserAccountMutationHookResult = ReturnType<typeof useDeleteInvitedUserAccountMutation>;
+export type DeleteInvitedUserAccountMutationResult = Apollo.MutationResult<DeleteInvitedUserAccountMutation>;
+export type DeleteInvitedUserAccountMutationOptions = Apollo.BaseMutationOptions<DeleteInvitedUserAccountMutation, DeleteInvitedUserAccountMutationVariables>;
 export const DeleteProjectLabelDocument = gql`
     mutation deleteProjectLabel($projectLabelID: UUID!) {
   deleteProjectLabel(input: {projectLabelID: $projectLabelID}) {
@@ -2642,6 +2757,44 @@ export function useDeleteTaskGroupTasksMutation(baseOptions?: Apollo.MutationHoo
 export type DeleteTaskGroupTasksMutationHookResult = ReturnType<typeof useDeleteTaskGroupTasksMutation>;
 export type DeleteTaskGroupTasksMutationResult = Apollo.MutationResult<DeleteTaskGroupTasksMutation>;
 export type DeleteTaskGroupTasksMutationOptions = Apollo.BaseMutationOptions<DeleteTaskGroupTasksMutation, DeleteTaskGroupTasksMutationVariables>;
+export const DeleteUserAccountDocument = gql`
+    mutation deleteUserAccount($userID: UUID!, $newOwnerID: UUID) {
+  deleteUserAccount(input: {userID: $userID, newOwnerID: $newOwnerID}) {
+    userAccount {
+      id
+      email
+      fullName
+    }
+  }
+}
+    `;
+export type DeleteUserAccountMutationFn = Apollo.MutationFunction<DeleteUserAccountMutation, DeleteUserAccountMutationVariables>;
+
+/**
+ * __useDeleteUserAccountMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserAccountMutation, { data, loading, error }] = useDeleteUserAccountMutation({
+ *   variables: {
+ *      userID: // value for 'userID'
+ *      newOwnerID: // value for 'newOwnerID'
+ *   },
+ * });
+ */
+export function useDeleteUserAccountMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserAccountMutation, DeleteUserAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserAccountMutation, DeleteUserAccountMutationVariables>(DeleteUserAccountDocument, options);
+      }
+export type DeleteUserAccountMutationHookResult = ReturnType<typeof useDeleteUserAccountMutation>;
+export type DeleteUserAccountMutationResult = Apollo.MutationResult<DeleteUserAccountMutation>;
+export type DeleteUserAccountMutationOptions = Apollo.BaseMutationOptions<DeleteUserAccountMutation, DeleteUserAccountMutationVariables>;
 export const DuplicateTaskGroupDocument = gql`
     mutation duplicateTaskGroup($taskGroupID: UUID!, $name: String!, $position: Float!, $projectID: UUID!) {
   duplicateTaskGroup(

@@ -8,7 +8,8 @@ import { useAuthStore } from "@/stores/authStore";
 export function TopNavbar() {
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, userRole } = useAuthStore();
+  const isAdmin = userRole === "admin";
 
   const handleLogout = async () => {
     await logout();
@@ -106,6 +107,20 @@ export function TopNavbar() {
         >
           Teams
         </Link>
+        {isAuthenticated && isAdmin && (
+          <Link
+            to="/admin"
+            style={navLinkStyle}
+            onMouseEnter={(e) =>
+              Object.assign(e.currentTarget.style, navLinkHoverStyle)
+            }
+            onMouseLeave={(e) =>
+              Object.assign(e.currentTarget.style, { color: textPrimary })
+            }
+          >
+            Admin
+          </Link>
+        )}
         {!isAuthenticated ? (
           <>
             <Link

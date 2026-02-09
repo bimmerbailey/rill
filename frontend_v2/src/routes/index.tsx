@@ -38,7 +38,7 @@ export function AppRoutes() {
       .then((response) => {
         if (!isMounted) return;
         if (response.valid) {
-          setUser(response.userID);
+          setUser(response.userID, response.role);
         } else {
           clearUser();
         }
