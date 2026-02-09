@@ -12,16 +12,50 @@ export function DashboardPage() {
     MyTasksSort.DueDate,
   );
 
+  const incompleteTasks = tasks.filter((t) => !t.complete);
+  const completedCount = tasks.length - incompleteTasks.length;
+  const totalCount = tasks.length;
+  const completionPct =
+    totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+  // Dark palette — warm charcoal tones, not cold
+  const base = "#141211"; // deepest background
+  const surface0 = "#1c1917"; // canvas
+  const surface1 = "#231f1c"; // raised card
+  const surface2 = "#2c2724"; // hover / elevated
+  const surface3 = "#36302c"; // active / input bg
+  const border = "rgba(255,235,210,0.06)";
+  const textPrimary = "rgba(245,238,230,0.87)"; // ~87% white-warm
+  const textSecondary = "rgba(245,238,230,0.5)";
+  const textTertiary = "rgba(245,238,230,0.32)";
+
+  // Accents — slightly desaturated from light mode
+  const terracotta = "#c9805e";
+  const sage = "#7fa67f";
+  const slate = "#7992b0";
+  const ochre = "#bfa26e";
+
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto p-8">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="h-48 bg-gray-200 rounded"></div>
-            <div className="h-48 bg-gray-200 rounded"></div>
-            <div className="h-48 bg-gray-200 rounded"></div>
-          </div>
+      <div
+        className="min-h-screen p-10"
+        style={{
+          background: `linear-gradient(160deg, ${base} 0%, ${surface0} 50%, ${base} 100%)`,
+          fontFamily: "'Libre Baskerville', Georgia, serif",
+        }}
+      >
+        <div className="max-w-6xl mx-auto space-y-6">
+          {[...Array(3)].map((_, i) => (
+            <div
+              key={i}
+              className="animate-pulse"
+              style={{
+                height: "180px",
+                borderRadius: "24px",
+                background: surface1,
+              }}
+            />
+          ))}
         </div>
       </div>
     );
@@ -29,164 +63,670 @@ export function DashboardPage() {
 
   if (error) {
     return (
-      <div className="max-w-6xl mx-auto p-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-          <h2 className="text-red-800 font-semibold mb-2">
-            Error loading dashboard
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{
+          background: `linear-gradient(160deg, ${base} 0%, ${surface0} 50%, ${base} 100%)`,
+        }}
+      >
+        <div
+          style={{
+            background: surface1,
+            borderRadius: "24px",
+            padding: "2.5rem",
+            maxWidth: "400px",
+            border: `1px solid ${border}`,
+          }}
+        >
+          <h2
+            style={{
+              fontFamily: "'Libre Baskerville', serif",
+              color: terracotta,
+              fontSize: "1.3rem",
+              marginBottom: "0.5rem",
+            }}
+          >
+            Something went wrong
           </h2>
-          <p className="text-red-600">{error.message}</p>
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              color: textSecondary,
+              fontSize: "0.9rem",
+            }}
+          >
+            {error.message}
+          </p>
         </div>
       </div>
     );
   }
 
-  const incompleteTasks = tasks.filter((t) => !t.complete);
-
   return (
-    <div className="max-w-6xl mx-auto p-8">
-      {/* Welcome Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-display text-[#1a1a1a] mb-2">
-          Welcome back,{" "}
-          <span className="italic">{user?.fullName || user?.username}</span>
-        </h1>
-        <p className="font-mono text-sm text-[#1a1a1a]/60">
-          You have access to {projects.length} projects across {teams.length}{" "}
-          teams
-        </p>
+    <div
+      className="min-h-screen"
+      style={{
+        background: `linear-gradient(160deg, ${base} 0%, ${surface0} 50%, ${base} 100%)`,
+        color: textPrimary,
+      }}
+    >
+      {/* Soft ambient blobs — warmer, dimmer */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div
+          style={{
+            position: "absolute",
+            top: "-10%",
+            right: "-5%",
+            width: "500px",
+            height: "500px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(201,128,94,0.06) 0%, transparent 70%)",
+            filter: "blur(80px)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "10%",
+            left: "-10%",
+            width: "600px",
+            height: "600px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(127,166,127,0.04) 0%, transparent 70%)",
+            filter: "blur(100px)",
+          }}
+        />
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {/* Projects Card */}
-        <div className="bg-white p-6 border-2 border-[#1a1a1a] shadow-[4px_4px_0_0_#1a1a1a]">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-mono text-xs uppercase tracking-widest text-[#1a1a1a]/60">
-              Projects
-            </h3>
-            <span className="w-8 h-8 bg-[#d4754e] text-white flex items-center justify-center font-bold text-sm">
-              {projects.length}
-            </span>
-          </div>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
-            {projects.slice(0, 5).map((project) => (
-              <Link
-                key={project.id}
-                to={`/projects/${project.id}`}
-                className="block p-3 bg-[#f7f3ef] hover:bg-[#d4754e] hover:text-white transition-colors font-mono text-sm"
-              >
-                {project.name}
-              </Link>
-            ))}
-            {projects.length > 5 && (
-              <p className="text-center text-sm text-[#1a1a1a]/50 pt-2">
-                +{projects.length - 5} more
-              </p>
-            )}
-          </div>
-          <Link
-            to="/projects"
-            className="inline-block mt-4 font-mono text-xs uppercase tracking-widest text-[#d4754e] hover:underline"
+      <div className="relative max-w-6xl mx-auto px-8 py-10">
+        {/* Welcome */}
+        <header
+          className="mb-10"
+          style={{ animation: "d2dFadeUp 0.7s ease-out" }}
+        >
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "0.8rem",
+              color: textTertiary,
+              fontWeight: 500,
+              marginBottom: "0.5rem",
+              letterSpacing: "0.05em",
+            }}
           >
-            View All →
-          </Link>
+            {new Date().toLocaleDateString("en-US", {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </p>
+          <h1
+            style={{
+              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
+              fontWeight: 400,
+              lineHeight: 1.2,
+              color: textPrimary,
+            }}
+          >
+            Hello,{" "}
+            <em style={{ fontStyle: "italic", color: terracotta }}>
+              {user?.fullName || user?.username}
+            </em>
+          </h1>
+        </header>
+
+        {/* Overview Cards Row */}
+        <div
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+          style={{ animation: "d2dFadeUp 0.7s ease-out 0.15s both" }}
+        >
+          {[
+            { label: "Projects", value: projects.length, bg: terracotta },
+            { label: "Open Tasks", value: incompleteTasks.length, bg: sage },
+            { label: "Completed", value: completedCount, bg: slate },
+            { label: "Teams", value: teams.length, bg: ochre },
+          ].map((card) => (
+            <div
+              key={card.label}
+              style={{
+                background: surface1,
+                borderRadius: "20px",
+                padding: "1.5rem",
+                border: `1px solid ${border}`,
+                transition: "transform 0.3s ease, background 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-4px)";
+                e.currentTarget.style.background = surface2;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.background = surface1;
+              }}
+            >
+              <div
+                className="inline-block mb-3"
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  background: card.bg,
+                  boxShadow: `0 0 8px ${card.bg}40`,
+                }}
+              />
+              <div
+                style={{
+                  fontFamily: "'Libre Baskerville', serif",
+                  fontSize: "2rem",
+                  fontWeight: 400,
+                  lineHeight: 1,
+                  color: textPrimary,
+                  marginBottom: "0.3rem",
+                }}
+              >
+                {card.value}
+              </div>
+              <div
+                style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "0.75rem",
+                  color: textTertiary,
+                  fontWeight: 500,
+                }}
+              >
+                {card.label}
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Tasks Card */}
-        <div className="bg-white p-6 border-2 border-[#1a1a1a] shadow-[4px_4px_0_0_#1a1a1a]">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-mono text-xs uppercase tracking-widest text-[#1a1a1a]/60">
-              My Tasks
-            </h3>
-            <span className="w-8 h-8 bg-[#1a1a1a] text-white flex items-center justify-center font-bold text-sm">
-              {incompleteTasks.length}
+        {/* Completion Bar */}
+        <div
+          className="mb-8"
+          style={{
+            background: surface1,
+            borderRadius: "20px",
+            padding: "1.5rem 2rem",
+            border: `1px solid ${border}`,
+            animation: "d2dFadeUp 0.7s ease-out 0.25s both",
+          }}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <span
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "0.8rem",
+                color: textSecondary,
+                fontWeight: 500,
+              }}
+            >
+              Overall Task Progress
+            </span>
+            <span
+              style={{
+                fontFamily: "'Libre Baskerville', serif",
+                fontSize: "0.9rem",
+                color: terracotta,
+              }}
+            >
+              {completionPct}%
             </span>
           </div>
-          {tasksLoading ? (
-            <div className="space-y-2">
-              <div className="h-12 bg-gray-100 rounded"></div>
-              <div className="h-12 bg-gray-100 rounded"></div>
-            </div>
-          ) : incompleteTasks.length > 0 ? (
-            <div className="space-y-2 max-h-48 overflow-y-auto">
-              {incompleteTasks.slice(0, 5).map((task) => (
-                <div
-                  key={task.id}
-                  className="p-3 bg-[#f7f3ef] border-l-4 border-[#d4754e]"
+          <div
+            style={{
+              width: "100%",
+              height: "8px",
+              borderRadius: "4px",
+              background: surface3,
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                width: `${completionPct}%`,
+                height: "100%",
+                borderRadius: "4px",
+                background: `linear-gradient(90deg, ${terracotta}, #d4a07a)`,
+                boxShadow: `0 0 12px ${terracotta}30`,
+                transition: "width 1s ease-out",
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="grid grid-cols-12 gap-6">
+          {/* Projects */}
+          <div
+            className="col-span-12 lg:col-span-7"
+            style={{ animation: "d2dFadeUp 0.7s ease-out 0.35s both" }}
+          >
+            <div
+              style={{
+                background: surface1,
+                borderRadius: "24px",
+                padding: "2rem",
+                border: `1px solid ${border}`,
+              }}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2
+                  style={{
+                    fontFamily: "'Libre Baskerville', serif",
+                    fontSize: "1.15rem",
+                    fontWeight: 400,
+                    color: textPrimary,
+                  }}
                 >
-                  <p className="font-medium text-sm truncate">{task.name}</p>
-                  {task.taskGroup && (
-                    <p className="text-xs text-[#1a1a1a]/50 mt-1">
-                      {task.taskGroup.name}
-                    </p>
-                  )}
-                </div>
-              ))}
+                  Your Projects
+                </h2>
+                <Link
+                  to="/projects"
+                  className="no-underline"
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "0.78rem",
+                    color: terracotta,
+                    fontWeight: 500,
+                    transition: "opacity 0.2s",
+                  }}
+                >
+                  See all &rarr;
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {projects.slice(0, 6).map((project, i) => (
+                  <Link
+                    key={project.id}
+                    to={`/projects/${project.id}`}
+                    className="no-underline"
+                    style={{
+                      display: "block",
+                      padding: "1.1rem 1.2rem",
+                      borderRadius: "16px",
+                      background:
+                        i % 2 === 0
+                          ? `linear-gradient(135deg, ${surface2}, ${surface3})`
+                          : `linear-gradient(135deg, rgba(127,166,127,0.06), rgba(127,166,127,0.03))`,
+                      border: `1px solid ${border}`,
+                      transition:
+                        "transform 0.25s ease, border-color 0.25s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                      e.currentTarget.style.borderColor =
+                        "rgba(255,235,210,0.12)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.borderColor = border;
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        style={{
+                          width: "36px",
+                          height: "36px",
+                          borderRadius: "10px",
+                          background: [
+                            terracotta,
+                            sage,
+                            slate,
+                            ochre,
+                            "#9a7ab8",
+                            "#5a9ac4",
+                          ][i % 6],
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#fff",
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontWeight: 600,
+                          fontSize: "0.8rem",
+                        }}
+                      >
+                        {project.name.charAt(0)}
+                      </div>
+                      <div className="min-w-0">
+                        <p
+                          className="truncate"
+                          style={{
+                            fontFamily: "'DM Sans', sans-serif",
+                            fontSize: "0.9rem",
+                            fontWeight: 500,
+                            color: textPrimary,
+                          }}
+                        >
+                          {project.name}
+                        </p>
+                        {project.team && (
+                          <p
+                            style={{
+                              fontFamily: "'DM Sans', sans-serif",
+                              fontSize: "0.7rem",
+                              color: textTertiary,
+                              marginTop: "2px",
+                            }}
+                          >
+                            {project.team.name}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              {projects.length === 0 && (
+                <p
+                  className="text-center py-8"
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    color: textTertiary,
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  No projects yet. Create one to get started.
+                </p>
+              )}
             </div>
-          ) : (
-            <p className="text-[#1a1a1a]/50 text-sm py-8 text-center">
-              No incomplete tasks
-            </p>
-          )}
-          <Link
-            to="/my-tasks"
-            className="inline-block mt-4 font-mono text-xs uppercase tracking-widest text-[#d4754e] hover:underline"
-          >
-            View All →
-          </Link>
-        </div>
-
-        {/* Teams Card */}
-        <div className="bg-white p-6 border-2 border-[#1a1a1a] shadow-[4px_4px_0_0_#1a1a1a]">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-mono text-xs uppercase tracking-widest text-[#1a1a1a]/60">
-              Teams
-            </h3>
-            <span className="w-8 h-8 bg-[#4a5d4a] text-white flex items-center justify-center font-bold text-sm">
-              {teams.length}
-            </span>
           </div>
-          <div className="space-y-2">
-            {teams.map((team) => (
-              <Link
-                key={team.id}
-                to={`/teams`}
-                className="flex items-center gap-3 p-3 bg-[#f7f3ef] hover:bg-[#4a5d4a] hover:text-white transition-colors"
-              >
-                <div className="w-8 h-8 bg-[#d4754e] flex items-center justify-center text-white font-bold text-xs">
-                  {team.name.charAt(0).toUpperCase()}
+
+          {/* Right Column */}
+          <div
+            className="col-span-12 lg:col-span-5 space-y-6"
+            style={{ animation: "d2dFadeUp 0.7s ease-out 0.45s both" }}
+          >
+            {/* Tasks */}
+            <div
+              style={{
+                background: surface1,
+                borderRadius: "24px",
+                padding: "2rem",
+                border: `1px solid ${border}`,
+              }}
+            >
+              <div className="flex items-center justify-between mb-5">
+                <h2
+                  style={{
+                    fontFamily: "'Libre Baskerville', serif",
+                    fontSize: "1.15rem",
+                    fontWeight: 400,
+                    color: textPrimary,
+                  }}
+                >
+                  Open Tasks
+                </h2>
+                <Link
+                  to="/my-tasks"
+                  className="no-underline"
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "0.78rem",
+                    color: terracotta,
+                    fontWeight: 500,
+                  }}
+                >
+                  All tasks &rarr;
+                </Link>
+              </div>
+              {tasksLoading ? (
+                <div className="space-y-3">
+                  {[...Array(3)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="animate-pulse"
+                      style={{
+                        height: "52px",
+                        borderRadius: "12px",
+                        background: surface2,
+                      }}
+                    />
+                  ))}
                 </div>
-                <span className="font-mono text-sm truncate">{team.name}</span>
-              </Link>
-            ))}
+              ) : incompleteTasks.length > 0 ? (
+                <div className="space-y-2">
+                  {incompleteTasks.slice(0, 5).map((task) => (
+                    <div
+                      key={task.id}
+                      className="flex items-center gap-3"
+                      style={{
+                        padding: "0.8rem 1rem",
+                        borderRadius: "14px",
+                        background: surface2,
+                        transition: "background 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = surface3;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = surface2;
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "18px",
+                          height: "18px",
+                          borderRadius: "6px",
+                          border: `2px solid ${textTertiary}`,
+                          flexShrink: 0,
+                        }}
+                      />
+                      <div className="min-w-0">
+                        <p
+                          className="truncate"
+                          style={{
+                            fontFamily: "'DM Sans', sans-serif",
+                            fontSize: "0.85rem",
+                            color: textPrimary,
+                          }}
+                        >
+                          {task.name}
+                        </p>
+                        {task.taskGroup && (
+                          <p
+                            style={{
+                              fontFamily: "'DM Sans', sans-serif",
+                              fontSize: "0.65rem",
+                              color: textTertiary,
+                              marginTop: "2px",
+                            }}
+                          >
+                            {task.taskGroup.name}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <div
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      borderRadius: "50%",
+                      background: `linear-gradient(135deg, rgba(127,166,127,0.2), rgba(127,166,127,0.1))`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      margin: "0 auto 0.75rem",
+                      fontSize: "1.3rem",
+                      color: sage,
+                    }}
+                  >
+                    &#10003;
+                  </div>
+                  <p
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      color: textTertiary,
+                      fontSize: "0.85rem",
+                    }}
+                  >
+                    You&apos;re all caught up!
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Teams */}
+            <div
+              style={{
+                background: surface1,
+                borderRadius: "24px",
+                padding: "1.5rem 2rem",
+                border: `1px solid ${border}`,
+              }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2
+                  style={{
+                    fontFamily: "'Libre Baskerville', serif",
+                    fontSize: "1.05rem",
+                    fontWeight: 400,
+                    color: textPrimary,
+                  }}
+                >
+                  Teams
+                </h2>
+                <Link
+                  to="/teams"
+                  className="no-underline"
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "0.78rem",
+                    color: terracotta,
+                    fontWeight: 500,
+                  }}
+                >
+                  Manage &rarr;
+                </Link>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {teams.map((team, i) => (
+                  <Link
+                    key={team.id}
+                    to="/teams"
+                    className="no-underline flex items-center gap-2"
+                    style={{
+                      padding: "0.5rem 1rem",
+                      borderRadius: "100px",
+                      background: [
+                        "rgba(201,128,94,0.1)",
+                        "rgba(127,166,127,0.1)",
+                        "rgba(121,146,176,0.1)",
+                        "rgba(191,162,110,0.1)",
+                      ][i % 4],
+                      border: `1px solid ${
+                        [
+                          "rgba(201,128,94,0.15)",
+                          "rgba(127,166,127,0.15)",
+                          "rgba(121,146,176,0.15)",
+                          "rgba(191,162,110,0.15)",
+                        ][i % 4]
+                      }`,
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: "0.8rem",
+                      fontWeight: 500,
+                      color: textSecondary,
+                      transition: "transform 0.2s ease, background 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "scale(1.04)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "scale(1)";
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "22px",
+                        height: "22px",
+                        borderRadius: "50%",
+                        background: [terracotta, sage, slate, ochre][i % 4],
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#fff",
+                        fontSize: "0.6rem",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {team.name.charAt(0)}
+                    </div>
+                    {team.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div
+              style={{
+                borderRadius: "24px",
+                padding: "2rem",
+                background: `linear-gradient(135deg, ${terracotta}, #d4946e)`,
+                boxShadow: `0 8px 30px rgba(201,128,94,0.15)`,
+              }}
+            >
+              <h3
+                style={{
+                  fontFamily: "'Libre Baskerville', serif",
+                  fontSize: "1.05rem",
+                  fontWeight: 400,
+                  color: "#fff",
+                  marginBottom: "1rem",
+                }}
+              >
+                Quick Actions
+              </h3>
+              <div className="space-y-2">
+                {[
+                  { label: "Browse Projects", to: "/projects" },
+                  { label: "View My Tasks", to: "/my-tasks" },
+                  { label: "Manage Teams", to: "/teams" },
+                ].map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className="flex items-center justify-between no-underline"
+                    style={{
+                      padding: "0.7rem 1rem",
+                      borderRadius: "12px",
+                      background: "rgba(0,0,0,0.15)",
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: "0.85rem",
+                      fontWeight: 500,
+                      color: "#fff",
+                      transition: "background 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "rgba(0,0,0,0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "rgba(0,0,0,0.15)";
+                    }}
+                  >
+                    {item.label}
+                    <span>&rarr;</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="bg-[#1a1a1a] text-[#f7f3ef] p-6">
-        <h3 className="font-display text-xl mb-4">Quick Actions</h3>
-        <div className="flex flex-wrap gap-4">
-          <Link
-            to="/projects"
-            className="px-6 py-3 bg-[#d4754e] text-white font-mono text-sm uppercase tracking-widest hover:bg-[#b85f3a] transition-colors"
-          >
-            Browse Projects
-          </Link>
-          <Link
-            to="/my-tasks"
-            className="px-6 py-3 border-2 border-[#f7f3ef] text-[#f7f3ef] font-mono text-sm uppercase tracking-widest hover:bg-[#f7f3ef] hover:text-[#1a1a1a] transition-colors"
-          >
-            View My Tasks
-          </Link>
-          <Link
-            to="/teams"
-            className="px-6 py-3 border-2 border-[#f7f3ef] text-[#f7f3ef] font-mono text-sm uppercase tracking-widest hover:bg-[#f7f3ef] hover:text-[#1a1a1a] transition-colors"
-          >
-            Manage Teams
-          </Link>
-        </div>
-      </div>
+      <style>{`
+        @keyframes d2dFadeUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 }

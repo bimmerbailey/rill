@@ -9,15 +9,34 @@ import {
 } from "@/features/projects/graphql/queries";
 import { useProjectBoard } from "@/features/projects/hooks/useProjectBoard";
 
+/**
+ * Project Board Page with "Soft Canvas — Evening" dark theme
+ */
 export function ProjectBoardPage() {
   const { projectId } = useParams<{ projectId: string }>();
   const { project, taskGroups, loading, error } = useProjectBoard(
-    projectId || "",
+    projectId || ""
   );
   const [newGroupName, setNewGroupName] = useState("");
   const [newTaskNames, setNewTaskNames] = useState<Record<string, string>>({});
   const [groupError, setGroupError] = useState<string | null>(null);
   const [taskError, setTaskError] = useState<Record<string, string>>({});
+
+  // Dark palette
+  const surface0 = "#1c1917";
+  const surface1 = "#231f1c";
+  const surface2 = "#2c2724";
+  const surface3 = "#36302c";
+  const border = "rgba(255,235,210,0.06)";
+  const textPrimary = "rgba(245,238,230,0.87)";
+  const textSecondary = "rgba(245,238,230,0.5)";
+  const textTertiary = "rgba(245,238,230,0.32)";
+  const terracotta = "#c9805e";
+  const sage = "#7fa67f";
+  const slate = "#7992b0";
+  const ochre = "#bfa26e";
+
+  const groupColors = [terracotta, sage, slate, ochre];
 
   const [createTaskGroup, { loading: creatingGroup }] = useMutation(
     CREATE_TASK_GROUP,
@@ -25,7 +44,7 @@ export function ProjectBoardPage() {
       refetchQueries: projectId
         ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectId } }]
         : [],
-    },
+    }
   );
   const [createTask, { loading: creatingTask }] = useMutation(CREATE_TASK, {
     refetchQueries: projectId
@@ -96,13 +115,13 @@ export function ProjectBoardPage() {
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto p-8">
+      <div className="max-w-6xl mx-auto p-8 relative z-10">
         <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+          <div className="h-8 rounded w-1/3" style={{ background: surface2 }}></div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="h-64 bg-gray-200 rounded"></div>
-            <div className="h-64 bg-gray-200 rounded"></div>
-            <div className="h-64 bg-gray-200 rounded"></div>
+            <div className="h-64 rounded" style={{ background: surface1 }}></div>
+            <div className="h-64 rounded" style={{ background: surface1 }}></div>
+            <div className="h-64 rounded" style={{ background: surface1 }}></div>
           </div>
         </div>
       </div>
@@ -111,12 +130,23 @@ export function ProjectBoardPage() {
 
   if (error) {
     return (
-      <div className="max-w-6xl mx-auto p-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-          <h2 className="text-red-800 font-semibold mb-2">
+      <div className="max-w-6xl mx-auto p-8 relative z-10">
+        <div
+          className="rounded-lg p-6"
+          style={{
+            background: surface1,
+            border: `1px solid ${border}`,
+          }}
+        >
+          <h2
+            className="font-semibold mb-2"
+            style={{ color: terracotta, fontFamily: "'Libre Baskerville', serif" }}
+          >
             Error loading project
           </h2>
-          <p className="text-red-600">{error.message}</p>
+          <p style={{ color: textSecondary, fontFamily: "'DM Sans', sans-serif" }}>
+            {error.message}
+          </p>
         </div>
       </div>
     );
@@ -124,13 +154,33 @@ export function ProjectBoardPage() {
 
   if (!project) {
     return (
-      <div className="max-w-6xl mx-auto p-8">
-        <div className="bg-white border-2 border-[#1a1a1a] shadow-[4px_4px_0_0_#1a1a1a] p-6">
-          <h2 className="font-display text-xl text-[#1a1a1a] mb-2">
+      <div className="max-w-6xl mx-auto p-8 relative z-10">
+        <div
+          className="p-6"
+          style={{
+            background: surface1,
+            border: `1px solid ${border}`,
+            borderRadius: "20px",
+          }}
+        >
+          <h2
+            className="mb-2"
+            style={{
+              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontSize: "1.5rem",
+              color: textPrimary,
+            }}
+          >
             Project not found
           </h2>
-          <p className="font-mono text-sm text-[#1a1a1a]/60">
-            We couldn’t load this project. Check the URL and try again.
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "0.9rem",
+              color: textSecondary,
+            }}
+          >
+            We couldn't load this project. Check the URL and try again.
           </p>
         </div>
       </div>
@@ -138,15 +188,44 @@ export function ProjectBoardPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-display text-[#1a1a1a]">{project.name}</h1>
-        <p className="font-mono text-sm text-[#1a1a1a]/60 mt-2">
+    <div className="max-w-6xl mx-auto p-8 relative z-10">
+      {/* Header */}
+      <div
+        className="mb-8"
+        style={{ animation: "d2dFadeUp 0.7s ease-out both" }}
+      >
+        <h1
+          style={{
+            fontFamily: "'Libre Baskerville', Georgia, serif",
+            fontSize: "2.5rem",
+            fontWeight: 400,
+            color: textPrimary,
+          }}
+        >
+          {project.name}
+        </h1>
+        <p
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: "0.9rem",
+            color: textSecondary,
+            marginTop: "0.5rem",
+          }}
+        >
           Project board
         </p>
       </div>
 
-      <div className="bg-white border-2 border-[#1a1a1a] shadow-[4px_4px_0_0_#1a1a1a] p-6 mb-8">
+      {/* Add Group Section */}
+      <div
+        className="p-6 mb-8"
+        style={{
+          background: surface1,
+          border: `1px solid ${border}`,
+          borderRadius: "20px",
+          animation: "d2dFadeUp 0.7s ease-out 0.1s both",
+        }}
+      >
         <div className="flex flex-col md:flex-row md:items-end gap-4">
           <div className="flex-1">
             <Input
@@ -155,58 +234,158 @@ export function ProjectBoardPage() {
               onChange={(event) => setNewGroupName(event.target.value)}
               error={groupError || undefined}
               placeholder="Backlog"
+              style={{
+                background: surface3,
+                borderColor: border,
+                color: textPrimary,
+              }}
             />
           </div>
           <Button
             onClick={handleCreateGroup}
             disabled={creatingGroup}
             className="md:self-end"
+            style={{
+              background: terracotta,
+              color: surface0,
+              borderRadius: "8px",
+            }}
           >
-            {creatingGroup ? "Creating..." : "Add Group"}
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+              {creatingGroup ? "Creating..." : "Add Group"}
+            </span>
           </Button>
         </div>
       </div>
 
+      {/* Task Groups */}
       {taskGroups.length === 0 ? (
-        <div className="bg-white border-2 border-[#1a1a1a] shadow-[4px_4px_0_0_#1a1a1a] p-6">
-          <p className="font-mono text-sm text-[#1a1a1a]/60">
+        <div
+          className="p-6"
+          style={{
+            background: surface1,
+            border: `1px solid ${border}`,
+            borderRadius: "20px",
+            animation: "d2dFadeUp 0.7s ease-out 0.2s both",
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "0.9rem",
+              color: textSecondary,
+            }}
+          >
             No task groups yet.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {taskGroups.map((group) => (
+          {taskGroups.map((group, groupIndex) => (
             <div
               key={group.id}
-              className="bg-white border-2 border-[#1a1a1a] shadow-[4px_4px_0_0_#1a1a1a] p-4 flex flex-col"
+              className="p-4 flex flex-col"
+              style={{
+                background: surface1,
+                border: `1px solid ${border}`,
+                borderRadius: "20px",
+                animation: `d2dFadeUp 0.7s ease-out ${0.2 + groupIndex * 0.1}s both`,
+              }}
             >
-              <h2 className="font-mono text-xs uppercase tracking-widest text-[#1a1a1a]/60 mb-4">
-                {group.name}
-              </h2>
-              <div className="space-y-3">
-                {group.tasks.map((task) => (
+              <div className="flex items-center gap-2 mb-4">
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    background: groupColors[groupIndex % groupColors.length],
+                    boxShadow: `0 0 8px ${groupColors[groupIndex % groupColors.length]}40`,
+                  }}
+                />
+                <h2
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.15em",
+                    color: textSecondary,
+                  }}
+                >
+                  {group.name}
+                </h2>
+              </div>
+
+              <div className="space-y-3 flex-1">
+                {group.tasks.map((task, taskIndex) => (
                   <div
                     key={task.id}
-                    className="border-2 border-[#1a1a1a] bg-[#f7f3ef] p-3 shadow-[2px_2px_0_0_#1a1a1a]"
+                    className="p-3 transition-all duration-200"
+                    style={{
+                      background: surface2,
+                      border: `1px solid ${border}`,
+                      borderRadius: "12px",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = surface3;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = surface2;
+                    }}
                   >
-                    <p className="font-medium text-sm text-[#1a1a1a]">
+                    <p
+                      style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: "0.9rem",
+                        fontWeight: 500,
+                        color: textPrimary,
+                      }}
+                    >
                       {task.name}
                     </p>
                   </div>
                 ))}
                 {group.tasks.length === 0 && (
-                  <p className="font-mono text-xs text-[#1a1a1a]/50">
+                  <p
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: "0.8rem",
+                      color: textTertiary,
+                      fontStyle: "italic",
+                    }}
+                  >
                     No tasks yet.
                   </p>
                 )}
               </div>
-              <div className="mt-4 border-t-2 border-[#1a1a1a] pt-4 space-y-3">
+
+              {/* Add Task Section */}
+              <div
+                className="mt-4 pt-4 space-y-3"
+                style={{ borderTop: `1px solid ${border}` }}
+              >
                 <div className="flex flex-col gap-2">
-                  <label className="font-mono text-xs uppercase tracking-widest text-[#1a1a1a]/70">
+                  <label
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: "0.7rem",
+                      fontWeight: 500,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                      color: textTertiary,
+                    }}
+                  >
                     New task
                   </label>
                   <input
-                    className="w-full px-3 py-2 bg-transparent border-2 border-[#1a1a1a] text-[#1a1a1a] font-mono text-sm"
+                    className="w-full px-3 py-2 rounded-lg"
+                    style={{
+                      background: surface3,
+                      border: `1px solid ${border}`,
+                      color: textPrimary,
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: "0.9rem",
+                    }}
                     value={newTaskNames[group.id] || ""}
                     onChange={(event) =>
                       setNewTaskNames((prev) => ({
@@ -217,7 +396,13 @@ export function ProjectBoardPage() {
                     placeholder="Task name"
                   />
                   {taskError[group.id] && (
-                    <span className="font-mono text-xs text-red-600">
+                    <span
+                      style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: "0.75rem",
+                        color: terracotta,
+                      }}
+                    >
                       {taskError[group.id]}
                     </span>
                   )}
@@ -227,8 +412,16 @@ export function ProjectBoardPage() {
                   onClick={() => handleCreateTask(group.id)}
                   disabled={creatingTask}
                   className="w-full"
+                  style={{
+                    background: surface2,
+                    border: `1px solid ${border}`,
+                    color: textPrimary,
+                    borderRadius: "8px",
+                  }}
                 >
-                  {creatingTask ? "Adding..." : "Add Task"}
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+                    {creatingTask ? "Adding..." : "Add Task"}
+                  </span>
                 </Button>
               </div>
             </div>

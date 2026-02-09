@@ -106,3 +106,15 @@ body {
     transform: translateX(0);
   }
 }
+
+/* Dashboard 2 Dark Theme Animation */
+@keyframes d2dFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

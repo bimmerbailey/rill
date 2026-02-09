@@ -6,6 +6,9 @@ import { authApi } from "@/features/auth/services/authApi";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useAuthStore } from "@/stores/authStore";
 
+/**
+ * Login Page with "Soft Canvas — Evening" dark theme
+ */
 export function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,6 +19,18 @@ export function LoginPage() {
   const location = useLocation() as { state?: { redirect?: string } };
   const { login } = useAuth();
   const { isAuthenticated } = useAuthStore();
+
+  // Dark palette — warm charcoal tones
+  const base = "#141211";
+  const surface0 = "#1c1917";
+  const surface1 = "#231f1c";
+  const surface2 = "#2c2724";
+  const surface3 = "#36302c";
+  const border = "rgba(255,235,210,0.06)";
+  const textPrimary = "rgba(245,238,230,0.87)";
+  const textSecondary = "rgba(245,238,230,0.5)";
+  const textTertiary = "rgba(245,238,230,0.32)";
+  const terracotta = "#c9805e";
 
   useEffect(() => {
     let isMounted = true;
@@ -67,17 +82,54 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex">
+    <div
+      className="min-h-screen w-full flex"
+      style={{
+        background: `linear-gradient(160deg, ${base} 0%, ${surface0} 50%, ${base} 100%)`,
+        color: textPrimary,
+        fontFamily: "'Libre Baskerville', Georgia, serif",
+      }}
+    >
+      {/* Soft ambient blobs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div
+          style={{
+            position: "absolute",
+            top: "-10%",
+            right: "-5%",
+            width: "500px",
+            height: "500px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(201,128,94,0.06) 0%, transparent 70%)",
+            filter: "blur(80px)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "10%",
+            left: "-10%",
+            width: "600px",
+            height: "600px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(127,166,127,0.04) 0%, transparent 70%)",
+            filter: "blur(100px)",
+          }}
+        />
+      </div>
+
       {/* Left Side - Visual */}
       <div
         className="
           hidden lg:flex lg:w-1/2 relative overflow-hidden
-          bg-[#1a1a1a] items-center justify-center
-          animate-[slideInLeft_1s_ease-out_forwards]
+          items-center justify-center
+          animate-[d2dFadeUp_1s_ease-out_both]
         "
       >
         {/* Geometric Pattern */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-5">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern
@@ -89,7 +141,7 @@ export function LoginPage() {
                 <path
                   d="M 60 0 L 0 0 0 60"
                   fill="none"
-                  stroke="#f7f3ef"
+                  stroke={textPrimary}
                   strokeWidth="1"
                 />
               </pattern>
@@ -99,49 +151,90 @@ export function LoginPage() {
         </div>
 
         {/* Decorative Elements */}
-        <div className="absolute top-20 left-20 w-32 h-32 border-4 border-[#d4754e] opacity-60 rotate-12" />
-        <div className="absolute bottom-32 right-20 w-24 h-24 bg-[#d4754e] opacity-40 -rotate-6" />
-        <div className="absolute top-1/2 right-1/4 w-16 h-16 border-2 border-[#f7f3ef] opacity-20 rotate-45" />
+        <div
+          className="absolute top-20 left-20 w-32 h-32 border-4 opacity-40 rotate-12"
+          style={{ borderColor: terracotta }}
+        />
+        <div
+          className="absolute bottom-32 right-20 w-24 h-24 opacity-20 -rotate-6"
+          style={{ backgroundColor: terracotta }}
+        />
+        <div
+          className="absolute top-1/2 right-1/4 w-16 h-16 border-2 opacity-10 rotate-45"
+          style={{ borderColor: textPrimary }}
+        />
 
         {/* Content */}
         <div
           className="
             relative z-10 text-center px-12
-            animate-[fadeSlideUp_1s_ease-out_0.3s_both]
+            animate-[d2dFadeUp_1s_ease-out_0.3s_both]
           "
         >
-          <div className="font-mono text-[#d4754e] text-sm tracking-[0.3em] uppercase mb-6">
+          <div
+            className="text-sm tracking-[0.3em] uppercase mb-6"
+            style={{ 
+              fontFamily: "'DM Sans', sans-serif",
+              color: textTertiary,
+              fontWeight: 500 
+            }}
+          >
             Welcome to
           </div>
-          <h1 className="font-display text-[#f7f3ef] text-6xl xl:text-7xl leading-none mb-8">
-            <span className="italic">Rill</span>
+          <h1
+            className="text-6xl xl:text-7xl leading-none mb-8"
+            style={{ color: textPrimary }}
+          >
+            <span className="italic" style={{ color: terracotta }}>Rill</span>
             <br />
-            <span className="text-[#d4754e]">Platform</span>
+            <span>Platform</span>
           </h1>
-          <p className="font-mono text-[#f7f3ef]/60 text-sm max-w-sm mx-auto leading-relaxed">
+          <p
+            className="text-sm max-w-sm mx-auto leading-relaxed"
+            style={{ 
+              fontFamily: "'DM Sans', sans-serif",
+              color: textSecondary 
+            }}
+          >
             Where structure meets creativity. Build, organize, and scale your
             vision with confidence.
           </p>
         </div>
 
         {/* Bottom Accent Line */}
-        <div className="absolute bottom-0 left-0 right-0 h-2 bg-[#d4754e]" />
+        <div
+          className="absolute bottom-0 left-0 right-0 h-1"
+          style={{ backgroundColor: terracotta, opacity: 0.6 }}
+        />
       </div>
 
       {/* Right Side - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16">
+      <div
+        className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16 relative z-10"
+        style={{ backgroundColor: surface0 }}
+      >
         <div
           className="
             w-full max-w-md
-            animate-[fadeSlideUp_1s_ease-out_0.2s_both]
+            animate-[d2dFadeUp_1s_ease-out_0.2s_both]
           "
         >
           {/* Mobile Header */}
           <div className="lg:hidden mb-12">
-            <div className="font-mono text-[#d4754e] text-xs tracking-[0.3em] uppercase mb-3">
+            <div
+              className="text-xs tracking-[0.3em] uppercase mb-3"
+              style={{ 
+                fontFamily: "'DM Sans', sans-serif",
+                color: terracotta,
+                fontWeight: 500 
+              }}
+            >
               Rill Platform
             </div>
-            <h1 className="font-display text-[#1a1a1a] text-4xl leading-none">
+            <h1
+              className="text-4xl leading-none"
+              style={{ color: textPrimary }}
+            >
               Welcome
               <br />
               <span className="italic">Back</span>
@@ -150,10 +243,20 @@ export function LoginPage() {
 
           {/* Desktop Header */}
           <div className="hidden lg:block mb-12">
-            <div className="font-mono text-[#d4754e] text-xs tracking-[0.3em] uppercase mb-3">
+            <div
+              className="text-xs tracking-[0.3em] uppercase mb-3"
+              style={{ 
+                fontFamily: "'DM Sans', sans-serif",
+                color: terracotta,
+                fontWeight: 500 
+              }}
+            >
               Authentication
             </div>
-            <h2 className="font-display text-[#1a1a1a] text-5xl leading-tight">
+            <h2
+              className="text-5xl leading-tight"
+              style={{ color: textPrimary }}
+            >
               Sign <span className="italic">In</span>
             </h2>
           </div>
@@ -162,7 +265,7 @@ export function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-8">
             <div
               className="
-                animate-[fadeSlideUp_0.7s_ease-out_0.4s_both]
+                animate-[d2dFadeUp_0.7s_ease-out_0.4s_both]
               "
             >
               <Input
@@ -176,12 +279,17 @@ export function LoginPage() {
                 }}
                 required
                 autoComplete="username"
+                style={{
+                  background: surface3,
+                  borderColor: border,
+                  color: textPrimary,
+                }}
               />
             </div>
 
             <div
               className="
-                animate-[fadeSlideUp_0.7s_ease-out_0.5s_both]
+                animate-[d2dFadeUp_0.7s_ease-out_0.5s_both]
               "
             >
               <Input
@@ -195,11 +303,23 @@ export function LoginPage() {
                 }}
                 required
                 autoComplete="current-password"
+                style={{
+                  background: surface3,
+                  borderColor: border,
+                  color: textPrimary,
+                }}
               />
             </div>
 
             {errorMessage ? (
-              <div className="font-mono text-xs text-red-600 uppercase tracking-wider">
+              <div
+                className="text-xs uppercase tracking-wider"
+                style={{ 
+                  fontFamily: "'DM Sans', sans-serif",
+                  color: terracotta,
+                  fontWeight: 500 
+                }}
+              >
                 {errorMessage}
               </div>
             ) : null}
@@ -208,21 +328,38 @@ export function LoginPage() {
             <div
               className="
                 flex items-center justify-between
-                animate-[fadeSlideUp_0.7s_ease-out_0.6s_both]
+                animate-[d2dFadeUp_0.7s_ease-out_0.6s_both]
               "
             >
               <label className="flex items-center gap-3 cursor-pointer group">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 border-2 border-[#1a1a1a] rounded-none accent-[#d4754e] cursor-pointer"
+                  className="w-4 h-4 cursor-pointer"
+                  style={{ 
+                    background: surface3,
+                    border: `1px solid ${border}`,
+                    accentColor: terracotta 
+                  }}
                 />
-                <span className="font-mono text-xs text-[#1a1a1a]/60 uppercase tracking-wider group-hover:text-[#1a1a1a] transition-colors">
+                <span
+                  className="text-xs uppercase tracking-wider transition-colors"
+                  style={{ 
+                    fontFamily: "'DM Sans', sans-serif",
+                    color: textSecondary,
+                    fontWeight: 500 
+                  }}
+                >
                   Remember me
                 </span>
               </label>
               <Link
                 to="/forgot-password"
-                className="font-mono text-xs text-[#d4754e] uppercase tracking-wider hover:underline underline-offset-4 transition-all"
+                className="text-xs uppercase tracking-wider hover:opacity-80 transition-all"
+                style={{ 
+                  fontFamily: "'DM Sans', sans-serif",
+                  color: terracotta,
+                  fontWeight: 500 
+                }}
               >
                 Forgot?
               </Link>
@@ -232,7 +369,7 @@ export function LoginPage() {
             <div
               className="
                 pt-4
-                animate-[fadeSlideUp_0.7s_ease-out_0.7s_both]
+                animate-[d2dFadeUp_0.7s_ease-out_0.7s_both]
               "
             >
               <Button
@@ -240,14 +377,29 @@ export function LoginPage() {
                 fullWidth
                 disabled={isLoading}
                 className="flex items-center justify-center gap-3"
+                style={{
+                  background: terracotta,
+                  color: surface0,
+                  borderRadius: "8px",
+                }}
               >
                 {isLoading ? (
                   <>
-                    <span className="w-4 h-4 border-2 border-[#f7f3ef]/30 border-t-[#f7f3ef] rounded-full animate-spin" />
-                    Authenticating...
+                    <span
+                      className="w-4 h-4 border-2 rounded-full animate-spin"
+                      style={{ 
+                        borderColor: `${textSecondary}`,
+                        borderTopColor: textPrimary 
+                      }}
+                    />
+                    <span style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      Authenticating...
+                    </span>
                   </>
                 ) : (
-                  "Continue"
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+                    Continue
+                  </span>
                 )}
               </Button>
             </div>
@@ -257,27 +409,46 @@ export function LoginPage() {
           <div
             className="
               my-10 flex items-center gap-4
-              animate-[fadeSlideUp_0.7s_ease-out_0.8s_both]
+              animate-[d2dFadeUp_0.7s_ease-out_0.8s_both]
             "
           >
-            <div className="flex-1 h-px bg-[#1a1a1a]/15" />
-            <span className="font-mono text-xs text-[#1a1a1a]/40 uppercase tracking-widest">
+            <div
+              className="flex-1 h-px"
+              style={{ backgroundColor: border }}
+            />
+            <span
+              className="text-xs uppercase tracking-widest"
+              style={{ 
+                fontFamily: "'DM Sans', sans-serif",
+                color: textTertiary,
+                fontWeight: 500 
+              }}
+            >
               Or
             </span>
-            <div className="flex-1 h-px bg-[#1a1a1a]/15" />
+            <div
+              className="flex-1 h-px"
+              style={{ backgroundColor: border }}
+            />
           </div>
 
           {/* Social Login */}
           <div
             className="
               space-y-3
-              animate-[fadeSlideUp_0.7s_ease-out_0.9s_both]
+              animate-[d2dFadeUp_0.7s_ease-out_0.9s_both]
             "
           >
             <Button
               variant="secondary"
               fullWidth
               className="flex items-center justify-center gap-3"
+              style={{
+                background: surface1,
+                border: `1px solid ${border}`,
+                color: textPrimary,
+                borderRadius: "8px",
+              }}
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -285,7 +456,9 @@ export function LoginPage() {
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
               </svg>
-              Continue with Google
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+                Continue with Google
+              </span>
             </Button>
           </div>
 
@@ -293,21 +466,41 @@ export function LoginPage() {
           <p
             className="
               mt-12 text-center
-              animate-[fadeSlideUp_0.7s_ease-out_1.0s_both]
+              animate-[d2dFadeUp_0.7s_ease-out_1.0s_both]
             "
           >
-            <span className="font-mono text-sm text-[#1a1a1a]/60">
+            <span
+              style={{ 
+                fontFamily: "'DM Sans', sans-serif",
+                color: textSecondary,
+                fontSize: "0.9rem" 
+              }}
+            >
               Don't have an account?{" "}
             </span>
             {showRegistration ? (
               <Link
                 to="/register"
-                className="font-mono text-sm text-[#1a1a1a] font-medium hover:text-[#d4754e] underline underline-offset-4 transition-all"
+                className="hover:opacity-80 transition-all"
+                style={{ 
+                  fontFamily: "'DM Sans', sans-serif",
+                  color: textPrimary,
+                  fontSize: "0.9rem",
+                  fontWeight: 500,
+                  textDecoration: "underline",
+                  textUnderlineOffset: "4px" 
+                }}
               >
                 Create one
               </Link>
             ) : (
-              <span className="font-mono text-sm text-[#1a1a1a]/50">
+              <span
+                style={{ 
+                  fontFamily: "'DM Sans', sans-serif",
+                  color: textTertiary,
+                  fontSize: "0.9rem" 
+                }}
+              >
                 Contact your admin
               </span>
             )}
@@ -316,23 +509,33 @@ export function LoginPage() {
           {/* Footer */}
           <div
             className="
-              mt-16 pt-8 border-t border-[#1a1a1a]/10
-              animate-[fadeSlideUp_0.7s_ease-out_1.1s_both]
+              mt-16 pt-8
+              animate-[d2dFadeUp_0.7s_ease-out_1.1s_both]
             "
+            style={{ borderTop: `1px solid ${border}` }}
           >
-            <p className="font-mono text-xs text-center text-[#1a1a1a]/40 uppercase tracking-wider">
+            <p
+              className="text-xs text-center uppercase tracking-wider"
+              style={{ 
+                fontFamily: "'DM Sans', sans-serif",
+                color: textTertiary,
+                fontWeight: 500 
+              }}
+            >
               Protected by reCAPTCHA and subject to our
               <br />
               <Link
                 to="/privacy"
-                className="hover:text-[#d4754e] transition-colors"
+                className="hover:opacity-80 transition-colors"
+                style={{ color: terracotta }}
               >
                 Privacy Policy
               </Link>
               {" & "}
               <Link
                 to="/terms"
-                className="hover:text-[#d4754e] transition-colors"
+                className="hover:opacity-80 transition-colors"
+                style={{ color: terracotta }}
               >
                 Terms
               </Link>
@@ -340,9 +543,6 @@ export function LoginPage() {
           </div>
         </div>
       </div>
-
-      {/* Mobile Bottom Accent */}
-      <div className="fixed bottom-0 left-0 right-0 h-1.5 bg-[#d4754e] lg:hidden" />
     </div>
   );
 }
