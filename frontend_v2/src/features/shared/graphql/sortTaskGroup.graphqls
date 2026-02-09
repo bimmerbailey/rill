@@ -1,0 +1,9 @@
+mutation sortTaskGroup($tasks: [TaskPositionUpdate!]!, $taskGroupID: UUID!) {
+  sortTaskGroup(input: { taskGroupID: $taskGroupID, tasks: $tasks }) {
+    taskGroupID
+    tasks {
+      id
+      position
+    }
+  }
+}

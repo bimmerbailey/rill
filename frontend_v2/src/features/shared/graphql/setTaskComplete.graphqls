@@ -1,0 +1,9 @@
+mutation setTaskComplete($taskID: UUID!, $complete: Boolean!) {
+  setTaskComplete(input: { taskID: $taskID, complete: $complete }) {
+    id
+    name
+    complete
+    completedAt
+    position
+  }
+}

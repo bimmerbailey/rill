@@ -1,15 +1,15 @@
 import { useMemo } from "react";
-import type { GetProjectBoardQuery } from "@/graphql/generated/graphql";
-import { useGetProjectBoardQuery } from "@/graphql/generated/graphql";
+import type { FindProjectQuery } from "@/graphql/generated/graphql";
+import { useFindProjectQuery } from "@/graphql/generated/graphql";
 
 const sortByPosition = <T extends { position: number }>(items: T[]) =>
   [...items].sort((a, b) => a.position - b.position);
 
 // UI-specific view model derived from generated GraphQL types
-type TaskGroup = GetProjectBoardQuery["findProject"]["taskGroups"][number];
+type TaskGroup = FindProjectQuery["findProject"]["taskGroups"][number];
 
 export function useProjectBoard(projectID: string) {
-  const { data, loading, error } = useGetProjectBoardQuery({
+  const { data, loading, error } = useFindProjectQuery({
     variables: { projectID },
     skip: !projectID,
   });
@@ -25,6 +25,8 @@ export function useProjectBoard(projectID: string) {
   return {
     project: data?.findProject,
     taskGroups,
+    labelColors: data?.labelColors || [],
+    users: data?.users || [],
     loading,
     error,
   };
