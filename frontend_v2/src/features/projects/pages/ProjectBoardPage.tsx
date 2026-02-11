@@ -1,14 +1,15 @@
 import { useMemo, useState, useCallback, useRef, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { useMutation, useQuery } from "@apollo/client";
+import { useParams } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 import { gql } from "@apollo/client";
-import { Button, Input } from "@/components/common";
+import { Button, Input, TaskDetailModal } from "@/components/common";
 import {
   CREATE_TASK,
   CREATE_TASK_GROUP,
   GET_PROJECT_BOARD,
 } from "@/features/projects/graphql/queries";
 import { useProjectBoard } from "@/features/projects/hooks/useProjectBoard";
+import { useTaskModal } from "@/hooks";
 import dayjs from "dayjs";
 
 // Additional mutations for full board functionality
@@ -148,68 +149,7 @@ const TOGGLE_TASK_LABEL = gql`
   }
 `;
 
-// Task detail query
-const FIND_TASK = gql`
-  query FindTask($taskID: String!) {
-    findTask(input: { taskShortID: $taskID }) {
-      id
-      shortId
-      name
-      description
-      dueDate {
-        at
-        notifications {
-          id
-          period
-          duration
-        }
-      }
-      hasTime
-      complete
-      watched
-      completedAt
-      position
-      badges {
-        checklist {
-          complete
-          total
-        }
-        comments {
-          unread
-          total
-        }
-      }
-      taskGroup {
-        id
-        name
-      }
-      labels {
-        id
-        assignedDate
-        projectLabel {
-          id
-          name
-          createdDate
-          labelColor {
-            id
-            colorHex
-            position
-            name
-          }
-        }
-      }
-      assigned {
-        id
-        fullName
-        profileIcon {
-          url
-          initials
-          bgColor
-        }
-      }
-    }
-  }
-`;
+
 
 /**
  * Project Board Page with "Soft Canvas — Evening" dark theme
@@ -231,8 +171,18 @@ export function ProjectBoardPage() {
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editingTaskName, setEditingTaskName] = useState("");
   
-  // Selected task for details panel
-  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  // Task modal for viewing and editing task details
+  const {
+    isOpen: isTaskModalOpen,
+    taskData: selectedTask,
+    loading: taskLoading,
+    openModal: openTaskModal,
+    closeModal: closeTaskModal,
+    updateTaskName,
+    updateTaskDescription,
+    toggleTaskComplete,
+    isUpdating: isTaskUpdating,
+  } = useTaskModal();
   
   // Filters and sorting
   const [filterText, setFilterText] = useState("");
@@ -269,7 +219,7 @@ export function ProjectBoardPage() {
     refetchQueries: projectId ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectId } }] : [],
   });
   
-  const [updateTaskName] = useMutation(UPDATE_TASK_NAME, {
+  const [updateTaskNameMutation] = useMutation(UPDATE_TASK_NAME, {
     refetchQueries: projectId ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectId } }] : [],
   });
   
@@ -284,13 +234,6 @@ export function ProjectBoardPage() {
   const [deleteTask] = useMutation(DELETE_TASK, {
     refetchQueries: projectId ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectId } }] : [],
   });
-
-  // Task detail query
-  const { data: taskDetailData } = useQuery(FIND_TASK, {
-    variables: { taskID: selectedTaskId },
-    skip: !selectedTaskId,
-  });
-  const selectedTask = taskDetailData?.findTask;
 
   const nextGroupPosition = useMemo(() => {
     if (taskGroups.length === 0) return 1;
@@ -351,7 +294,7 @@ export function ProjectBoardPage() {
   const handleUpdateTaskName = async (taskId: string) => {
     if (!editingTaskName.trim()) return;
     try {
-      await updateTaskName({ variables: { taskID: taskId, name: editingTaskName.trim() } });
+      await updateTaskNameMutation({ variables: { taskID: taskId, name: editingTaskName.trim() } });
       setEditingTaskId(null);
       setEditingTaskName("");
     } catch (err) {
@@ -383,7 +326,7 @@ export function ProjectBoardPage() {
     if (!confirm("Are you sure you want to delete this task?")) return;
     try {
       await deleteTask({ variables: { taskID: taskId } });
-      if (selectedTaskId === taskId) setSelectedTaskId(null);
+      if (selectedTask?.id === taskId) closeTaskModal();
     } catch (err) {
       console.error("Failed to delete task", err);
     }
@@ -571,7 +514,7 @@ export function ProjectBoardPage() {
                           key={task.id}
                           className="p-3 cursor-pointer transition-all duration-200"
                           style={{ background: surface2, border: `1px solid ${border}`, borderRadius: "12px", opacity: task.complete ? 0.7 : 1 }}
-                          onClick={() => setSelectedTaskId(task.shortId || task.id)}
+                          onClick={() => openTaskModal(task.shortId || task.id)}
                           onMouseEnter={(e) => { e.currentTarget.style.background = surface3; }}
                           onMouseLeave={(e) => { e.currentTarget.style.background = surface2; }}
                         >
@@ -707,138 +650,17 @@ export function ProjectBoardPage() {
           </div>
         </div>
 
-        {/* Task Details Panel */}
-        {selectedTaskId && selectedTask && (
-          <div className="w-80 flex-shrink-0" style={{ animation: "d2dFadeUp 0.3s ease-out" }}>
-            <div className="sticky top-6 p-5" style={{ background: surface1, border: `1px solid ${border}`, borderRadius: "20px" }}>
-              <div className="flex items-start justify-between mb-4">
-                <h3 style={{ fontFamily: "'Libre Baskerville', Georgia, serif", fontSize: "1.1rem", color: textPrimary }}>Task Details</h3>
-                <button onClick={() => setSelectedTaskId(null)} style={{ color: textTertiary, fontSize: "1.2rem" }}>×</button>
-              </div>
-              
-              <div className="space-y-4">
-                {/* Task Name */}
-                <div>
-                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.7rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Name</label>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: textPrimary, marginTop: "0.25rem" }}>{selectedTask.name}</p>
-                </div>
-                
-                {/* Description */}
-                {selectedTask.description && (
-                  <div>
-                    <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.7rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Description</label>
-                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", color: textSecondary, marginTop: "0.25rem", whiteSpace: "pre-wrap" }}>{selectedTask.description}</p>
-                  </div>
-                )}
-                
-                {/* Due Date */}
-                <div>
-                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.7rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Due Date</label>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", color: selectedTask.dueDate?.at ? textPrimary : textTertiary, marginTop: "0.25rem" }}>
-                    {selectedTask.dueDate?.at
-                      ? dayjs(selectedTask.dueDate.at).format(selectedTask.hasTime ? "MMM D, YYYY h:mm A" : "MMM D, YYYY")
-                      : "No due date"}
-                  </p>
-                </div>
-                
-                {/* Status */}
-                <div>
-                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.7rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Status</label>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span
-                      style={{
-                        width: "10px",
-                        height: "10px",
-                        borderRadius: "50%",
-                        background: selectedTask.complete ? sage : terracotta,
-                      }}
-                    />
-                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", color: textSecondary }}>
-                      {selectedTask.complete ? "Completed" : "In Progress"}
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Labels */}
-                {selectedTask.labels && selectedTask.labels.length > 0 && (
-                  <div>
-                    <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.7rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Labels</label>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {selectedTask.labels.map((label) => (
-                        <span
-                          key={label.id}
-                          className="px-2 py-0.5 rounded text-xs"
-                          style={{
-                            background: label.projectLabel?.labelColor?.colorHex || terracotta,
-                            color: "#fff",
-                            fontFamily: "'DM Sans', sans-serif",
-                          }}
-                        >
-                          {label.projectLabel?.name || "Label"}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Assigned */}
-                {selectedTask.assigned && selectedTask.assigned.length > 0 && (
-                  <div>
-                    <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.7rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Assigned</label>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {selectedTask.assigned.map((user) => (
-                        <div key={user.id} className="flex items-center gap-1">
-                          <div
-                            className="w-6 h-6 rounded-full flex items-center justify-center text-xs"
-                            style={{ background: user.profileIcon?.bgColor || slate, color: "#fff" }}
-                          >
-                            {user.profileIcon?.initials || user.fullName?.charAt(0) || "?"}
-                          </div>
-                          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", color: textSecondary }}>{user.fullName}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Badges */}
-                {(selectedTask.badges?.checklist?.total || 0) > 0 || (selectedTask.badges?.comments?.total || 0) > 0 ? (
-                  <div>
-                    <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.7rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Activity</label>
-                    <div className="flex gap-3 mt-1">
-                      {(selectedTask.badges?.checklist?.total || 0) > 0 && (
-                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", color: textSecondary }}>
-                          Checklist: {selectedTask.badges?.checklist?.complete}/{selectedTask.badges?.checklist?.total}
-                        </span>
-                      )}
-                      {(selectedTask.badges?.comments?.total || 0) > 0 && (
-                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", color: textSecondary }}>
-                          Comments: {selectedTask.badges?.comments?.total}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ) : null}
-                
-                {/* Actions */}
-                <div className="pt-3" style={{ borderTop: `1px solid ${border}` }}>
-                  <button
-                    onClick={() => handleToggleComplete(selectedTask.id, selectedTask.complete)}
-                    className="w-full py-2 rounded-lg text-sm transition-opacity hover:opacity-90"
-                    style={{
-                      background: selectedTask.complete ? surface2 : sage,
-                      color: selectedTask.complete ? textSecondary : "#fff",
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontWeight: 500,
-                    }}
-                  >
-                    {selectedTask.complete ? "Mark Incomplete" : "Mark Complete"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Task Detail Modal */}
+        <TaskDetailModal
+          isOpen={isTaskModalOpen}
+          onClose={closeTaskModal}
+          task={selectedTask}
+          loading={taskLoading}
+          onUpdateName={updateTaskName}
+          onUpdateDescription={updateTaskDescription}
+          onToggleComplete={toggleTaskComplete}
+          isUpdating={isTaskUpdating}
+        />
       </div>
     </div>
   );

@@ -6,6 +6,8 @@ import {
   useGetMyTasksQuery,
 } from "@/graphql/generated/graphql";
 import { useDashboardData } from "@/features/dashboard/hooks/useDashboard";
+import { TaskDetailModal } from "@/components/common";
+import { useTaskModal } from "@/hooks";
 
 const statusOptions = [
   { value: MyTasksStatus.Incomplete, label: "Incomplete" },
@@ -37,6 +39,19 @@ export function MyTasksPage() {
   const { data, loading, error } = useGetMyTasksQuery({
     variables: { status, sort },
   });
+
+  // Task modal for viewing and editing task details
+  const {
+    isOpen: isTaskModalOpen,
+    taskData: selectedTask,
+    loading: taskLoading,
+    openModal: openTaskModal,
+    closeModal: closeTaskModal,
+    updateTaskName,
+    updateTaskDescription,
+    toggleTaskComplete,
+    isUpdating: isTaskUpdating,
+  } = useTaskModal();
 
   // Dark palette — warm charcoal tones
   const base = "#141211";
@@ -341,6 +356,7 @@ export function MyTasksPage() {
                   {group.tasks.map((task) => (
                     <div
                       key={task.id}
+                      onClick={() => openTaskModal(task.shortId)}
                       style={{
                         background: surface2,
                         borderRadius: "14px",
@@ -349,6 +365,14 @@ export function MyTasksPage() {
                         display: "flex",
                         alignItems: "center",
                         gap: "0.9rem",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = surface3;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = surface2;
                       }}
                     >
                       <span
@@ -401,6 +425,18 @@ export function MyTasksPage() {
           </div>
         )}
       </div>
+
+      {/* Task Detail Modal */}
+      <TaskDetailModal
+        isOpen={isTaskModalOpen}
+        onClose={closeTaskModal}
+        task={selectedTask}
+        loading={taskLoading}
+        onUpdateName={updateTaskName}
+        onUpdateDescription={updateTaskDescription}
+        onToggleComplete={toggleTaskComplete}
+        isUpdating={isTaskUpdating}
+      />
     </div>
   );
 }
