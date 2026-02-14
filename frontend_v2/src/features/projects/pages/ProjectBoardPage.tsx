@@ -8,7 +8,7 @@ import {
   CREATE_TASK_GROUP,
   GET_PROJECT_BOARD,
 } from "@/features/projects/graphql/queries";
-import { useProjectBoard } from "@/features/projects/hooks/useProjectBoard";
+import { useProjectBoard, useProjectMembers } from "@/features/projects/hooks";
 import { useTaskModal } from "@/hooks";
 import { useAuthStore } from "@/stores";
 import {
@@ -19,6 +19,10 @@ import {
 import { DraggableTask } from "@/features/projects/components/DraggableTask";
 import { DraggableColumn } from "@/features/projects/components/DraggableColumn";
 import { useBoardDropHandler } from "@/features/projects/hooks/useBoardDropHandler";
+import { ProjectSettingsMenu } from "@/features/projects/components/ProjectSettingsMenu";
+import { LabelManagerModal } from "@/features/projects/components/labels";
+import { MemberManagementModal } from "@/features/projects/components/members";
+import { ProjectSettingsModal } from "@/features/projects/components/settings";
 
 const SET_TASK_COMPLETE = gql`
   mutation SetTaskComplete($taskID: UUID!, $complete: Boolean!) {
@@ -69,9 +73,32 @@ const DELETE_TASK = gql`
 
 export function ProjectBoardPage() {
   const { projectId } = useParams<{ projectId: string }>();
-  const { project, taskGroups, loading, error } = useProjectBoard(
-    projectId || "",
-  );
+  const {
+    project,
+    taskGroups,
+    members,
+    invitedMembers,
+    labels,
+    labelColors,
+    users,
+    loading,
+    error,
+    refetch,
+  } = useProjectBoard(projectId || "");
+
+  const {
+    inviteProjectMembers,
+    removeProjectMember,
+    cancelProjectInvite,
+    changeProjectMemberRole,
+  } = useProjectMembers({
+    projectId: projectId || "",
+    onMembersChanged: () => refetch(),
+  });
+
+  const [showLabelsModal, setShowLabelsModal] = useState(false);
+  const [showMembersModal, setShowMembersModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   const [newGroupName, setNewGroupName] = useState("");
   const [newTaskNames, setNewTaskNames] = useState<Record<string, string>>({});
@@ -579,6 +606,11 @@ export function ProjectBoardPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <ProjectSettingsMenu
+              onOpenLabels={() => setShowLabelsModal(true)}
+              onOpenMembers={() => setShowMembersModal(true)}
+              onOpenSettings={() => setShowSettingsModal(true)}
+            />
             <input
               type="text"
               placeholder="Filter tasks..."
@@ -936,6 +968,37 @@ export function ProjectBoardPage() {
         onCreateDueDateNotification={createDueDateNotification}
         onDeleteDueDateNotification={deleteDueDateNotification}
         isUpdating={isTaskUpdating}
+      />
+
+      <LabelManagerModal
+        isOpen={showLabelsModal}
+        onClose={() => setShowLabelsModal(false)}
+        projectId={projectId || ""}
+        labels={labels}
+        labelColors={labelColors}
+        onLabelChanged={() => refetch()}
+      />
+
+      <MemberManagementModal
+        isOpen={showMembersModal}
+        onClose={() => setShowMembersModal(false)}
+        members={members}
+        invitedMembers={invitedMembers}
+        users={users}
+        currentUserId={currentUserId ?? undefined}
+        onInvite={inviteProjectMembers}
+        onRemove={removeProjectMember}
+        onCancelInvite={cancelProjectInvite}
+        onChangeRole={changeProjectMemberRole}
+      />
+
+      <ProjectSettingsModal
+        isOpen={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
+        projectId={projectId || ""}
+        projectName={project?.name || ""}
+        publicOn={project?.publicOn}
+        onSettingsChanged={() => refetch()}
       />
     </div>
   );
