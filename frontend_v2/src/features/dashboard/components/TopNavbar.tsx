@@ -18,7 +18,6 @@ export function TopNavbar() {
 
   // Dark palette
   const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
   const border = "rgba(255,235,210,0.06)";
   const textPrimary = "rgba(245,238,230,0.87)";
   const textSecondary = "rgba(245,238,230,0.5)";

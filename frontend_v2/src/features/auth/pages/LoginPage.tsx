@@ -24,7 +24,6 @@ export function LoginPage() {
   const base = "#141211";
   const surface0 = "#1c1917";
   const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
   const surface3 = "#36302c";
   const border = "rgba(255,235,210,0.06)";
   const textPrimary = "rgba(245,238,230,0.87)";

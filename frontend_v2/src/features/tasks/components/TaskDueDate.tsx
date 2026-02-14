@@ -96,9 +96,20 @@ export function TaskDueDate({
     setIsSubmitting(true);
     try {
       if (dateValue) {
-        const dateTime = hasTimeValue
-          ? `${dateValue}T${timeValue || "00:00"}`
-          : dateValue;
+        // Format as RFC3339Nano compatible string (ISO 8601 with timezone)
+        let dateTime: string;
+        if (hasTimeValue && timeValue) {
+          // Parse the date and time, then convert to ISO string
+          const [year, month, day] = dateValue.split("-").map(Number);
+          const [hours, minutes] = timeValue.split(":").map(Number);
+          const date = new Date(year, month - 1, day, hours, minutes, 0, 0);
+          dateTime = date.toISOString();
+        } else {
+          // Date only - set to start of day in UTC
+          const [year, month, day] = dateValue.split("-").map(Number);
+          const date = new Date(year, month - 1, day, 0, 0, 0, 0);
+          dateTime = date.toISOString();
+        }
         await onUpdateDueDate(dateTime, hasTimeValue);
       } else {
         await onUpdateDueDate(null, false);

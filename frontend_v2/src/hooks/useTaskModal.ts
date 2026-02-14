@@ -135,48 +135,50 @@ export function useTaskModal(): UseTaskModalReturn {
     setTaskId(null);
   }, []);
 
+  const fullTaskId = data?.findTask?.id;
+
   const updateTaskName = useCallback(
     async (name: string) => {
-      if (!taskId) return;
+      if (!fullTaskId) return;
       await updateNameMutation({
-        variables: { taskID: taskId, name },
+        variables: { taskID: fullTaskId, name },
       });
     },
-    [taskId, updateNameMutation],
+    [fullTaskId, updateNameMutation],
   );
 
   const updateTaskDescription = useCallback(
     async (description: string) => {
-      if (!taskId) return;
+      if (!fullTaskId) return;
       await updateDescriptionMutation({
-        variables: { taskID: taskId, description },
+        variables: { taskID: fullTaskId, description },
       });
     },
-    [taskId, updateDescriptionMutation],
+    [fullTaskId, updateDescriptionMutation],
   );
 
   const toggleTaskComplete = useCallback(
     async (complete: boolean) => {
-      if (!taskId) return;
+      if (!fullTaskId) return;
       await setCompleteMutation({
-        variables: { taskID: taskId, complete },
+        variables: { taskID: fullTaskId, complete },
       });
     },
-    [taskId, setCompleteMutation],
+    [fullTaskId, setCompleteMutation],
   );
 
   const toggleTaskWatch = useCallback(async () => {
-    if (!taskId) return;
+    if (!fullTaskId) return;
     await toggleWatchMutation({
-      variables: { taskID: taskId },
+      variables: { taskID: fullTaskId },
     });
-  }, [taskId, toggleWatchMutation]);
+  }, [fullTaskId, toggleWatchMutation]);
 
   const createComment = useCallback(
     async (message: string) => {
-      if (!taskId) return;
+      if (!fullTaskId || !taskId) return;
       await createCommentMutation({
-        variables: { taskID: taskId, message },
+        variables: { taskID: fullTaskId, message },
         update: (cache, { data }) => {
           if (!data?.createTaskComment) return;
           const newComment = data.createTaskComment.comment;
@@ -196,7 +198,7 @@ export function useTaskModal(): UseTaskModalReturn {
         },
       });
     },
-    [taskId, createCommentMutation],
+    [fullTaskId, taskId, createCommentMutation],
   );
 
   const updateComment = useCallback(
@@ -238,9 +240,9 @@ export function useTaskModal(): UseTaskModalReturn {
 
   const createChecklist = useCallback(
     async (name: string, position: number) => {
-      if (!taskId) return;
+      if (!fullTaskId || !taskId) return;
       await createChecklistMutation({
-        variables: { taskID: taskId, name, position },
+        variables: { taskID: fullTaskId, name, position },
         update: (cache, { data }) => {
           if (!data?.createTaskChecklist) return;
           const newChecklist = data.createTaskChecklist;
@@ -263,7 +265,7 @@ export function useTaskModal(): UseTaskModalReturn {
         },
       });
     },
-    [taskId, createChecklistMutation],
+    [fullTaskId, taskId, createChecklistMutation],
   );
 
   const deleteChecklist = useCallback(
@@ -395,40 +397,40 @@ export function useTaskModal(): UseTaskModalReturn {
 
   const toggleLabel = useCallback(
     async (projectLabelID: string) => {
-      if (!taskId) return;
+      if (!fullTaskId) return;
       await toggleLabelMutation({
-        variables: { taskID: taskId, projectLabelID },
+        variables: { taskID: fullTaskId, projectLabelID },
       });
     },
-    [taskId, toggleLabelMutation],
+    [fullTaskId, toggleLabelMutation],
   );
 
   const assign = useCallback(
     async (userID: string) => {
-      if (!taskId) return;
+      if (!fullTaskId) return;
       await assignMutation({
-        variables: { taskID: taskId, userID },
+        variables: { taskID: fullTaskId, userID },
       });
     },
-    [taskId, assignMutation],
+    [fullTaskId, assignMutation],
   );
 
   const unassign = useCallback(
     async (userID: string) => {
-      if (!taskId) return;
+      if (!fullTaskId) return;
       await unassignMutation({
-        variables: { taskID: taskId, userID },
+        variables: { taskID: fullTaskId, userID },
       });
     },
-    [taskId, unassignMutation],
+    [fullTaskId, unassignMutation],
   );
 
   const updateDueDate = useCallback(
     async (dueDate: string | null, hasTime: boolean) => {
-      if (!taskId) return;
+      if (!fullTaskId) return;
       await updateDueDateMutation({
         variables: {
-          taskID: taskId,
+          taskID: fullTaskId,
           dueDate,
           hasTime,
           createNotifications: [],
@@ -437,19 +439,19 @@ export function useTaskModal(): UseTaskModalReturn {
         },
       });
     },
-    [taskId, updateDueDateMutation],
+    [fullTaskId, updateDueDateMutation],
   );
 
   const createDueDateNotification = useCallback(
     async (period: number, duration: DueDateNotificationDuration) => {
-      if (!taskId) return;
+      if (!fullTaskId) return;
       await createNotificationMutation({
         variables: {
-          input: [{ taskID: taskId, period, duration }],
+          input: [{ taskID: fullTaskId, period, duration }],
         },
       });
     },
-    [taskId, createNotificationMutation],
+    [fullTaskId, createNotificationMutation],
   );
 
   const deleteDueDateNotification = useCallback(

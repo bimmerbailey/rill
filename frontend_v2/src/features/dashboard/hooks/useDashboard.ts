@@ -9,7 +9,7 @@ export function useDashboardData() {
   const { data, loading, error } = useGetDashboardDataQuery();
 
   return {
-    user: data?.me.user,
+    user: data?.me?.user,
     projects: data?.projects || [],
     teams: data?.teams || [],
     loading,

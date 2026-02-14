@@ -21,12 +21,10 @@ export function RegisterPage() {
   const base = "#141211";
   const surface0 = "#1c1917";
   const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
   const surface3 = "#36302c";
   const border = "rgba(255,235,210,0.06)";
   const textPrimary = "rgba(245,238,230,0.87)";
   const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(245,238,230,0.32)";
   const terracotta = "#c9805e";
 
   const handleSubmit = async (e: React.FormEvent) => {

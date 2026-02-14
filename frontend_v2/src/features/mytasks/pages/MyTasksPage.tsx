@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import {
-  type Task,
   MyTasksSort,
   MyTasksStatus,
   useGetMyTasksQuery,
+  type GetMyTasksQuery,
 } from "@/graphql/generated/graphql";
 import { useDashboardData } from "@/features/dashboard/hooks/useDashboard";
 import { TaskDetailModal } from "@/components/common";
@@ -26,9 +26,11 @@ const sortOptions = [
   { value: MyTasksSort.DueDate, label: "Due date" },
 ];
 
+type TaskItem = GetMyTasksQuery["myTasks"]["tasks"][number];
+
 type GroupedTasks = {
   name: string;
-  tasks: Task[];
+  tasks: TaskItem[];
   projectId?: string;
 };
 

@@ -29,7 +29,6 @@ export function ProjectsPage() {
   const [projectError, setProjectError] = useState<string | null>(null);
 
   // Dark palette
-  const base = "#141211";
   const surface0 = "#1c1917";
   const surface1 = "#231f1c";
   const surface2 = "#2c2724";

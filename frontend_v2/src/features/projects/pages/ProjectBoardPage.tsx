@@ -765,7 +765,7 @@ export function ProjectBoardPage() {
                           task={task}
                           columnId={group.id}
                           isDragDisabled={isTaskDragDisabled}
-                          onClick={() => openTaskModal(task.shortId || task.id)}
+                          onClick={() => openTaskModal(task.shortId)}
                           onToggleComplete={() =>
                             handleToggleComplete(task.id, task.complete)
                           }
