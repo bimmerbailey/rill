@@ -187,3 +187,43 @@ export const TOGGLE_TASK_WATCH = gql`
     }
   }
 `;
+
+export const UPDATE_TASK_CHECKLIST_LOCATION = gql`
+  mutation updateTaskChecklistLocation(
+    $taskChecklistID: UUID!
+    $position: Float!
+  ) {
+    updateTaskChecklistLocation(
+      input: { taskChecklistID: $taskChecklistID, position: $position }
+    ) {
+      checklist {
+        id
+        position
+      }
+    }
+  }
+`;
+
+export const UPDATE_TASK_CHECKLIST_ITEM_LOCATION = gql`
+  mutation updateTaskChecklistItemLocation(
+    $taskChecklistID: UUID!
+    $taskChecklistItemID: UUID!
+    $position: Float!
+  ) {
+    updateTaskChecklistItemLocation(
+      input: {
+        taskChecklistID: $taskChecklistID
+        taskChecklistItemID: $taskChecklistItemID
+        position: $position
+      }
+    ) {
+      taskChecklistID
+      prevChecklistID
+      checklistItem {
+        id
+        taskChecklistID
+        position
+      }
+    }
+  }
+`;
