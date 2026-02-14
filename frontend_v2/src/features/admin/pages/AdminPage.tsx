@@ -160,17 +160,17 @@ export function AdminPage() {
 
   // Dark palette
   const base = "#141211";
-  const surface0 = "#1c1917";
-  const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(245,238,230,0.32)";
-  const terracotta = "#c9805e";
-  const sage = "#7fa67f";
-  const slate = "#7992b0";
+  const surface0 = "var(--color-surface-0)";
+  const surface1 = "var(--color-surface-1)";
+  const surface2 = "var(--color-surface-2)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const sage = "var(--color-sage)";
+  const slate = "var(--color-slate)";
 
   // GraphQL operations
   const { data, loading, error, refetch } = useQuery(GET_USERS);

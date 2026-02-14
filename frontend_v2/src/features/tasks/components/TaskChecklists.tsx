@@ -4,14 +4,14 @@ import { cn } from "@/utils";
 import type { FindTaskQuery } from "@/graphql/generated/graphql";
 
 const theme = {
-  surface1: "#231f1c",
-  surface2: "#2c2724",
-  surface3: "#3a3430",
-  border: "rgba(255,235,210,0.06)",
-  textPrimary: "rgba(245,238,230,0.87)",
-  textSecondary: "rgba(245,238,230,0.5)",
-  terracotta: "#c9805e",
-  success: "#7fb069",
+  surface1: "var(--color-surface-1)",
+  surface2: "var(--color-surface-2)",
+  surface3: "var(--color-surface-3)",
+  border: "var(--color-border)",
+  textPrimary: "var(--color-text-primary)",
+  textSecondary: "var(--color-text-secondary)",
+  terracotta: "var(--color-terracotta)",
+  success: "var(--color-success)",
 };
 
 type TaskChecklist = NonNullable<FindTaskQuery["findTask"]>["checklists"][0];
@@ -289,7 +289,7 @@ export function TaskChecklists({
                   onClick={() =>
                     setMenuOpenId(isMenuOpen ? null : checklist.id)
                   }
-                  className="p-1 rounded hover:bg-[rgba(255,235,210,0.1)]"
+                  className="p-1 rounded hover:bg-[color-mix(in srgb, var(--color-text-primary) 10%, transparent)]"
                   style={{ color: theme.textSecondary }}
                 >
                   <MoreHorizontal size={16} />
@@ -360,8 +360,8 @@ export function TaskChecklists({
                       className={cn(
                         "w-5 h-5 rounded border-2 flex items-center justify-center transition-all flex-shrink-0",
                         item.complete
-                          ? "bg-[#7fb069] border-[#7fb069]"
-                          : "border-[rgba(245,238,230,0.3)] hover:border-[#c9805e]",
+                          ? "bg-[var(--color-success)] border-[var(--color-success)]"
+                          : "border-[color-mix(in srgb, var(--color-text-primary) 30%, transparent)] hover:border-[var(--color-terracotta)]",
                       )}
                     >
                       {item.complete && (
@@ -413,7 +413,7 @@ export function TaskChecklists({
                         </span>
                         <button
                           onClick={() => handleDeleteItem(item.id)}
-                          className="p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-[rgba(255,235,210,0.1)]"
+                          className="p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-[color-mix(in srgb, var(--color-text-primary) 10%, transparent)]"
                           style={{ color: theme.textSecondary }}
                         >
                           <X size={14} />

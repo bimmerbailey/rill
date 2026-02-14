@@ -7,14 +7,14 @@ import {
 } from "@/graphql/generated/graphql";
 
 const theme = {
-  surface1: "#231f1c",
-  surface2: "#2c2724",
-  surface3: "#3a3430",
-  border: "rgba(255,235,210,0.06)",
-  textPrimary: "rgba(245,238,230,0.87)",
-  textSecondary: "rgba(245,238,230,0.5)",
-  terracotta: "#c9805e",
-  success: "#7fb069",
+  surface1: "var(--color-surface-1)",
+  surface2: "var(--color-surface-2)",
+  surface3: "var(--color-surface-3)",
+  border: "var(--color-border)",
+  textPrimary: "var(--color-text-primary)",
+  textSecondary: "var(--color-text-secondary)",
+  terracotta: "var(--color-terracotta)",
+  success: "var(--color-success)",
   warning: "#d4a574",
   error: "#d4574a",
 };
@@ -372,7 +372,7 @@ export function TaskDueDate({
                                 handleDeleteNotification(notification.id)
                               }
                               disabled={isSubmitting}
-                              className="p-1 rounded hover:bg-[rgba(255,235,210,0.1)]"
+                              className="p-1 rounded hover:bg-[color-mix(in srgb, var(--color-text-primary) 10%, transparent)]"
                               style={{ color: theme.textSecondary }}
                             >
                               <Trash2 size={12} />

@@ -71,12 +71,14 @@ export function NotificationPopup({
   const popupWidth = 400;
   const popupLeft = Math.min(rect.left, window.innerWidth - popupWidth - 20);
 
-  const surface1 = "#1c1917";
-  const surface2 = "#231f1c";
-  const border = "rgba(255,235,210,0.1)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.6)";
-  const accent = "#c9805e";
+  const surface1 = "var(--color-surface-0)";
+  const surface2 = "var(--color-surface-1)";
+  const border = "var(--color-border-strong)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const accent = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   return (
     <div
@@ -103,7 +105,7 @@ export function NotificationPopup({
           <Bell size={16} style={{ color: accent }} />
           <span
             style={{
-              fontFamily: "'Libre Baskerville', serif",
+              fontFamily: fontHeading,
               fontSize: "1rem",
               color: textPrimary,
             }}
@@ -135,7 +137,7 @@ export function NotificationPopup({
                 className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:opacity-80 transition-opacity"
                 style={{
                   color: textPrimary,
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                 }}
               >
                 <CheckCircle size={14} style={{ color: accent }} />

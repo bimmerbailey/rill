@@ -25,13 +25,15 @@ export function MemberRoleModal({
   const [screen, setScreen] = useState<Screen>("main");
   const [changing, setChanging] = useState(false);
 
-  const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(255,235,210,0.32)";
-  const terracotta = "#c9805e";
+  const surface1 = "var(--color-surface-1)";
+  const surface2 = "var(--color-surface-2)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const isSelf = currentUserId === member.id;
   const currentRole = member.role.code.toLowerCase();
@@ -90,7 +92,7 @@ export function MemberRoleModal({
           <div className="flex items-start justify-between mb-4">
             <h3
               style={{
-                fontFamily: "'Libre Baskerville', Georgia, serif",
+                fontFamily: fontHeading,
                 fontSize: "1.2rem",
                 color: textPrimary,
               }}
@@ -148,7 +150,7 @@ export function MemberRoleModal({
                 >
                   <div
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.95rem",
                       fontWeight: 700,
                       color: textPrimary,
@@ -172,7 +174,7 @@ export function MemberRoleModal({
                   </div>
                   <div
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.8rem",
                       color: textSecondary,
                       lineHeight: 1.5,
@@ -196,7 +198,7 @@ export function MemberRoleModal({
               />
               <p
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.8rem",
                   color: textTertiary,
                   padding: "0.5rem 1rem",
@@ -239,7 +241,7 @@ export function MemberRoleModal({
             background: "transparent",
             border: "none",
             padding: "1rem 1.5rem",
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             fontSize: "0.9rem",
             color: textPrimary,
             cursor: "pointer",
@@ -274,7 +276,7 @@ export function MemberRoleModal({
             background: "transparent",
             border: "none",
             padding: "1rem 1.5rem",
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             fontSize: "0.9rem",
             color: canRemove ? textPrimary : textTertiary,
             cursor: canRemove ? "pointer" : "not-allowed",
@@ -304,7 +306,7 @@ export function MemberRoleModal({
             />
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.75rem",
                 color: textTertiary,
                 padding: "0.75rem 1.5rem",

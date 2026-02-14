@@ -17,14 +17,14 @@ import {
 } from "@/features/tasks";
 
 const theme = {
-  surface1: "#231f1c",
-  surface2: "#2c2724",
-  surface3: "#3a3430",
-  border: "rgba(255,235,210,0.06)",
-  textPrimary: "rgba(245,238,230,0.87)",
-  textSecondary: "rgba(245,238,230,0.5)",
-  terracotta: "#c9805e",
-  success: "#7fb069",
+  surface1: "var(--color-surface-1)",
+  surface2: "var(--color-surface-2)",
+  surface3: "var(--color-surface-3)",
+  border: "var(--color-border)",
+  textPrimary: "var(--color-text-primary)",
+  textSecondary: "var(--color-text-secondary)",
+  terracotta: "var(--color-terracotta)",
+  success: "var(--color-success)",
 };
 
 type TabType = "details" | "comments" | "activity";
@@ -225,8 +225,8 @@ export function TaskDetailModal({
               className={cn(
                 "w-6 h-6 rounded border-2 flex items-center justify-center transition-all",
                 task?.complete
-                  ? "bg-[#7fb069] border-[#7fb069]"
-                  : "border-[rgba(245,238,230,0.3)] hover:border-[#c9805e]",
+                  ? "bg-[var(--color-success)] border-[var(--color-success)]"
+                  : "border-[color-mix(in srgb, var(--color-text-primary) 30%, transparent)] hover:border-[var(--color-terracotta)]",
               )}
             >
               {task?.complete && <Check size={14} className="text-white" />}
@@ -240,7 +240,7 @@ export function TaskDetailModal({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg transition-colors hover:bg-[rgba(255,235,210,0.1)]"
+            className="p-2 rounded-lg transition-colors hover:bg-[color-mix(in srgb, var(--color-text-primary) 10%, transparent)]"
             style={{ color: theme.textSecondary }}
           >
             <X size={20} />
@@ -258,8 +258,8 @@ export function TaskDetailModal({
               className={cn(
                 "px-4 py-2 text-sm font-medium transition-colors relative",
                 activeTab === tab.id
-                  ? "text-[#c9805e]"
-                  : "text-[rgba(245,238,230,0.5)] hover:text-[rgba(245,238,230,0.87)]",
+                  ? "text-[var(--color-terracotta)]"
+                  : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
               )}
             >
               {tab.label}
@@ -405,7 +405,7 @@ export function TaskDetailModal({
                       ) : (
                         <div
                           onClick={startEditingDescription}
-                          className="p-3 rounded-lg cursor-pointer min-h-[80px] transition-colors hover:bg-[rgba(255,235,210,0.05)]"
+                          className="p-3 rounded-lg cursor-pointer min-h-[80px] transition-colors hover:bg-[color-mix(in srgb, var(--color-text-primary) 5%, transparent)]"
                           style={{
                             color: task.description
                               ? theme.textPrimary

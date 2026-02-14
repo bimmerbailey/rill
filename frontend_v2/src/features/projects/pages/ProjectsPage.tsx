@@ -29,18 +29,20 @@ export function ProjectsPage() {
   const [projectError, setProjectError] = useState<string | null>(null);
 
   // Dark palette
-  const surface0 = "#1c1917";
-  const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(245,238,230,0.32)";
-  const terracotta = "#c9805e";
-  const sage = "#7fa67f";
-  const slate = "#7992b0";
-  const ochre = "#bfa26e";
+  const surface0 = "var(--color-surface-0)";
+  const surface1 = "var(--color-surface-1)";
+  const surface2 = "var(--color-surface-2)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const sage = "var(--color-sage)";
+  const slate = "var(--color-slate)";
+  const ochre = "var(--color-ochre)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const tileColors = [terracotta, sage, slate, ochre];
 
@@ -164,7 +166,7 @@ export function ProjectsPage() {
             className="font-semibold mb-2"
             style={{
               color: terracotta,
-              fontFamily: "'Libre Baskerville', serif",
+              fontFamily: fontHeading,
             }}
           >
             Error loading projects
@@ -172,7 +174,7 @@ export function ProjectsPage() {
           <p
             style={{
               color: textSecondary,
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
             }}
           >
             {error.message}
@@ -192,7 +194,7 @@ export function ProjectsPage() {
         <div>
           <h1
             style={{
-              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontFamily: fontHeading,
               fontSize: "2.5rem",
               fontWeight: 400,
               color: textPrimary,
@@ -202,7 +204,7 @@ export function ProjectsPage() {
           </h1>
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontSize: "0.9rem",
               color: textSecondary,
               marginTop: "0.5rem",
@@ -223,9 +225,7 @@ export function ProjectsPage() {
             borderRadius: "8px",
           }}
         >
-          <span
-            style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}
-          >
+          <span style={{ fontFamily: fontBody, fontWeight: 500 }}>
             Add Team
           </span>
         </Button>
@@ -239,7 +239,7 @@ export function ProjectsPage() {
         <div className="flex items-center justify-between mb-4">
           <h2
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontSize: "0.75rem",
               fontWeight: 500,
               textTransform: "uppercase",
@@ -282,7 +282,7 @@ export function ProjectsPage() {
               />
               <div
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "1rem",
                   fontWeight: 600,
                   color: textPrimary,
@@ -299,7 +299,7 @@ export function ProjectsPage() {
               background: "transparent",
               border: `2px dashed ${border}`,
               borderRadius: "20px",
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontSize: "0.75rem",
               fontWeight: 500,
               textTransform: "uppercase",
@@ -333,7 +333,7 @@ export function ProjectsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <h2
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.75rem",
                 fontWeight: 500,
                 textTransform: "uppercase",
@@ -346,7 +346,7 @@ export function ProjectsPage() {
             <Link
               to="/teams"
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.75rem",
                 fontWeight: 500,
                 textTransform: "uppercase",
@@ -391,7 +391,7 @@ export function ProjectsPage() {
                 />
                 <div
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "1rem",
                     fontWeight: 600,
                     color: textPrimary,
@@ -408,7 +408,7 @@ export function ProjectsPage() {
                 background: "transparent",
                 border: `2px dashed ${border}`,
                 borderRadius: "20px",
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.75rem",
                 fontWeight: 500,
                 textTransform: "uppercase",
@@ -449,7 +449,7 @@ export function ProjectsPage() {
             <div className="flex items-start justify-between mb-6">
               <h3
                 style={{
-                  fontFamily: "'Libre Baskerville', Georgia, serif",
+                  fontFamily: fontHeading,
                   fontSize: "1.5rem",
                   color: textPrimary,
                 }}
@@ -498,7 +498,7 @@ export function ProjectsPage() {
                 >
                   <span
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontWeight: 500,
                     }}
                   >
@@ -516,7 +516,7 @@ export function ProjectsPage() {
                 >
                   <span
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontWeight: 500,
                     }}
                   >
@@ -547,7 +547,7 @@ export function ProjectsPage() {
             <div className="flex items-start justify-between mb-6">
               <h3
                 style={{
-                  fontFamily: "'Libre Baskerville', Georgia, serif",
+                  fontFamily: fontHeading,
                   fontSize: "1.5rem",
                   color: textPrimary,
                 }}
@@ -587,7 +587,7 @@ export function ProjectsPage() {
               <div className="flex flex-col gap-2">
                 <label
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.75rem",
                     fontWeight: 500,
                     textTransform: "uppercase",
@@ -603,7 +603,7 @@ export function ProjectsPage() {
                     background: surface3,
                     border: `1px solid ${border}`,
                     color: textPrimary,
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.9rem",
                   }}
                   value={selectedTeamId}
@@ -628,7 +628,7 @@ export function ProjectsPage() {
                 >
                   <span
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontWeight: 500,
                     }}
                   >
@@ -646,7 +646,7 @@ export function ProjectsPage() {
                 >
                   <span
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontWeight: 500,
                     }}
                   >

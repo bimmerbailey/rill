@@ -41,12 +41,15 @@ export function MemberManagementModal({
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
   const [selectedEmail, setSelectedEmail] = useState<string | null>(null);
 
-  const surface0 = "#141211";
-  const surface1 = "#1c1917";
-  const border = "rgba(255,235,210,0.1)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.6)";
-  const terracotta = "#c9805e";
+  const surface0 = "var(--color-surface-base)";
+  const surface1 = "var(--color-surface-0)";
+  const border = "var(--color-border-strong)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const terracotta = "var(--color-terracotta)";
+  const danger = "var(--color-danger)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const selectedMember = useMemo(
     () => members.find((m) => m.id === selectedMemberId) || null,
@@ -111,7 +114,7 @@ export function MemberManagementModal({
             <div>
               <h2
                 style={{
-                  fontFamily: "'Libre Baskerville', serif",
+                  fontFamily: fontHeading,
                   fontSize: "1.25rem",
                   color: textPrimary,
                 }}
@@ -120,7 +123,7 @@ export function MemberManagementModal({
               </h2>
               <p
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.8rem",
                   color: textSecondary,
                   marginTop: "0.25rem",
@@ -136,7 +139,7 @@ export function MemberManagementModal({
                 style={{
                   background: terracotta,
                   color: surface0,
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.85rem",
                 }}
               >
@@ -200,7 +203,7 @@ export function MemberManagementModal({
           >
             <h3
               style={{
-                fontFamily: "'Libre Baskerville', serif",
+                fontFamily: fontHeading,
                 color: textPrimary,
                 marginBottom: "1rem",
               }}
@@ -209,7 +212,7 @@ export function MemberManagementModal({
             </h3>
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: textSecondary,
                 marginBottom: "1rem",
               }}
@@ -221,7 +224,7 @@ export function MemberManagementModal({
                 onClick={() => setSelectedEmail(null)}
                 style={{
                   color: textSecondary,
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                 }}
               >
                 Keep Invite
@@ -229,8 +232,8 @@ export function MemberManagementModal({
               <button
                 onClick={handleCancelInvite}
                 style={{
-                  color: "#e57373",
-                  fontFamily: "'DM Sans', sans-serif",
+                  color: danger,
+                  fontFamily: fontBody,
                   fontWeight: 500,
                 }}
               >

@@ -30,7 +30,8 @@ export function NotificationList({
     }
   };
 
-  const textSecondary = "rgba(245,238,230,0.6)";
+  const textSecondary = "var(--color-text-secondary)";
+  const fontBody = "var(--font-body)";
 
   if (notifications.length === 0 && !loading) {
     return (
@@ -39,7 +40,7 @@ export function NotificationList({
         style={{
           height: "280px",
           color: textSecondary,
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: fontBody,
         }}
       >
         No notifications
@@ -66,7 +67,7 @@ export function NotificationList({
       {loading && (
         <div
           className="flex justify-center py-3"
-          style={{ color: textSecondary, fontFamily: "'DM Sans', sans-serif" }}
+          style={{ color: textSecondary, fontFamily: fontBody }}
         >
           Loading...
         </div>

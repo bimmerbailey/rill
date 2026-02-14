@@ -7,10 +7,11 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, colorIndex }: ProjectCardProps) {
-  const terracotta = "#c9805e";
-  const sage = "#7fa67f";
-  const slate = "#7992b0";
-  const ochre = "#bfa26e";
+  const terracotta = "var(--color-terracotta)";
+  const sage = "var(--color-sage)";
+  const slate = "var(--color-slate)";
+  const ochre = "var(--color-ochre)";
+  const fontBody = "var(--font-body)";
 
   const accentColors = [terracotta, sage, slate, ochre];
   const bgColor = accentColors[colorIndex % accentColors.length];
@@ -70,7 +71,7 @@ export function ProjectCard({ project, colorIndex }: ProjectCardProps) {
       >
         <div
           style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             fontSize: "0.95rem",
             color: "#fff",
             fontWeight: 600,

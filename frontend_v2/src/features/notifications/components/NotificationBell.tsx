@@ -31,9 +31,9 @@ export function NotificationBell({
     setIsOpen(false);
   }, []);
 
-  const textSecondary = "rgba(245,238,230,0.6)";
-  const accent = "#c9805e";
-  const danger = "#e57373";
+  const textSecondary = "var(--color-text-secondary)";
+  const accent = "var(--color-terracotta)";
+  const danger = "var(--color-danger)";
 
   return (
     <>

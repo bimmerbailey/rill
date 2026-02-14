@@ -21,15 +21,17 @@ export function LoginPage() {
   const { isAuthenticated } = useAuthStore();
 
   // Dark palette — warm charcoal tones
-  const base = "#141211";
-  const surface0 = "#1c1917";
-  const surface1 = "#231f1c";
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(245,238,230,0.32)";
-  const terracotta = "#c9805e";
+  const base = "var(--color-surface-base)";
+  const surface0 = "var(--color-surface-0)";
+  const surface1 = "var(--color-surface-1)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   useEffect(() => {
     let isMounted = true;
@@ -86,7 +88,7 @@ export function LoginPage() {
       style={{
         background: `linear-gradient(160deg, ${base} 0%, ${surface0} 50%, ${base} 100%)`,
         color: textPrimary,
-        fontFamily: "'Libre Baskerville', Georgia, serif",
+        fontFamily: fontHeading,
       }}
     >
       {/* Soft ambient blobs */}
@@ -173,7 +175,7 @@ export function LoginPage() {
           <div
             className="text-sm tracking-[0.3em] uppercase mb-6"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               color: textTertiary,
               fontWeight: 500,
             }}
@@ -193,7 +195,7 @@ export function LoginPage() {
           <p
             className="text-sm max-w-sm mx-auto leading-relaxed"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               color: textSecondary,
             }}
           >
@@ -225,7 +227,7 @@ export function LoginPage() {
             <div
               className="text-xs tracking-[0.3em] uppercase mb-3"
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: terracotta,
                 fontWeight: 500,
               }}
@@ -247,7 +249,7 @@ export function LoginPage() {
             <div
               className="text-xs tracking-[0.3em] uppercase mb-3"
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: terracotta,
                 fontWeight: 500,
               }}
@@ -316,7 +318,7 @@ export function LoginPage() {
               <div
                 className="text-xs uppercase tracking-wider"
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   color: terracotta,
                   fontWeight: 500,
                 }}
@@ -345,7 +347,7 @@ export function LoginPage() {
                 <span
                   className="text-xs uppercase tracking-wider transition-colors"
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     color: textSecondary,
                     fontWeight: 500,
                   }}
@@ -357,7 +359,7 @@ export function LoginPage() {
                 to="/forgot-password"
                 className="text-xs uppercase tracking-wider hover:opacity-80 transition-all"
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   color: terracotta,
                   fontWeight: 500,
                 }}
@@ -393,14 +395,14 @@ export function LoginPage() {
                         borderTopColor: textPrimary,
                       }}
                     />
-                    <span style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    <span style={{ fontFamily: fontBody }}>
                       Authenticating...
                     </span>
                   </>
                 ) : (
                   <span
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontWeight: 500,
                     }}
                   >
@@ -422,7 +424,7 @@ export function LoginPage() {
             <span
               className="text-xs uppercase tracking-widest"
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: textTertiary,
                 fontWeight: 500,
               }}
@@ -456,9 +458,7 @@ export function LoginPage() {
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
               </svg>
-              <span
-                style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}
-              >
+              <span style={{ fontFamily: fontBody, fontWeight: 500 }}>
                 Continue with Google
               </span>
             </Button>
@@ -473,7 +473,7 @@ export function LoginPage() {
           >
             <span
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: textSecondary,
                 fontSize: "0.9rem",
               }}
@@ -485,7 +485,7 @@ export function LoginPage() {
                 to="/register"
                 className="hover:opacity-80 transition-all"
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   color: textPrimary,
                   fontSize: "0.9rem",
                   fontWeight: 500,
@@ -498,7 +498,7 @@ export function LoginPage() {
             ) : (
               <span
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   color: textTertiary,
                   fontSize: "0.9rem",
                 }}
@@ -519,7 +519,7 @@ export function LoginPage() {
             <p
               className="text-xs text-center uppercase tracking-wider"
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: textTertiary,
                 fontWeight: 500,
               }}

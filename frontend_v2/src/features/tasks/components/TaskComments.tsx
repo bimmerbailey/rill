@@ -4,13 +4,13 @@ import { cn } from "@/utils";
 import type { FindTaskQuery } from "@/graphql/generated/graphql";
 
 const theme = {
-  surface1: "#231f1c",
-  surface2: "#2c2724",
-  surface3: "#3a3430",
-  border: "rgba(255,235,210,0.06)",
-  textPrimary: "rgba(245,238,230,0.87)",
-  textSecondary: "rgba(245,238,230,0.5)",
-  terracotta: "#c9805e",
+  surface1: "var(--color-surface-1)",
+  surface2: "var(--color-surface-2)",
+  surface3: "var(--color-surface-3)",
+  border: "var(--color-border)",
+  textPrimary: "var(--color-text-primary)",
+  textSecondary: "var(--color-text-secondary)",
+  terracotta: "var(--color-terracotta)",
 };
 
 interface TaskCommentsProps {
@@ -163,7 +163,7 @@ export function TaskComments({
                         onClick={() =>
                           setMenuOpenId(isMenuOpen ? null : comment.id)
                         }
-                        className="p-1 rounded hover:bg-[rgba(255,235,210,0.1)]"
+                        className="p-1 rounded hover:bg-[color-mix(in srgb, var(--color-text-primary) 10%, transparent)]"
                         style={{ color: theme.textSecondary }}
                       >
                         <MoreHorizontal size={16} />

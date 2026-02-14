@@ -26,15 +26,17 @@ export function InviteProjectMemberModal({
   const [selectedUsers, setSelectedUsers] = useState<ProjectUser[]>([]);
   const [inviting, setInviting] = useState(false);
 
-  const surface0 = "#141211";
-  const surface1 = "#1c1917";
-  const surface2 = "#231f1c";
-  const surface3 = "#2c2724";
-  const border = "rgba(255,235,210,0.1)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.6)";
-  const textTertiary = "rgba(245,238,230,0.32)";
-  const terracotta = "#c9805e";
+  const surface0 = "var(--color-surface-base)";
+  const surface1 = "var(--color-surface-0)";
+  const surface2 = "var(--color-surface-1)";
+  const surface3 = "var(--color-surface-2)";
+  const border = "var(--color-border-strong)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const memberIds = useMemo(
     () => new Set(currentMembers.map((m) => m.id)),
@@ -111,7 +113,7 @@ export function InviteProjectMemberModal({
         >
           <h2
             style={{
-              fontFamily: "'Libre Baskerville', serif",
+              fontFamily: fontHeading,
               fontSize: "1.25rem",
               color: textPrimary,
             }}
@@ -148,7 +150,7 @@ export function InviteProjectMemberModal({
                 background: surface3,
                 border: `1px solid ${border}`,
                 color: textPrimary,
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
               }}
               autoFocus
             />
@@ -164,7 +166,7 @@ export function InviteProjectMemberModal({
                 >
                   <span
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.85rem",
                       color: textPrimary,
                     }}
@@ -213,7 +215,7 @@ export function InviteProjectMemberModal({
                     <div className="text-left flex-1">
                       <div
                         style={{
-                          fontFamily: "'DM Sans', sans-serif",
+                          fontFamily: fontBody,
                           fontSize: "0.9rem",
                           color: textPrimary,
                         }}
@@ -222,7 +224,7 @@ export function InviteProjectMemberModal({
                       </div>
                       <div
                         style={{
-                          fontFamily: "'DM Sans', sans-serif",
+                          fontFamily: fontBody,
                           fontSize: "0.8rem",
                           color: textSecondary,
                         }}
@@ -243,7 +245,7 @@ export function InviteProjectMemberModal({
               className="px-4 py-2 rounded-lg"
               style={{
                 color: textSecondary,
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
               }}
             >
               Cancel
@@ -255,7 +257,7 @@ export function InviteProjectMemberModal({
               style={{
                 background: terracotta,
                 color: surface0,
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontWeight: 500,
                 opacity: selectedUsers.length === 0 ? 0.5 : 1,
               }}

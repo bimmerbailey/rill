@@ -18,15 +18,17 @@ export function TopNavbar() {
   };
 
   // Dark palette
-  const surface1 = "#231f1c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const terracotta = "#c9805e";
+  const surface1 = "var(--color-surface-1)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontBody = "var(--font-body)";
+  const fontHeading = "var(--font-heading)";
 
   const navLinkStyle = {
     color: textPrimary,
-    fontFamily: "'DM Sans', sans-serif",
+    fontFamily: fontBody,
     fontSize: "0.9rem",
     fontWeight: 500,
     textDecoration: "none",
@@ -43,7 +45,7 @@ export function TopNavbar() {
       style={{
         background: surface1,
         borderBottom: `1px solid ${border}`,
-        fontFamily: "'Libre Baskerville', Georgia, serif",
+        fontFamily: fontHeading,
       }}
     >
       <div className="text-xl font-bold">
@@ -52,7 +54,7 @@ export function TopNavbar() {
           style={{
             color: terracotta,
             textDecoration: "none",
-            fontFamily: "'Libre Baskerville', serif",
+            fontFamily: fontHeading,
           }}
         >
           Taskcafe
@@ -176,7 +178,7 @@ export function TopNavbar() {
           style={{
             color: textSecondary,
             textDecoration: "none",
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             fontSize: "0.9rem",
             transition: "color 0.2s ease",
           }}

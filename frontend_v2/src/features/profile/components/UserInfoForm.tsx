@@ -38,10 +38,13 @@ export function UserInfoForm({
   });
 
   // Dark palette
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const handleFormSubmit = async (data: UserInfoFormData) => {
     await onSubmit(data);
@@ -80,7 +83,7 @@ export function UserInfoForm({
         <p
           className="mt-2 text-xs uppercase tracking-wider"
           style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             color: textSecondary,
           }}
         >
@@ -105,7 +108,7 @@ export function UserInfoForm({
         <p
           className="mt-2 text-xs uppercase tracking-wider"
           style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             color: textSecondary,
           }}
         >
@@ -144,13 +147,13 @@ export function UserInfoForm({
             background: surface3,
             borderColor: border,
             color: textPrimary,
-            fontFamily: "'Libre Baskerville', Georgia, serif",
+            fontFamily: fontHeading,
           }}
         />
         <p
           className="mt-2 text-xs uppercase tracking-wider"
           style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             color: textSecondary,
           }}
         >
@@ -159,7 +162,7 @@ export function UserInfoForm({
         {errors.bio && (
           <span
             className="font-mono text-xs mt-1 block"
-            style={{ color: "#c9805e" }}
+            style={{ color: terracotta }}
           >
             {errors.bio.message}
           </span>

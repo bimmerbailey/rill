@@ -44,10 +44,11 @@ export function LabelManagerModal({
   const [deleteLabel] = useDeleteProjectLabelMutation();
   const [toggleLabel] = useToggleTaskLabelMutation();
 
-  const surface1 = "#1c1917";
-  const border = "rgba(255,235,210,0.1)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.6)";
+  const surface1 = "var(--color-surface-0)";
+  const border = "var(--color-border-strong)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const fontHeading = "var(--font-heading)";
 
   const handleCreateNew = () => {
     setEditingLabel(null);
@@ -147,7 +148,7 @@ export function LabelManagerModal({
         >
           <h2
             style={{
-              fontFamily: "'Libre Baskerville', serif",
+              fontFamily: fontHeading,
               fontSize: "1.25rem",
               color: textPrimary,
             }}

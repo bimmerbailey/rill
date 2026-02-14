@@ -127,10 +127,11 @@ export function NotificationItem({
 
   const { icon, content, projectName } = getNotificationContent();
 
-  const surface2 = "#231f1c";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.6)";
-  const accent = "#c9805e";
+  const surface2 = "var(--color-surface-1)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const accent = "var(--color-terracotta)";
+  const fontBody = "var(--font-body)";
 
   return (
     <div
@@ -173,7 +174,7 @@ export function NotificationItem({
       <div className="flex-1 min-w-0">
         <div
           className="text-sm leading-snug"
-          style={{ color: textPrimary, fontFamily: "'DM Sans', sans-serif" }}
+          style={{ color: textPrimary, fontFamily: fontBody }}
         >
           {content}
         </div>

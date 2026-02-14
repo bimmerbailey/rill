@@ -17,12 +17,14 @@ export function DeleteProjectModal({
   const [deleting, setDeleting] = useState(false);
   const [confirmText, setConfirmText] = useState("");
 
-  const surface1 = "#1c1917";
-  const surface3 = "#2c2724";
-  const border = "rgba(255,235,210,0.1)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.6)";
-  const danger = "#e57373";
+  const surface1 = "var(--color-surface-0)";
+  const surface3 = "var(--color-surface-2)";
+  const border = "var(--color-border-strong)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const danger = "var(--color-danger)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const canDelete = confirmText === projectName;
 
@@ -53,24 +55,31 @@ export function DeleteProjectModal({
         className="rounded-xl w-full max-w-md mx-4 shadow-2xl"
         style={{
           background: surface1,
-          border: `1px solid ${danger}40`,
+          border:
+            "1px solid color-mix(in srgb, var(--color-danger) 40%, transparent)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
         <div
           className="flex items-center justify-between p-4"
-          style={{ borderBottom: `1px solid ${danger}40` }}
+          style={{
+            borderBottom:
+              "1px solid color-mix(in srgb, var(--color-danger) 40%, transparent)",
+          }}
         >
           <div className="flex items-center gap-3">
             <div
               className="p-2 rounded-full"
-              style={{ background: `${danger}20` }}
+              style={{
+                background:
+                  "color-mix(in srgb, var(--color-danger) 20%, transparent)",
+              }}
             >
               <Trash2 size={20} style={{ color: danger }} />
             </div>
             <h2
               style={{
-                fontFamily: "'Libre Baskerville', serif",
+                fontFamily: fontHeading,
                 fontSize: "1.25rem",
                 color: danger,
               }}
@@ -90,8 +99,10 @@ export function DeleteProjectModal({
           <div
             className="p-4 rounded-lg"
             style={{
-              background: `${danger}10`,
-              border: `1px solid ${danger}30`,
+              background:
+                "color-mix(in srgb, var(--color-danger) 10%, transparent)",
+              border:
+                "1px solid color-mix(in srgb, var(--color-danger) 30%, transparent)",
             }}
           >
             <div className="flex items-start gap-3">
@@ -102,7 +113,7 @@ export function DeleteProjectModal({
               <div>
                 <p
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     color: textPrimary,
                     marginBottom: "0.5rem",
                   }}
@@ -114,7 +125,7 @@ export function DeleteProjectModal({
                 <ul
                   className="list-disc list-inside"
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.85rem",
                     color: textSecondary,
                   }}
@@ -126,7 +137,7 @@ export function DeleteProjectModal({
                 </ul>
                 <p
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.85rem",
                     color: danger,
                     marginTop: "0.5rem",
@@ -142,7 +153,7 @@ export function DeleteProjectModal({
           <div>
             <label
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.85rem",
                 color: textSecondary,
                 marginBottom: "0.5rem",
@@ -161,7 +172,7 @@ export function DeleteProjectModal({
                 background: surface3,
                 border: `1px solid ${border}`,
                 color: textPrimary,
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
               }}
             />
           </div>
@@ -172,7 +183,7 @@ export function DeleteProjectModal({
               className="px-4 py-2 rounded-lg"
               style={{
                 color: textSecondary,
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
               }}
             >
               Cancel

@@ -7,9 +7,10 @@ import { TopNavbar } from "./TopNavbar";
  */
 export function DashboardLayout() {
   // Dark palette — warm charcoal tones, not cold
-  const base = "#141211";
-  const surface0 = "#1c1917";
-  const textPrimary = "rgba(245,238,230,0.87)";
+  const base = "var(--color-surface-base)";
+  const surface0 = "var(--color-surface-0)";
+  const textPrimary = "var(--color-text-primary)";
+  const fontHeading = "var(--font-heading)";
 
   return (
     <div
@@ -17,7 +18,7 @@ export function DashboardLayout() {
       style={{
         background: `linear-gradient(160deg, ${base} 0%, ${surface0} 50%, ${base} 100%)`,
         color: textPrimary,
-        fontFamily: "'Libre Baskerville', Georgia, serif",
+        fontFamily: fontHeading,
       }}
     >
       {/* Soft ambient blobs — warmer, dimmer */}
@@ -31,7 +32,7 @@ export function DashboardLayout() {
             height: "500px",
             borderRadius: "50%",
             background:
-              "radial-gradient(circle, rgba(201,128,94,0.06) 0%, transparent 70%)",
+              "radial-gradient(circle, color-mix(in srgb, var(--color-terracotta) 6%, transparent) 0%, transparent 70%)",
             filter: "blur(80px)",
           }}
         />

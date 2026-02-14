@@ -3,11 +3,11 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import type { FindTaskQuery } from "@/graphql/generated/graphql";
 
 const theme = {
-  surface1: "#231f1c",
-  surface2: "#2c2724",
-  surface3: "#3a3430",
-  textPrimary: "rgba(245,238,230,0.87)",
-  textSecondary: "rgba(245,238,230,0.5)",
+  surface1: "var(--color-surface-1)",
+  surface2: "var(--color-surface-2)",
+  surface3: "var(--color-surface-3)",
+  textPrimary: "var(--color-text-primary)",
+  textSecondary: "var(--color-text-secondary)",
 };
 
 type ActivityType = NonNullable<

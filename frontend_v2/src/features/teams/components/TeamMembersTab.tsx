@@ -23,12 +23,14 @@ export function TeamMembersTab() {
   const [showRoleModal, setShowRoleModal] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
 
-  const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const terracotta = "#c9805e";
+  const surface1 = "var(--color-surface-1)";
+  const surface2 = "var(--color-surface-2)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const members = team?.members || [];
 
@@ -113,7 +115,7 @@ export function TeamMembersTab() {
           <div>
             <h2
               style={{
-                fontFamily: "'Libre Baskerville', Georgia, serif",
+                fontFamily: fontHeading,
                 fontSize: "1.4rem",
                 color: textPrimary,
                 marginBottom: "0.35rem",
@@ -123,7 +125,7 @@ export function TeamMembersTab() {
             </h2>
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.85rem",
                 color: textSecondary,
                 lineHeight: 1.5,
@@ -162,7 +164,7 @@ export function TeamMembersTab() {
               style={{
                 padding: "3rem 2rem",
                 textAlign: "center",
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.9rem",
                 color: textSecondary,
               }}

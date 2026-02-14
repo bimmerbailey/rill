@@ -9,14 +9,16 @@ export function TeamDetailPage() {
   const { team, loading, error } = useTeamDetail(teamId || "");
 
   // Dark palette
-  const base = "#141211";
-  const surface0 = "#1c1917";
-  const surface1 = "#231f1c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(255,235,210,0.32)";
-  const terracotta = "#c9805e";
+  const base = "var(--color-surface-base)";
+  const surface0 = "var(--color-surface-0)";
+  const surface1 = "var(--color-surface-1)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   // Determine active tab from current URL
   const getActiveTab = (): "projects" | "members" | "settings" => {
@@ -87,7 +89,7 @@ export function TeamDetailPage() {
           >
             <h2
               style={{
-                fontFamily: "'Libre Baskerville', serif",
+                fontFamily: fontHeading,
                 color: terracotta,
                 fontSize: "1.2rem",
                 marginBottom: "0.5rem",
@@ -97,7 +99,7 @@ export function TeamDetailPage() {
             </h2>
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: textSecondary,
                 fontSize: "0.9rem",
               }}
@@ -123,7 +125,7 @@ export function TeamDetailPage() {
         <nav
           className="mb-6"
           style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             fontSize: "0.85rem",
             color: textSecondary,
           }}
@@ -150,7 +152,7 @@ export function TeamDetailPage() {
         <header className="mb-8">
           <h1
             style={{
-              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontFamily: fontHeading,
               fontSize: "clamp(1.8rem, 4vw, 2.6rem)",
               fontWeight: 400,
               lineHeight: 1.2,

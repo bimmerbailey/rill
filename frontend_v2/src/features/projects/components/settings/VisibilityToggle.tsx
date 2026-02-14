@@ -15,15 +15,17 @@ export function VisibilityToggle({
   const [showConfirm, setShowConfirm] = useState(false);
   const [toggling, setToggling] = useState(false);
 
-  const surface0 = "#141211";
-  const surface1 = "#1c1917";
-  const surface2 = "#231f1c";
-  const surface3 = "#2c2724";
-  const border = "rgba(255,235,210,0.1)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.6)";
-  const terracotta = "#c9805e";
-  const sage = "#7fa67f";
+  const surface0 = "var(--color-surface-base)";
+  const surface1 = "var(--color-surface-0)";
+  const surface2 = "var(--color-surface-1)";
+  const surface3 = "var(--color-surface-2)";
+  const border = "var(--color-border-strong)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const terracotta = "var(--color-terracotta)";
+  const sage = "var(--color-sage)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const handleToggle = async () => {
     if (!isPublic) {
@@ -63,7 +65,7 @@ export function VisibilityToggle({
           <div>
             <div
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.95rem",
                 color: textPrimary,
               }}
@@ -72,7 +74,7 @@ export function VisibilityToggle({
             </div>
             <div
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.8rem",
                 color: textSecondary,
               }}
@@ -90,7 +92,7 @@ export function VisibilityToggle({
           style={{
             background: isPublic ? surface3 : terracotta,
             color: isPublic ? textPrimary : surface0,
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             fontWeight: 500,
             opacity: toggling ? 0.5 : 1,
           }}
@@ -116,13 +118,16 @@ export function VisibilityToggle({
             <div className="flex items-center gap-3 mb-4">
               <div
                 className="p-2 rounded-full"
-                style={{ background: "rgba(201,128,94,0.15)" }}
+                style={{
+                  background:
+                    "color-mix(in srgb, var(--color-terracotta) 15%, transparent)",
+                }}
               >
                 <AlertTriangle size={20} style={{ color: terracotta }} />
               </div>
               <h3
                 style={{
-                  fontFamily: "'Libre Baskerville', serif",
+                  fontFamily: fontHeading,
                   color: textPrimary,
                 }}
               >
@@ -131,7 +136,7 @@ export function VisibilityToggle({
             </div>
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: textSecondary,
                 marginBottom: "1.5rem",
               }}
@@ -145,7 +150,7 @@ export function VisibilityToggle({
                 className="px-4 py-2 rounded-lg"
                 style={{
                   color: textSecondary,
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                 }}
               >
                 Cancel
@@ -157,7 +162,7 @@ export function VisibilityToggle({
                 style={{
                   background: terracotta,
                   color: surface0,
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontWeight: 500,
                 }}
               >

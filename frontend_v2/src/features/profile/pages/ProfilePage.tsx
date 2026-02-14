@@ -2,17 +2,19 @@ import { ProfileSettings } from "../components/ProfileSettings";
 
 export function ProfilePage() {
   // Dark palette — warm charcoal tones
-  const base = "#141211";
-  const surface0 = "#1c1917";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const terracotta = "#c9805e";
+  const base = "var(--color-surface-base)";
+  const surface0 = "var(--color-surface-0)";
+  const textPrimary = "var(--color-text-primary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   return (
     <div
       className="min-h-screen p-10"
       style={{
         background: `linear-gradient(160deg, ${base} 0%, ${surface0} 50%, ${base} 100%)`,
-        fontFamily: "'Libre Baskerville', Georgia, serif",
+        fontFamily: fontHeading,
       }}
     >
       <div className="max-w-5xl mx-auto">
@@ -21,7 +23,7 @@ export function ProfilePage() {
           <div
             className="text-xs tracking-[0.3em] uppercase mb-3"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               color: terracotta,
               fontWeight: 500,
             }}

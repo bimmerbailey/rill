@@ -23,13 +23,15 @@ export function ProjectMemberRoleModal({
   const [screen, setScreen] = useState<"menu" | "role">("menu");
   const [loading, setLoading] = useState(false);
 
-  const surface1 = "#1c1917";
-  const surface2 = "#231f1c";
-  const border = "rgba(255,235,210,0.1)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.6)";
-  const terracotta = "#c9805e";
-  const danger = "#e57373";
+  const surface1 = "var(--color-surface-0)";
+  const surface2 = "var(--color-surface-1)";
+  const border = "var(--color-border-strong)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const terracotta = "var(--color-terracotta)";
+  const danger = "var(--color-danger)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const handleClose = () => {
     setScreen("menu");
@@ -96,7 +98,7 @@ export function ProjectMemberRoleModal({
           <h2
             className="flex-1"
             style={{
-              fontFamily: "'Libre Baskerville', serif",
+              fontFamily: fontHeading,
               fontSize: "1.1rem",
               color: textPrimary,
             }}
@@ -128,7 +130,7 @@ export function ProjectMemberRoleModal({
                   <Shield size={18} style={{ color: terracotta }} />
                   <span
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       color: textPrimary,
                     }}
                   >
@@ -137,7 +139,7 @@ export function ProjectMemberRoleModal({
                 </div>
                 <span
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.85rem",
                     color: textSecondary,
                   }}
@@ -150,8 +152,10 @@ export function ProjectMemberRoleModal({
                 <div
                   className="px-3 py-2 rounded"
                   style={{
-                    background: "rgba(229,115,115,0.1)",
-                    border: `1px solid ${danger}40`,
+                    background:
+                      "color-mix(in srgb, var(--color-danger) 10%, transparent)",
+                    border:
+                      "1px solid color-mix(in srgb, var(--color-danger) 25%, transparent)",
                   }}
                 >
                   <p style={{ color: danger, fontSize: "0.8rem" }}>
@@ -173,7 +177,7 @@ export function ProjectMemberRoleModal({
                 <Trash2 size={18} style={{ color: danger }} />
                 <span
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     color: danger,
                   }}
                 >
@@ -204,7 +208,7 @@ export function ProjectMemberRoleModal({
                       <div className="flex items-center gap-2">
                         <span
                           style={{
-                            fontFamily: "'DM Sans', sans-serif",
+                            fontFamily: fontBody,
                             fontWeight: 500,
                             color: textPrimary,
                           }}
@@ -221,7 +225,7 @@ export function ProjectMemberRoleModal({
                       </div>
                       <p
                         style={{
-                          fontFamily: "'DM Sans', sans-serif",
+                          fontFamily: fontBody,
                           fontSize: "0.8rem",
                           color: textSecondary,
                           marginTop: "0.25rem",

@@ -6,9 +6,11 @@ interface TeamTabsProps {
 }
 
 export function TeamTabs({ teamId, activeTab }: TeamTabsProps) {
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const terracotta = "#c9805e";
+  const textSecondary = "var(--color-text-secondary)";
+  const textPrimary = "var(--color-text-primary)";
+  const terracotta = "var(--color-terracotta)";
+  const border = "var(--color-border)";
+  const fontBody = "var(--font-body)";
 
   const tabs = [
     { id: "projects", label: "Projects", path: `/teams/${teamId}/projects` },
@@ -19,7 +21,7 @@ export function TeamTabs({ teamId, activeTab }: TeamTabsProps) {
   return (
     <nav
       style={{
-        borderBottom: `1px solid rgba(255,235,210,0.06)`,
+        borderBottom: `1px solid ${border}`,
         display: "flex",
         gap: "2rem",
       }}
@@ -31,7 +33,7 @@ export function TeamTabs({ teamId, activeTab }: TeamTabsProps) {
             key={tab.id}
             to={tab.path}
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontSize: "0.75rem",
               fontWeight: 600,
               textTransform: "uppercase",

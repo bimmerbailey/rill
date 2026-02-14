@@ -13,7 +13,9 @@ export function ColorPicker({
   onColorSelect,
   excludeNoColor = true,
 }: ColorPickerProps) {
-  const textSecondary = "rgba(245,238,230,0.6)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textPrimary = "var(--color-text-primary)";
+  const fontBody = "var(--font-body)";
 
   const displayColors = excludeNoColor
     ? colors.filter((c) => c.name.toLowerCase() !== "no_color")
@@ -27,7 +29,7 @@ export function ColorPicker({
     <div>
       <label
         style={{
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: fontBody,
           fontSize: "0.8rem",
           color: textSecondary,
           marginBottom: "0.5rem",
@@ -53,7 +55,7 @@ export function ColorPicker({
               style={{
                 background: color.colorHex,
                 border: isSelected
-                  ? "2px solid rgba(245,238,230,0.87)"
+                  ? `2px solid ${textPrimary}`
                   : "2px solid transparent",
                 transform: isSelected ? "scale(1.1)" : "scale(1)",
               }}

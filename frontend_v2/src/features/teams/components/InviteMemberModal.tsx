@@ -30,13 +30,15 @@ export function InviteMemberModal({
   const [searchQuery, setSearchQuery] = useState("");
   const [inviting, setInviting] = useState(false);
 
-  const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(255,235,210,0.32)";
+  const surface1 = "var(--color-surface-1)";
+  const surface2 = "var(--color-surface-2)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   // Filter out existing members and apply search
   const availableUsers = users.filter((user) => {
@@ -84,7 +86,7 @@ export function InviteMemberModal({
         <div className="flex items-start justify-between mb-4">
           <h3
             style={{
-              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontFamily: fontHeading,
               fontSize: "1.3rem",
               color: textPrimary,
             }}
@@ -136,7 +138,7 @@ export function InviteMemberModal({
                 padding: "2rem 1rem",
                 textAlign: "center",
                 color: textSecondary,
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.9rem",
               }}
             >
@@ -181,7 +183,7 @@ export function InviteMemberModal({
                   <div style={{ flex: 1 }}>
                     <div
                       style={{
-                        fontFamily: "'DM Sans', sans-serif",
+                        fontFamily: fontBody,
                         fontSize: "0.9rem",
                         fontWeight: 600,
                         color: textPrimary,
@@ -192,7 +194,7 @@ export function InviteMemberModal({
                     </div>
                     <div
                       style={{
-                        fontFamily: "'DM Sans', sans-serif",
+                        fontFamily: fontBody,
                         fontSize: "0.75rem",
                         color: textSecondary,
                       }}

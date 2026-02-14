@@ -16,15 +16,16 @@ export function ProjectMemberList({
   onManageMember,
   onManageInvitedMember,
 }: ProjectMemberListProps) {
-  const surface1 = "#1c1917";
-  const surface2 = "#231f1c";
-  const border = "rgba(255,235,210,0.1)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.6)";
-  const textTertiary = "rgba(245,238,230,0.32)";
-  const terracotta = "#c9805e";
-  const sage = "#7fa67f";
-  const slate = "#7992b0";
+  const surface1 = "var(--color-surface-0)";
+  const surface2 = "var(--color-surface-1)";
+  const border = "var(--color-border-strong)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const sage = "var(--color-sage)";
+  const slate = "var(--color-slate)";
+  const fontBody = "var(--font-body)";
 
   const getRoleBadgeColor = (code: string) => {
     switch (code) {
@@ -62,7 +63,7 @@ export function ProjectMemberList({
                 <div className="flex items-center gap-2">
                   <span
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.9rem",
                       color: textPrimary,
                     }}
@@ -72,7 +73,7 @@ export function ProjectMemberList({
                   {isCurrentUser && (
                     <span
                       style={{
-                        fontFamily: "'DM Sans', sans-serif",
+                        fontFamily: fontBody,
                         fontSize: "0.7rem",
                         color: textTertiary,
                         fontStyle: "italic",
@@ -84,7 +85,7 @@ export function ProjectMemberList({
                 </div>
                 <span
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.8rem",
                     color: textSecondary,
                   }}
@@ -99,7 +100,7 @@ export function ProjectMemberList({
                 style={{
                   background: `${getRoleBadgeColor(member.role.code)}20`,
                   color: getRoleBadgeColor(member.role.code),
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                 }}
               >
                 {member.role.name}
@@ -109,7 +110,7 @@ export function ProjectMemberList({
                 className="px-3 py-1 rounded transition-colors"
                 style={{
                   color: terracotta,
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.85rem",
                 }}
               >
@@ -128,7 +129,7 @@ export function ProjectMemberList({
           >
             <span
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.8rem",
                 color: textSecondary,
                 textTransform: "uppercase",
@@ -167,7 +168,7 @@ export function ProjectMemberList({
                 <div>
                   <span
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.9rem",
                       color: textPrimary,
                     }}
@@ -176,7 +177,7 @@ export function ProjectMemberList({
                   </span>
                   <div
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.75rem",
                       color: textTertiary,
                     }}
@@ -191,7 +192,7 @@ export function ProjectMemberList({
                   className="px-3 py-1 rounded transition-colors"
                   style={{
                     color: terracotta,
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.85rem",
                   }}
                 >

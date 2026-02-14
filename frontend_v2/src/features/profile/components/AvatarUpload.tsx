@@ -47,9 +47,10 @@ export function AvatarUpload({
   const isLoading = isUploading || isRemoving;
 
   // Dark palette
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(245,238,230,0.32)";
-  const terracotta = "#c9805e";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontBody = "var(--font-body)";
 
   return (
     <div className="flex flex-col items-center space-y-6">
@@ -105,7 +106,7 @@ export function AvatarUpload({
         <p
           className="text-xs uppercase tracking-wider text-center"
           style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             color: textSecondary,
           }}
         >

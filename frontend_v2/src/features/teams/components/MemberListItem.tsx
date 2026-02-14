@@ -7,12 +7,13 @@ interface MemberListItemProps {
 }
 
 export function MemberListItem({ member, onManage }: MemberListItemProps) {
-  const surface2 = "#2c2724";
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const terracotta = "#c9805e";
+  const surface2 = "var(--color-surface-2)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontBody = "var(--font-body)";
 
   return (
     <div
@@ -42,7 +43,7 @@ export function MemberListItem({ member, onManage }: MemberListItemProps) {
         <div>
           <div
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontSize: "0.95rem",
               fontWeight: 600,
               color: textPrimary,
@@ -53,7 +54,7 @@ export function MemberListItem({ member, onManage }: MemberListItemProps) {
           </div>
           <div
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontSize: "0.8rem",
               color: textSecondary,
             }}
@@ -66,7 +67,7 @@ export function MemberListItem({ member, onManage }: MemberListItemProps) {
       <button
         onClick={() => onManage(member)}
         style={{
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: fontBody,
           fontSize: "0.8rem",
           fontWeight: 500,
           textTransform: "uppercase",

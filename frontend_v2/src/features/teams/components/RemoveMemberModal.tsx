@@ -18,13 +18,15 @@ export function RemoveMemberModal({
   const [selectedNewOwner, setSelectedNewOwner] = useState<string | null>(null);
   const [removing, setRemoving] = useState(false);
 
-  const surface1 = "#231f1c";
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(255,235,210,0.32)";
-  const danger = "#d97070";
+  const surface1 = "var(--color-surface-1)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const danger = "var(--color-danger)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const ownedProjects = member.owned?.projects || [];
   const hasOwnedProjects = ownedProjects.length > 0;
@@ -63,7 +65,7 @@ export function RemoveMemberModal({
         <div className="flex items-start justify-between mb-4">
           <h3
             style={{
-              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontFamily: fontHeading,
               fontSize: "1.3rem",
               color: textPrimary,
             }}
@@ -91,7 +93,7 @@ export function RemoveMemberModal({
         <div className="space-y-4">
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontSize: "0.9rem",
               color: textSecondary,
               lineHeight: 1.6,
@@ -105,7 +107,7 @@ export function RemoveMemberModal({
             <>
               <p
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.9rem",
                   color: textPrimary,
                   lineHeight: 1.6,
@@ -121,7 +123,7 @@ export function RemoveMemberModal({
               <div style={{ marginTop: "1rem" }}>
                 <label
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.75rem",
                     fontWeight: 600,
                     textTransform: "uppercase",
@@ -143,7 +145,7 @@ export function RemoveMemberModal({
                     border: `1px solid ${border}`,
                     borderRadius: "8px",
                     color: textPrimary,
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.9rem",
                     cursor: "pointer",
                   }}

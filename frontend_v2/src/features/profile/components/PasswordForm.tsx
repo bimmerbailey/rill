@@ -28,12 +28,14 @@ export function PasswordForm({ onSubmit, isSubmitting }: PasswordFormProps) {
   });
 
   // Dark palette
-  const surface2 = "#2c2724";
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const terracotta = "#c9805e";
+  const surface2 = "var(--color-surface-2)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const onFormSubmit = async (data: PasswordFormData) => {
     await onSubmit(data.password);
@@ -53,7 +55,7 @@ export function PasswordForm({ onSubmit, isSubmitting }: PasswordFormProps) {
         <p
           className="text-sm leading-relaxed"
           style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             color: textSecondary,
           }}
         >
@@ -82,7 +84,7 @@ export function PasswordForm({ onSubmit, isSubmitting }: PasswordFormProps) {
               background: surface3,
               borderColor: errors.password ? terracotta : border,
               color: textPrimary,
-              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontFamily: fontHeading,
             }}
           />
           <button
@@ -97,7 +99,7 @@ export function PasswordForm({ onSubmit, isSubmitting }: PasswordFormProps) {
         <p
           className="mt-2 text-xs uppercase tracking-wider"
           style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             color: textSecondary,
           }}
         >
@@ -133,7 +135,7 @@ export function PasswordForm({ onSubmit, isSubmitting }: PasswordFormProps) {
               background: surface3,
               borderColor: errors.confirmPassword ? terracotta : border,
               color: textPrimary,
-              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontFamily: fontHeading,
             }}
           />
           <button

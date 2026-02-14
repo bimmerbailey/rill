@@ -161,18 +161,20 @@ export function ProjectBoardPage() {
     "position",
   );
 
-  const surface0 = "#1c1917";
-  const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(245,238,230,0.32)";
-  const terracotta = "#c9805e";
-  const sage = "#7fa67f";
-  const slate = "#7992b0";
-  const ochre = "#bfa26e";
+  const surface0 = "var(--color-surface-0)";
+  const surface1 = "var(--color-surface-1)";
+  const surface2 = "var(--color-surface-2)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const sage = "var(--color-sage)";
+  const slate = "var(--color-slate)";
+  const ochre = "var(--color-ochre)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const groupColors = [terracotta, sage, slate, ochre];
 
@@ -531,7 +533,7 @@ export function ProjectBoardPage() {
             className="font-semibold mb-2"
             style={{
               color: terracotta,
-              fontFamily: "'Libre Baskerville', serif",
+              fontFamily: fontHeading,
             }}
           >
             Error loading project
@@ -539,7 +541,7 @@ export function ProjectBoardPage() {
           <p
             style={{
               color: textSecondary,
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
             }}
           >
             {error.message}
@@ -563,7 +565,7 @@ export function ProjectBoardPage() {
           <h2
             className="mb-2"
             style={{
-              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontFamily: fontHeading,
               fontSize: "1.5rem",
               color: textPrimary,
             }}
@@ -572,7 +574,7 @@ export function ProjectBoardPage() {
           </h2>
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontSize: "0.9rem",
               color: textSecondary,
             }}
@@ -594,7 +596,7 @@ export function ProjectBoardPage() {
           <div>
             <h1
               style={{
-                fontFamily: "'Libre Baskerville', Georgia, serif",
+                fontFamily: fontHeading,
                 fontSize: "2rem",
                 fontWeight: 400,
                 color: textPrimary,
@@ -604,7 +606,7 @@ export function ProjectBoardPage() {
             </h1>
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.85rem",
                 color: textSecondary,
                 marginTop: "0.25rem",
@@ -631,7 +633,7 @@ export function ProjectBoardPage() {
                 background: surface2,
                 border: `1px solid ${border}`,
                 color: textPrimary,
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
               }}
             />
             <select
@@ -644,7 +646,7 @@ export function ProjectBoardPage() {
                 background: surface2,
                 border: `1px solid ${border}`,
                 color: textPrimary,
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
               }}
             >
               <option value="position">Sort by Position</option>
@@ -654,7 +656,7 @@ export function ProjectBoardPage() {
             <label
               className="flex items-center gap-2 cursor-pointer"
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.85rem",
                 color: textSecondary,
               }}
@@ -685,7 +687,7 @@ export function ProjectBoardPage() {
             >
               <p
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.9rem",
                   color: textSecondary,
                 }}
@@ -754,7 +756,7 @@ export function ProjectBoardPage() {
                                 background: surface3,
                                 border: `1px solid ${border}`,
                                 color: textPrimary,
-                                fontFamily: "'DM Sans', sans-serif",
+                                fontFamily: fontBody,
                               }}
                               onClick={(e) => e.stopPropagation()}
                             />
@@ -767,7 +769,7 @@ export function ProjectBoardPage() {
                               }}
                               className="cursor-pointer hover:opacity-80"
                               style={{
-                                fontFamily: "'DM Sans', sans-serif",
+                                fontFamily: fontBody,
                                 fontSize: "0.85rem",
                                 fontWeight: 600,
                                 textTransform: "uppercase",
@@ -780,7 +782,7 @@ export function ProjectBoardPage() {
                           )}
                           <span
                             style={{
-                              fontFamily: "'DM Sans', sans-serif",
+                              fontFamily: fontBody,
                               fontSize: "0.75rem",
                               color: textTertiary,
                             }}
@@ -835,7 +837,7 @@ export function ProjectBoardPage() {
                       {displayTasks.length === 0 && (
                         <p
                           style={{
-                            fontFamily: "'DM Sans', sans-serif",
+                            fontFamily: fontBody,
                             fontSize: "0.8rem",
                             color: textTertiary,
                             fontStyle: "italic",
@@ -868,13 +870,13 @@ export function ProjectBoardPage() {
                           background: surface3,
                           border: `1px solid ${border}`,
                           color: textPrimary,
-                          fontFamily: "'DM Sans', sans-serif",
+                          fontFamily: fontBody,
                         }}
                       />
                       {taskError[group.id] && (
                         <span
                           style={{
-                            fontFamily: "'DM Sans', sans-serif",
+                            fontFamily: fontBody,
                             fontSize: "0.75rem",
                             color: terracotta,
                           }}
@@ -912,7 +914,7 @@ export function ProjectBoardPage() {
                 background: surface3,
                 border: `1px solid ${border}`,
                 color: textPrimary,
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
               }}
             />
             <Button
@@ -926,7 +928,7 @@ export function ProjectBoardPage() {
             >
               <span
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontWeight: 500,
                 }}
               >
@@ -937,7 +939,7 @@ export function ProjectBoardPage() {
           {groupError && (
             <span
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.8rem",
                 color: terracotta,
                 marginTop: "0.5rem",

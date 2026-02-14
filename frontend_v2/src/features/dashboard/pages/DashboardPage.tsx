@@ -19,21 +19,23 @@ export function DashboardPage() {
     totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
   // Dark palette — warm charcoal tones, not cold
-  const base = "#141211"; // deepest background
-  const surface0 = "#1c1917"; // canvas
-  const surface1 = "#231f1c"; // raised card
-  const surface2 = "#2c2724"; // hover / elevated
-  const surface3 = "#36302c"; // active / input bg
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)"; // ~87% white-warm
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(245,238,230,0.32)";
+  const base = "var(--color-surface-base)"; // deepest background
+  const surface0 = "var(--color-surface-0)"; // canvas
+  const surface1 = "var(--color-surface-1)"; // raised card
+  const surface2 = "var(--color-surface-2)"; // hover / elevated
+  const surface3 = "var(--color-surface-3)"; // active / input bg
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)"; // ~87% white-warm
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
 
   // Accents — slightly desaturated from light mode
-  const terracotta = "#c9805e";
-  const sage = "#7fa67f";
-  const slate = "#7992b0";
-  const ochre = "#bfa26e";
+  const terracotta = "var(--color-terracotta)";
+  const sage = "var(--color-sage)";
+  const slate = "var(--color-slate)";
+  const ochre = "var(--color-ochre)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   if (loading) {
     return (
@@ -41,7 +43,7 @@ export function DashboardPage() {
         className="min-h-screen p-10"
         style={{
           background: `linear-gradient(160deg, ${base} 0%, ${surface0} 50%, ${base} 100%)`,
-          fontFamily: "'Libre Baskerville', Georgia, serif",
+          fontFamily: fontHeading,
         }}
       >
         <div className="max-w-6xl mx-auto space-y-6">
@@ -80,7 +82,7 @@ export function DashboardPage() {
         >
           <h2
             style={{
-              fontFamily: "'Libre Baskerville', serif",
+              fontFamily: fontHeading,
               color: terracotta,
               fontSize: "1.3rem",
               marginBottom: "0.5rem",
@@ -90,7 +92,7 @@ export function DashboardPage() {
           </h2>
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               color: textSecondary,
               fontSize: "0.9rem",
             }}
@@ -148,7 +150,7 @@ export function DashboardPage() {
         >
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontSize: "0.8rem",
               color: textTertiary,
               fontWeight: 500,
@@ -165,7 +167,7 @@ export function DashboardPage() {
           </p>
           <h1
             style={{
-              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontFamily: fontHeading,
               fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
               fontWeight: 400,
               lineHeight: 1.2,
@@ -220,7 +222,7 @@ export function DashboardPage() {
               />
               <div
                 style={{
-                  fontFamily: "'Libre Baskerville', serif",
+                  fontFamily: fontHeading,
                   fontSize: "2rem",
                   fontWeight: 400,
                   lineHeight: 1,
@@ -232,7 +234,7 @@ export function DashboardPage() {
               </div>
               <div
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.75rem",
                   color: textTertiary,
                   fontWeight: 500,
@@ -258,7 +260,7 @@ export function DashboardPage() {
           <div className="flex items-center justify-between mb-3">
             <span
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.8rem",
                 color: textSecondary,
                 fontWeight: 500,
@@ -268,7 +270,7 @@ export function DashboardPage() {
             </span>
             <span
               style={{
-                fontFamily: "'Libre Baskerville', serif",
+                fontFamily: fontHeading,
                 fontSize: "0.9rem",
                 color: terracotta,
               }}
@@ -316,7 +318,7 @@ export function DashboardPage() {
               <div className="flex items-center justify-between mb-6">
                 <h2
                   style={{
-                    fontFamily: "'Libre Baskerville', serif",
+                    fontFamily: fontHeading,
                     fontSize: "1.15rem",
                     fontWeight: 400,
                     color: textPrimary,
@@ -328,7 +330,7 @@ export function DashboardPage() {
                   to="/projects"
                   className="no-underline"
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.78rem",
                     color: terracotta,
                     fontWeight: 500,
@@ -384,7 +386,7 @@ export function DashboardPage() {
                           alignItems: "center",
                           justifyContent: "center",
                           color: "#fff",
-                          fontFamily: "'DM Sans', sans-serif",
+                          fontFamily: fontBody,
                           fontWeight: 600,
                           fontSize: "0.8rem",
                         }}
@@ -395,7 +397,7 @@ export function DashboardPage() {
                         <p
                           className="truncate"
                           style={{
-                            fontFamily: "'DM Sans', sans-serif",
+                            fontFamily: fontBody,
                             fontSize: "0.9rem",
                             fontWeight: 500,
                             color: textPrimary,
@@ -406,7 +408,7 @@ export function DashboardPage() {
                         {project.team && (
                           <p
                             style={{
-                              fontFamily: "'DM Sans', sans-serif",
+                              fontFamily: fontBody,
                               fontSize: "0.7rem",
                               color: textTertiary,
                               marginTop: "2px",
@@ -424,7 +426,7 @@ export function DashboardPage() {
                 <p
                   className="text-center py-8"
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     color: textTertiary,
                     fontSize: "0.9rem",
                   }}
@@ -452,7 +454,7 @@ export function DashboardPage() {
               <div className="flex items-center justify-between mb-5">
                 <h2
                   style={{
-                    fontFamily: "'Libre Baskerville', serif",
+                    fontFamily: fontHeading,
                     fontSize: "1.15rem",
                     fontWeight: 400,
                     color: textPrimary,
@@ -464,7 +466,7 @@ export function DashboardPage() {
                   to="/my-tasks"
                   className="no-underline"
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.78rem",
                     color: terracotta,
                     fontWeight: 500,
@@ -519,7 +521,7 @@ export function DashboardPage() {
                         <p
                           className="truncate"
                           style={{
-                            fontFamily: "'DM Sans', sans-serif",
+                            fontFamily: fontBody,
                             fontSize: "0.85rem",
                             color: textPrimary,
                           }}
@@ -529,7 +531,7 @@ export function DashboardPage() {
                         {task.taskGroup && (
                           <p
                             style={{
-                              fontFamily: "'DM Sans', sans-serif",
+                              fontFamily: fontBody,
                               fontSize: "0.65rem",
                               color: textTertiary,
                               marginTop: "2px",
@@ -562,7 +564,7 @@ export function DashboardPage() {
                   </div>
                   <p
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       color: textTertiary,
                       fontSize: "0.85rem",
                     }}
@@ -585,7 +587,7 @@ export function DashboardPage() {
               <div className="flex items-center justify-between mb-4">
                 <h2
                   style={{
-                    fontFamily: "'Libre Baskerville', serif",
+                    fontFamily: fontHeading,
                     fontSize: "1.05rem",
                     fontWeight: 400,
                     color: textPrimary,
@@ -597,7 +599,7 @@ export function DashboardPage() {
                   to="/teams"
                   className="no-underline"
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.78rem",
                     color: terracotta,
                     fontWeight: 500,
@@ -629,7 +631,7 @@ export function DashboardPage() {
                           "rgba(191,162,110,0.15)",
                         ][i % 4]
                       }`,
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.8rem",
                       fontWeight: 500,
                       color: textSecondary,
@@ -675,7 +677,7 @@ export function DashboardPage() {
             >
               <h3
                 style={{
-                  fontFamily: "'Libre Baskerville', serif",
+                  fontFamily: fontHeading,
                   fontSize: "1.05rem",
                   fontWeight: 400,
                   color: "#fff",
@@ -698,7 +700,7 @@ export function DashboardPage() {
                       padding: "0.7rem 1rem",
                       borderRadius: "12px",
                       background: "rgba(0,0,0,0.15)",
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.85rem",
                       fontWeight: 500,
                       color: "#fff",

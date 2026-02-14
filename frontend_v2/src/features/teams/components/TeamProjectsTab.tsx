@@ -23,14 +23,16 @@ export function TeamProjectsTab() {
     });
 
   // Dark palette
-  const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(255,235,210,0.32)";
-  const terracotta = "#c9805e";
+  const surface1 = "var(--color-surface-1)";
+  const surface2 = "var(--color-surface-2)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   // Filter and sort projects
   const filteredProjects = useMemo(() => {
@@ -145,7 +147,7 @@ export function TeamProjectsTab() {
           <div>
             <h3
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontSize: "0.7rem",
                 fontWeight: 600,
                 letterSpacing: "0.08em",
@@ -169,7 +171,7 @@ export function TeamProjectsTab() {
                       border: "none",
                       padding: "0.5rem 0.75rem",
                       borderRadius: "6px",
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.85rem",
                       fontWeight: sortOption === option.id ? 700 : 400,
                       color:
@@ -212,7 +214,7 @@ export function TeamProjectsTab() {
             >
               <p
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.95rem",
                   color: textSecondary,
                   marginBottom: "1.5rem",
@@ -243,7 +245,7 @@ export function TeamProjectsTab() {
             >
               <p
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.95rem",
                   color: textSecondary,
                 }}
@@ -267,7 +269,7 @@ export function TeamProjectsTab() {
                   background: "transparent",
                   border: `2px dashed ${border}`,
                   borderRadius: "20px",
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.75rem",
                   fontWeight: 500,
                   textTransform: "uppercase",
@@ -314,7 +316,7 @@ export function TeamProjectsTab() {
             <div className="flex items-start justify-between mb-6">
               <h3
                 style={{
-                  fontFamily: "'Libre Baskerville', Georgia, serif",
+                  fontFamily: fontHeading,
                   fontSize: "1.5rem",
                   color: textPrimary,
                 }}
@@ -364,7 +366,7 @@ export function TeamProjectsTab() {
                     background: "none",
                     border: "none",
                     color: textSecondary,
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     fontSize: "0.85rem",
                     fontWeight: 500,
                     textTransform: "uppercase",

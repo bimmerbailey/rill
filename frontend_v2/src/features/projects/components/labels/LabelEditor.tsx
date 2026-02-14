@@ -68,20 +68,22 @@ export function LabelEditor({
     }
   };
 
-  const surface1 = "#1c1917";
-  const surface3 = "#2c2724";
-  const border = "rgba(255,235,210,0.1)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.6)";
-  const terracotta = "#c9805e";
-  const danger = "#e57373";
+  const surface1 = "var(--color-surface-0)";
+  const surface3 = "var(--color-surface-2)";
+  const border = "var(--color-border-strong)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const terracotta = "var(--color-terracotta)";
+  const danger = "var(--color-danger)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3
           style={{
-            fontFamily: "'Libre Baskerville', serif",
+            fontFamily: fontHeading,
             fontSize: "1.1rem",
             color: textPrimary,
           }}
@@ -100,8 +102,10 @@ export function LabelEditor({
         <div
           className="px-3 py-2 rounded"
           style={{
-            background: "rgba(229,115,115,0.1)",
-            border: `1px solid ${danger}`,
+            background:
+              "color-mix(in srgb, var(--color-danger) 10%, transparent)",
+            border:
+              "1px solid color-mix(in srgb, var(--color-danger) 40%, transparent)",
           }}
         >
           <p style={{ color: danger, fontSize: "0.85rem" }}>{error}</p>
@@ -111,7 +115,7 @@ export function LabelEditor({
       <div>
         <label
           style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             fontSize: "0.8rem",
             color: textSecondary,
             marginBottom: "0.5rem",
@@ -130,7 +134,7 @@ export function LabelEditor({
             background: surface3,
             border: `1px solid ${border}`,
             color: textPrimary,
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
           }}
           autoFocus
         />
@@ -154,7 +158,7 @@ export function LabelEditor({
             }}
           >
             <Trash2 size={16} />
-            <span style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            <span style={{ fontFamily: fontBody }}>
               {deleting ? "Deleting..." : "Delete"}
             </span>
           </button>
@@ -167,7 +171,7 @@ export function LabelEditor({
             className="px-4 py-2 rounded-lg transition-colors"
             style={{
               color: textSecondary,
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
             }}
           >
             Cancel
@@ -179,7 +183,7 @@ export function LabelEditor({
             style={{
               background: terracotta,
               color: surface1,
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontWeight: 500,
               opacity: saving ? 0.5 : 1,
             }}

@@ -18,14 +18,16 @@ export function RegisterPage() {
   const [registered, setRegistered] = useState(false);
 
   // Dark palette — warm charcoal tones
-  const base = "#141211";
-  const surface0 = "#1c1917";
-  const surface1 = "#231f1c";
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const terracotta = "#c9805e";
+  const base = "var(--color-surface-base)";
+  const surface0 = "var(--color-surface-0)";
+  const surface1 = "var(--color-surface-1)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +58,7 @@ export function RegisterPage() {
       style={{
         background: `linear-gradient(160deg, ${base} 0%, ${surface0} 50%, ${base} 100%)`,
         color: textPrimary,
-        fontFamily: "'Libre Baskerville', Georgia, serif",
+        fontFamily: fontHeading,
       }}
     >
       {/* Soft ambient blobs */}
@@ -103,7 +105,7 @@ export function RegisterPage() {
           <div
             className="text-xs tracking-[0.3em] uppercase mb-3"
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               color: terracotta,
               fontWeight: 500,
             }}
@@ -123,7 +125,7 @@ export function RegisterPage() {
             <p
               className="mt-4"
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: textSecondary,
                 fontSize: "0.9rem",
               }}
@@ -194,7 +196,7 @@ export function RegisterPage() {
                 <div
                   className="text-sm animate-[d2dFadeUp_0.5s_ease-out_both]"
                   style={{
-                    fontFamily: "'DM Sans', sans-serif",
+                    fontFamily: fontBody,
                     color: terracotta,
                     fontWeight: 500,
                   }}
@@ -217,7 +219,7 @@ export function RegisterPage() {
                 >
                   <span
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontWeight: 500,
                     }}
                   >
@@ -231,7 +233,7 @@ export function RegisterPage() {
             <p className="mt-8 text-center animate-[d2dFadeUp_0.7s_ease-out_0.5s_both]">
               <span
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   color: textSecondary,
                   fontSize: "0.9rem",
                 }}
@@ -241,7 +243,7 @@ export function RegisterPage() {
               <Link
                 to="/login"
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   color: textPrimary,
                   fontSize: "0.9rem",
                   fontWeight: 500,
@@ -262,7 +264,7 @@ export function RegisterPage() {
             <Link
               to="/login"
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: terracotta,
                 fontSize: "0.9rem",
                 fontWeight: 500,

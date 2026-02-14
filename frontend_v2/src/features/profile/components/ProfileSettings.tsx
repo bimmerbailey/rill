@@ -36,12 +36,14 @@ export function ProfileSettings() {
   } = useProfile();
 
   // Dark palette — warm charcoal tones
-  const surface1 = "#231f1c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(245,238,230,0.32)";
-  const terracotta = "#c9805e";
+  const surface1 = "var(--color-surface-1)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   if (loading) {
     return (
@@ -62,7 +64,7 @@ export function ProfileSettings() {
       <div className="text-center py-12">
         <p
           style={{
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
             color: textSecondary,
           }}
         >
@@ -89,7 +91,7 @@ export function ProfileSettings() {
               disabled={!tab.enabled}
               className="py-4 px-1 border-b-2 text-xs uppercase tracking-widest transition-all duration-300"
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 fontWeight: 500,
                 borderColor: activeTab === tab.id ? terracotta : "transparent",
                 color: activeTab === tab.id ? terracotta : textSecondary,
@@ -128,7 +130,7 @@ export function ProfileSettings() {
               <h2
                 className="text-2xl mb-8"
                 style={{
-                  fontFamily: "'Libre Baskerville', serif",
+                  fontFamily: fontHeading,
                   color: textPrimary,
                 }}
               >
@@ -148,7 +150,7 @@ export function ProfileSettings() {
               <h2
                 className="text-2xl mb-8"
                 style={{
-                  fontFamily: "'Libre Baskerville', serif",
+                  fontFamily: fontHeading,
                   color: textPrimary,
                 }}
               >
@@ -168,7 +170,7 @@ export function ProfileSettings() {
             <h2
               className="text-2xl mb-8"
               style={{
-                fontFamily: "'Libre Baskerville', serif",
+                fontFamily: fontHeading,
                 color: textPrimary,
               }}
             >
@@ -185,7 +187,7 @@ export function ProfileSettings() {
           <div className="text-center py-12">
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: textSecondary,
               }}
             >
@@ -198,7 +200,7 @@ export function ProfileSettings() {
           <div className="text-center py-12">
             <p
               style={{
-                fontFamily: "'DM Sans', sans-serif",
+                fontFamily: fontBody,
                 color: textSecondary,
               }}
             >

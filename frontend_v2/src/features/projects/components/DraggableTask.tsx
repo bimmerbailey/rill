@@ -264,7 +264,8 @@ export function DraggableTask({
                         key={user.id}
                         className="w-5 h-5 rounded-full flex items-center justify-center text-xs"
                         style={{
-                          background: user.profileIcon?.bgColor || "#7992b0",
+                          background:
+                            user.profileIcon?.bgColor || "var(--color-slate)",
                           color: "#fff",
                           border: `1px solid ${surface2}`,
                         }}

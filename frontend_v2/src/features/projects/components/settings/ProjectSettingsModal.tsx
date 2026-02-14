@@ -34,11 +34,13 @@ export function ProjectSettingsModal({
   const [toggleVisibility] = useToggleProjectVisibilityMutation();
   const [deleteProject] = useDeleteProjectMutation();
 
-  const surface1 = "#1c1917";
-  const border = "rgba(255,235,210,0.1)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.6)";
-  const danger = "#e57373";
+  const surface1 = "var(--color-surface-0)";
+  const border = "var(--color-border-strong)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const danger = "var(--color-danger)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const handleToggleVisibility = async (isPublic: boolean) => {
     try {
@@ -119,7 +121,7 @@ export function ProjectSettingsModal({
           >
             <h2
               style={{
-                fontFamily: "'Libre Baskerville', serif",
+                fontFamily: fontHeading,
                 fontSize: "1.25rem",
                 color: textPrimary,
               }}
@@ -138,7 +140,7 @@ export function ProjectSettingsModal({
             <div>
               <h3
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.85rem",
                   color: textSecondary,
                   textTransform: "uppercase",
@@ -162,7 +164,7 @@ export function ProjectSettingsModal({
             >
               <h3
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.85rem",
                   color: textSecondary,
                   textTransform: "uppercase",
@@ -175,15 +177,17 @@ export function ProjectSettingsModal({
               <div
                 className="p-4 rounded-lg"
                 style={{
-                  background: `${danger}10`,
-                  border: `1px solid ${danger}30`,
+                  background:
+                    "color-mix(in srgb, var(--color-danger) 10%, transparent)",
+                  border:
+                    "1px solid color-mix(in srgb, var(--color-danger) 30%, transparent)",
                 }}
               >
                 <div className="flex items-center justify-between">
                   <div>
                     <p
                       style={{
-                        fontFamily: "'DM Sans', sans-serif",
+                        fontFamily: fontBody,
                         fontSize: "0.9rem",
                         color: textPrimary,
                       }}
@@ -192,7 +196,7 @@ export function ProjectSettingsModal({
                     </p>
                     <p
                       style={{
-                        fontFamily: "'DM Sans', sans-serif",
+                        fontFamily: fontBody,
                         fontSize: "0.8rem",
                         color: textSecondary,
                       }}
@@ -206,7 +210,7 @@ export function ProjectSettingsModal({
                     style={{
                       background: danger,
                       color: "#fff",
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.85rem",
                     }}
                   >

@@ -132,7 +132,7 @@ export function DraggableColumn({
             left: closestEdge === "left" ? -2 : undefined,
             right: closestEdge === "right" ? -2 : undefined,
             width: 4,
-            background: "#c9805e",
+            background: "var(--color-terracotta)",
             borderRadius: 2,
           }}
         />

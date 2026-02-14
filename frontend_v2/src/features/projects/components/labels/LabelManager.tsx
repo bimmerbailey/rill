@@ -22,13 +22,14 @@ export function LabelManager({
 }: LabelManagerProps) {
   const [search, setSearch] = useState("");
 
-  const surface2 = "#231f1c";
-  const surface3 = "#2c2724";
-  const border = "rgba(255,235,210,0.1)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(245,238,230,0.32)";
-  const terracotta = "#c9805e";
+  const surface2 = "var(--color-surface-1)";
+  const surface3 = "var(--color-surface-2)";
+  const border = "var(--color-border-strong)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const fontBody = "var(--font-body)";
 
   const filteredLabels = labels.filter((label) => {
     if (!search.trim()) return true;
@@ -70,7 +71,7 @@ export function LabelManager({
             background: surface3,
             border: `1px solid ${border}`,
             color: textPrimary,
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: fontBody,
           }}
         />
       </div>
@@ -113,9 +114,7 @@ export function LabelManager({
         }}
       >
         <Plus size={16} />
-        <span style={{ fontFamily: "'DM Sans', sans-serif" }}>
-          Create new label
-        </span>
+        <span style={{ fontFamily: fontBody }}>Create new label</span>
       </button>
     </div>
   );

@@ -9,13 +9,15 @@ export function TeamSettingsTab() {
   const { team, projects, loading } = useTeamDetail(teamId || "");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(255,235,210,0.32)";
-  const danger = "#d97070";
+  const surface1 = "var(--color-surface-1)";
+  const surface2 = "var(--color-surface-2)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const danger = "var(--color-danger)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   if (loading || !team) {
     return (
@@ -52,7 +54,7 @@ export function TeamSettingsTab() {
         >
           <h2
             style={{
-              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontFamily: fontHeading,
               fontSize: "1.4rem",
               color: textPrimary,
               marginBottom: "1.5rem",
@@ -65,7 +67,7 @@ export function TeamSettingsTab() {
             <div>
               <label
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.75rem",
                   fontWeight: 600,
                   textTransform: "uppercase",
@@ -79,7 +81,7 @@ export function TeamSettingsTab() {
               </label>
               <div
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "1rem",
                   color: textPrimary,
                 }}
@@ -91,7 +93,7 @@ export function TeamSettingsTab() {
             <div>
               <label
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.75rem",
                   fontWeight: 600,
                   textTransform: "uppercase",
@@ -105,7 +107,7 @@ export function TeamSettingsTab() {
               </label>
               <div
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "1rem",
                   color: textPrimary,
                 }}
@@ -117,7 +119,7 @@ export function TeamSettingsTab() {
             <div>
               <label
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.75rem",
                   fontWeight: 600,
                   textTransform: "uppercase",
@@ -131,7 +133,7 @@ export function TeamSettingsTab() {
               </label>
               <div
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "1rem",
                   color: textPrimary,
                 }}
@@ -143,7 +145,7 @@ export function TeamSettingsTab() {
             <div>
               <label
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.75rem",
                   fontWeight: 600,
                   textTransform: "uppercase",
@@ -171,8 +173,10 @@ export function TeamSettingsTab() {
         {/* Danger Zone */}
         <div
           style={{
-            background: `rgba(${parseInt(danger.slice(1, 3), 16)}, ${parseInt(danger.slice(3, 5), 16)}, ${parseInt(danger.slice(5, 7), 16)}, 0.05)`,
-            border: `2px solid rgba(${parseInt(danger.slice(1, 3), 16)}, ${parseInt(danger.slice(3, 5), 16)}, ${parseInt(danger.slice(5, 7), 16)}, 0.3)`,
+            background:
+              "color-mix(in srgb, var(--color-danger) 5%, transparent)",
+            border:
+              "2px solid color-mix(in srgb, var(--color-danger) 30%, transparent)",
             borderRadius: "16px",
             padding: "2rem",
           }}
@@ -189,7 +193,7 @@ export function TeamSettingsTab() {
             <div style={{ flex: 1 }}>
               <h3
                 style={{
-                  fontFamily: "'Libre Baskerville', Georgia, serif",
+                  fontFamily: fontHeading,
                   fontSize: "1.2rem",
                   color: danger,
                   marginBottom: "0.75rem",
@@ -199,7 +203,7 @@ export function TeamSettingsTab() {
               </h3>
               <h4
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "1rem",
                   fontWeight: 600,
                   color: textPrimary,
@@ -210,7 +214,7 @@ export function TeamSettingsTab() {
               </h4>
               <p
                 style={{
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: fontBody,
                   fontSize: "0.9rem",
                   color: textSecondary,
                   lineHeight: 1.6,

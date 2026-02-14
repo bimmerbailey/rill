@@ -16,9 +16,10 @@ export function NotificationTabs({
   activeFilter,
   onChangeFilter,
 }: NotificationTabsProps) {
-  const border = "rgba(255,235,210,0.1)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const accent = "#c9805e";
+  const border = "var(--color-border-strong)";
+  const textSecondary = "var(--color-text-secondary)";
+  const accent = "var(--color-terracotta)";
+  const fontBody = "var(--font-body)";
 
   return (
     <div
@@ -34,7 +35,7 @@ export function NotificationTabs({
             className="px-3 py-1.5 text-sm transition-colors"
             style={{
               color: isActive ? accent : textSecondary,
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontWeight: isActive ? 500 : 400,
               borderBottom: isActive
                 ? `2px solid ${accent}`

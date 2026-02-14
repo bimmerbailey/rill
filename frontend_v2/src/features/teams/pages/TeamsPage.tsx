@@ -6,19 +6,21 @@ export function TeamsPage() {
   const { teams, projectTeams, loading, error } = useProjectsData();
 
   // Dark palette — warm charcoal tones
-  const base = "#141211";
-  const surface0 = "#1c1917";
-  const surface1 = "#231f1c";
-  const surface2 = "#2c2724";
-  const surface3 = "#36302c";
-  const border = "rgba(255,235,210,0.06)";
-  const textPrimary = "rgba(245,238,230,0.87)";
-  const textSecondary = "rgba(245,238,230,0.5)";
-  const textTertiary = "rgba(245,238,230,0.32)";
-  const terracotta = "#c9805e";
-  const sage = "#7fa67f";
-  const slate = "#7992b0";
-  const ochre = "#bfa26e";
+  const base = "var(--color-surface-base)";
+  const surface0 = "var(--color-surface-0)";
+  const surface1 = "var(--color-surface-1)";
+  const surface2 = "var(--color-surface-2)";
+  const surface3 = "var(--color-surface-3)";
+  const border = "var(--color-border)";
+  const textPrimary = "var(--color-text-primary)";
+  const textSecondary = "var(--color-text-secondary)";
+  const textTertiary = "var(--color-text-tertiary)";
+  const terracotta = "var(--color-terracotta)";
+  const sage = "var(--color-sage)";
+  const slate = "var(--color-slate)";
+  const ochre = "var(--color-ochre)";
+  const fontHeading = "var(--font-heading)";
+  const fontBody = "var(--font-body)";
 
   const accentColors = [terracotta, sage, slate, ochre];
 
@@ -82,7 +84,7 @@ export function TeamsPage() {
         >
           <h2
             style={{
-              fontFamily: "'Libre Baskerville', serif",
+              fontFamily: fontHeading,
               color: terracotta,
               fontSize: "1.2rem",
               marginBottom: "0.5rem",
@@ -92,7 +94,7 @@ export function TeamsPage() {
           </h2>
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               color: textSecondary,
               fontSize: "0.9rem",
             }}
@@ -119,7 +121,7 @@ export function TeamsPage() {
         >
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontSize: "0.8rem",
               color: textTertiary,
               fontWeight: 500,
@@ -132,7 +134,7 @@ export function TeamsPage() {
           </p>
           <h1
             style={{
-              fontFamily: "'Libre Baskerville', Georgia, serif",
+              fontFamily: fontHeading,
               fontSize: "clamp(1.8rem, 4vw, 2.6rem)",
               fontWeight: 400,
               lineHeight: 1.2,
@@ -143,7 +145,7 @@ export function TeamsPage() {
           </h1>
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: fontBody,
               fontSize: "0.9rem",
               color: textSecondary,
               marginTop: "0.5rem",
@@ -205,7 +207,7 @@ export function TeamsPage() {
                     />
                     <h2
                       style={{
-                        fontFamily: "'Libre Baskerville', Georgia, serif",
+                        fontFamily: fontHeading,
                         fontSize: "1.2rem",
                         fontWeight: 400,
                         color: textPrimary,
@@ -217,7 +219,7 @@ export function TeamsPage() {
                   <Link
                     to={`/teams/${team.id}`}
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.75rem",
                       color: textTertiary,
                       textDecoration: "none",
@@ -236,7 +238,7 @@ export function TeamsPage() {
                 {team.projects.length === 0 ? (
                   <p
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: fontBody,
                       fontSize: "0.9rem",
                       color: textSecondary,
                     }}
@@ -268,7 +270,7 @@ export function TeamsPage() {
                       >
                         <div
                           style={{
-                            fontFamily: "'DM Sans', sans-serif",
+                            fontFamily: fontBody,
                             fontSize: "0.95rem",
                             color: textPrimary,
                             fontWeight: 600,
@@ -278,7 +280,7 @@ export function TeamsPage() {
                         </div>
                         <div
                           style={{
-                            fontFamily: "'DM Sans', sans-serif",
+                            fontFamily: fontBody,
                             fontSize: "0.75rem",
                             color: textTertiary,
                             marginTop: "0.35rem",
