@@ -187,7 +187,11 @@ export function TeamsPage() {
                 }}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
+                  <Link
+                    to={`/teams/${team.id}`}
+                    className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                    style={{ textDecoration: "none" }}
+                  >
                     <span
                       style={{
                         width: "8px",
@@ -209,16 +213,24 @@ export function TeamsPage() {
                     >
                       {team.name}
                     </h2>
-                  </div>
-                  <span
+                  </Link>
+                  <Link
+                    to={`/teams/${team.id}`}
                     style={{
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: "0.75rem",
                       color: textTertiary,
+                      textDecoration: "none",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = terracotta;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = textTertiary;
                     }}
                   >
-                    {team.projects.length} projects
-                  </span>
+                    View team →
+                  </Link>
                 </div>
 
                 {team.projects.length === 0 ? (

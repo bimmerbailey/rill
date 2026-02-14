@@ -13,6 +13,12 @@ import { ProjectBoardPage } from "@/features/projects/pages/ProjectBoardPage";
 import { MyTasksPage } from "@/features/mytasks/pages/MyTasksPage";
 import { ProfilePage } from "@/features/profile/pages/ProfilePage";
 import { TeamsPage } from "@/features/teams/pages/TeamsPage";
+import { TeamDetailPage } from "@/features/teams/pages/TeamDetailPage";
+import {
+  TeamProjectsTab,
+  TeamMembersTab,
+  TeamSettingsTab,
+} from "@/features/teams/components";
 import { AdminPage } from "@/features/admin/pages/AdminPage";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -82,6 +88,12 @@ export function AppRoutes() {
         <Route path="/my-tasks" element={<MyTasksPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/teams" element={<TeamsPage />} />
+        <Route path="/teams/:teamId" element={<TeamDetailPage />}>
+          <Route index element={<Navigate to="projects" replace />} />
+          <Route path="projects" element={<TeamProjectsTab />} />
+          <Route path="members" element={<TeamMembersTab />} />
+          <Route path="settings" element={<TeamSettingsTab />} />
+        </Route>
         <Route path="/admin" element={<AdminPage />} />
       </Route>
     </Routes>
