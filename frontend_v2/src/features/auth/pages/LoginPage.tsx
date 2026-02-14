@@ -173,10 +173,10 @@ export function LoginPage() {
         >
           <div
             className="text-sm tracking-[0.3em] uppercase mb-6"
-            style={{ 
+            style={{
               fontFamily: "'DM Sans', sans-serif",
               color: textTertiary,
-              fontWeight: 500 
+              fontWeight: 500,
             }}
           >
             Welcome to
@@ -185,15 +185,17 @@ export function LoginPage() {
             className="text-6xl xl:text-7xl leading-none mb-8"
             style={{ color: textPrimary }}
           >
-            <span className="italic" style={{ color: terracotta }}>Rill</span>
+            <span className="italic" style={{ color: terracotta }}>
+              Rill
+            </span>
             <br />
             <span>Platform</span>
           </h1>
           <p
             className="text-sm max-w-sm mx-auto leading-relaxed"
-            style={{ 
+            style={{
               fontFamily: "'DM Sans', sans-serif",
-              color: textSecondary 
+              color: textSecondary,
             }}
           >
             Where structure meets creativity. Build, organize, and scale your
@@ -223,10 +225,10 @@ export function LoginPage() {
           <div className="lg:hidden mb-12">
             <div
               className="text-xs tracking-[0.3em] uppercase mb-3"
-              style={{ 
+              style={{
                 fontFamily: "'DM Sans', sans-serif",
                 color: terracotta,
-                fontWeight: 500 
+                fontWeight: 500,
               }}
             >
               Rill Platform
@@ -245,10 +247,10 @@ export function LoginPage() {
           <div className="hidden lg:block mb-12">
             <div
               className="text-xs tracking-[0.3em] uppercase mb-3"
-              style={{ 
+              style={{
                 fontFamily: "'DM Sans', sans-serif",
                 color: terracotta,
-                fontWeight: 500 
+                fontWeight: 500,
               }}
             >
               Authentication
@@ -314,10 +316,10 @@ export function LoginPage() {
             {errorMessage ? (
               <div
                 className="text-xs uppercase tracking-wider"
-                style={{ 
+                style={{
                   fontFamily: "'DM Sans', sans-serif",
                   color: terracotta,
-                  fontWeight: 500 
+                  fontWeight: 500,
                 }}
               >
                 {errorMessage}
@@ -335,18 +337,18 @@ export function LoginPage() {
                 <input
                   type="checkbox"
                   className="w-4 h-4 cursor-pointer"
-                  style={{ 
+                  style={{
                     background: surface3,
                     border: `1px solid ${border}`,
-                    accentColor: terracotta 
+                    accentColor: terracotta,
                   }}
                 />
                 <span
                   className="text-xs uppercase tracking-wider transition-colors"
-                  style={{ 
+                  style={{
                     fontFamily: "'DM Sans', sans-serif",
                     color: textSecondary,
-                    fontWeight: 500 
+                    fontWeight: 500,
                   }}
                 >
                   Remember me
@@ -355,10 +357,10 @@ export function LoginPage() {
               <Link
                 to="/forgot-password"
                 className="text-xs uppercase tracking-wider hover:opacity-80 transition-all"
-                style={{ 
+                style={{
                   fontFamily: "'DM Sans', sans-serif",
                   color: terracotta,
-                  fontWeight: 500 
+                  fontWeight: 500,
                 }}
               >
                 Forgot?
@@ -387,9 +389,9 @@ export function LoginPage() {
                   <>
                     <span
                       className="w-4 h-4 border-2 rounded-full animate-spin"
-                      style={{ 
+                      style={{
                         borderColor: `${textSecondary}`,
-                        borderTopColor: textPrimary 
+                        borderTopColor: textPrimary,
                       }}
                     />
                     <span style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -397,7 +399,12 @@ export function LoginPage() {
                     </span>
                   </>
                 ) : (
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+                  <span
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: 500,
+                    }}
+                  >
                     Continue
                   </span>
                 )}
@@ -412,24 +419,18 @@ export function LoginPage() {
               animate-[d2dFadeUp_0.7s_ease-out_0.8s_both]
             "
           >
-            <div
-              className="flex-1 h-px"
-              style={{ backgroundColor: border }}
-            />
+            <div className="flex-1 h-px" style={{ backgroundColor: border }} />
             <span
               className="text-xs uppercase tracking-widest"
-              style={{ 
+              style={{
                 fontFamily: "'DM Sans', sans-serif",
                 color: textTertiary,
-                fontWeight: 500 
+                fontWeight: 500,
               }}
             >
               Or
             </span>
-            <div
-              className="flex-1 h-px"
-              style={{ backgroundColor: border }}
-            />
+            <div className="flex-1 h-px" style={{ backgroundColor: border }} />
           </div>
 
           {/* Social Login */}
@@ -456,7 +457,9 @@ export function LoginPage() {
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
               </svg>
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+              <span
+                style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}
+              >
                 Continue with Google
               </span>
             </Button>
@@ -470,10 +473,10 @@ export function LoginPage() {
             "
           >
             <span
-              style={{ 
+              style={{
                 fontFamily: "'DM Sans', sans-serif",
                 color: textSecondary,
-                fontSize: "0.9rem" 
+                fontSize: "0.9rem",
               }}
             >
               Don't have an account?{" "}
@@ -482,23 +485,23 @@ export function LoginPage() {
               <Link
                 to="/register"
                 className="hover:opacity-80 transition-all"
-                style={{ 
+                style={{
                   fontFamily: "'DM Sans', sans-serif",
                   color: textPrimary,
                   fontSize: "0.9rem",
                   fontWeight: 500,
                   textDecoration: "underline",
-                  textUnderlineOffset: "4px" 
+                  textUnderlineOffset: "4px",
                 }}
               >
                 Create one
               </Link>
             ) : (
               <span
-                style={{ 
+                style={{
                   fontFamily: "'DM Sans', sans-serif",
                   color: textTertiary,
-                  fontSize: "0.9rem" 
+                  fontSize: "0.9rem",
                 }}
               >
                 Contact your admin
@@ -516,10 +519,10 @@ export function LoginPage() {
           >
             <p
               className="text-xs text-center uppercase tracking-wider"
-              style={{ 
+              style={{
                 fontFamily: "'DM Sans', sans-serif",
                 color: textTertiary,
-                fontWeight: 500 
+                fontWeight: 500,
               }}
             >
               Protected by reCAPTCHA and subject to our

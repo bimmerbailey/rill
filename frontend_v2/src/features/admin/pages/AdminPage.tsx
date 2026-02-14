@@ -144,7 +144,8 @@ export function AdminPage() {
   const [activeTab, setActiveTab] = useState<"users" | "invited">("users");
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
-  const [invitedUserToDelete, setInvitedUserToDelete] = useState<InvitedUser | null>(null);
+  const [invitedUserToDelete, setInvitedUserToDelete] =
+    useState<InvitedUser | null>(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -173,32 +174,38 @@ export function AdminPage() {
 
   // GraphQL operations
   const { data, loading, error, refetch } = useQuery(GET_USERS);
-  
-  const [createUser, { loading: creatingUser }] = useMutation(CREATE_USER_ACCOUNT, {
-    onCompleted: () => {
-      setShowAddUserModal(false);
-      setFormData({
-        fullName: "",
-        email: "",
-        username: "",
-        initials: "",
-        password: "",
-        roleCode: "member",
-      });
-      setFormErrors({});
-      refetch();
-    },
-    onError: (error) => {
-      setFormErrors({ email: error.message });
-    },
-  });
 
-  const [deleteUser, { loading: deletingUser }] = useMutation(DELETE_USER_ACCOUNT, {
-    onCompleted: () => {
-      setUserToDelete(null);
-      refetch();
+  const [createUser, { loading: creatingUser }] = useMutation(
+    CREATE_USER_ACCOUNT,
+    {
+      onCompleted: () => {
+        setShowAddUserModal(false);
+        setFormData({
+          fullName: "",
+          email: "",
+          username: "",
+          initials: "",
+          password: "",
+          roleCode: "member",
+        });
+        setFormErrors({});
+        refetch();
+      },
+      onError: (error) => {
+        setFormErrors({ email: error.message });
+      },
     },
-  });
+  );
+
+  const [deleteUser, { loading: deletingUser }] = useMutation(
+    DELETE_USER_ACCOUNT,
+    {
+      onCompleted: () => {
+        setUserToDelete(null);
+        refetch();
+      },
+    },
+  );
 
   const [deleteInvitedUser, { loading: deletingInvitedUser }] = useMutation(
     DELETE_INVITED_USER_ACCOUNT,
@@ -207,7 +214,7 @@ export function AdminPage() {
         setInvitedUserToDelete(null);
         refetch();
       },
-    }
+    },
   );
 
   const users: User[] = data?.users || [];
@@ -220,8 +227,9 @@ export function AdminPage() {
     if (!formData.username.trim()) errors.username = "Username is required";
     if (!formData.initials.trim()) errors.initials = "Initials are required";
     if (!formData.password.trim()) errors.password = "Password is required";
-    if (formData.password.length < 8) errors.password = "Password must be at least 8 characters";
-    
+    if (formData.password.length < 8)
+      errors.password = "Password must be at least 8 characters";
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -262,8 +270,22 @@ export function AdminPage() {
         }}
       >
         <div className="max-w-6xl mx-auto animate-pulse space-y-6">
-          <div style={{ background: surface2, height: "40px", width: "200px", borderRadius: "10px" }} />
-          <div style={{ background: surface1, height: "400px", borderRadius: "20px", border: `1px solid ${border}` }} />
+          <div
+            style={{
+              background: surface2,
+              height: "40px",
+              width: "200px",
+              borderRadius: "10px",
+            }}
+          />
+          <div
+            style={{
+              background: surface1,
+              height: "400px",
+              borderRadius: "20px",
+              border: `1px solid ${border}`,
+            }}
+          />
         </div>
       </div>
     );
@@ -279,11 +301,32 @@ export function AdminPage() {
         }}
       >
         <div className="max-w-6xl mx-auto">
-          <div style={{ background: surface1, borderRadius: "20px", border: `1px solid ${border}`, padding: "2rem" }}>
-            <h2 style={{ fontFamily: "'Libre Baskerville', serif", color: terracotta, fontSize: "1.2rem", marginBottom: "0.5rem" }}>
+          <div
+            style={{
+              background: surface1,
+              borderRadius: "20px",
+              border: `1px solid ${border}`,
+              padding: "2rem",
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: "'Libre Baskerville', serif",
+                color: terracotta,
+                fontSize: "1.2rem",
+                marginBottom: "0.5rem",
+              }}
+            >
               Error loading admin data
             </h2>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", color: textSecondary }}>{error.message}</p>
+            <p
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                color: textSecondary,
+              }}
+            >
+              {error.message}
+            </p>
           </div>
         </div>
       </div>
@@ -324,25 +367,107 @@ export function AdminPage() {
         </header>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8" style={{ animation: "d2dFadeUp 0.7s ease-out 0.1s both" }}>
-          <div style={{ background: surface1, borderRadius: "16px", border: `1px solid ${border}`, padding: "1.5rem" }}>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Total Users</p>
-            <p style={{ fontFamily: "'Libre Baskerville', serif", fontSize: "2rem", color: textPrimary, marginTop: "0.5rem" }}>{users.length}</p>
+        <div
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"
+          style={{ animation: "d2dFadeUp 0.7s ease-out 0.1s both" }}
+        >
+          <div
+            style={{
+              background: surface1,
+              borderRadius: "16px",
+              border: `1px solid ${border}`,
+              padding: "1.5rem",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "0.75rem",
+                color: textTertiary,
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+              }}
+            >
+              Total Users
+            </p>
+            <p
+              style={{
+                fontFamily: "'Libre Baskerville', serif",
+                fontSize: "2rem",
+                color: textPrimary,
+                marginTop: "0.5rem",
+              }}
+            >
+              {users.length}
+            </p>
           </div>
-          <div style={{ background: surface1, borderRadius: "16px", border: `1px solid ${border}`, padding: "1.5rem" }}>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Invited Users</p>
-            <p style={{ fontFamily: "'Libre Baskerville', serif", fontSize: "2rem", color: textPrimary, marginTop: "0.5rem" }}>{invitedUsers.length}</p>
+          <div
+            style={{
+              background: surface1,
+              borderRadius: "16px",
+              border: `1px solid ${border}`,
+              padding: "1.5rem",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "0.75rem",
+                color: textTertiary,
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+              }}
+            >
+              Invited Users
+            </p>
+            <p
+              style={{
+                fontFamily: "'Libre Baskerville', serif",
+                fontSize: "2rem",
+                color: textPrimary,
+                marginTop: "0.5rem",
+              }}
+            >
+              {invitedUsers.length}
+            </p>
           </div>
-          <div style={{ background: surface1, borderRadius: "16px", border: `1px solid ${border}`, padding: "1.5rem" }}>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Admins</p>
-            <p style={{ fontFamily: "'Libre Baskerville', serif", fontSize: "2rem", color: textPrimary, marginTop: "0.5rem" }}>
+          <div
+            style={{
+              background: surface1,
+              borderRadius: "16px",
+              border: `1px solid ${border}`,
+              padding: "1.5rem",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "0.75rem",
+                color: textTertiary,
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+              }}
+            >
+              Admins
+            </p>
+            <p
+              style={{
+                fontFamily: "'Libre Baskerville', serif",
+                fontSize: "2rem",
+                color: textPrimary,
+                marginTop: "0.5rem",
+              }}
+            >
               {users.filter((u) => u.role?.code === "admin").length}
             </p>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex items-center justify-between mt-10 mb-6" style={{ animation: "d2dFadeUp 0.7s ease-out 0.2s both" }}>
+        <div
+          className="flex items-center justify-between mt-10 mb-6"
+          style={{ animation: "d2dFadeUp 0.7s ease-out 0.2s both" }}
+        >
           <div className="flex gap-2">
             <button
               onClick={() => setActiveTab("users")}
@@ -377,34 +502,127 @@ export function AdminPage() {
           </div>
           <Button
             onClick={() => setShowAddUserModal(true)}
-            style={{ background: terracotta, color: surface0, borderRadius: "8px" }}
+            style={{
+              background: terracotta,
+              color: surface0,
+              borderRadius: "8px",
+            }}
           >
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>+ Add User</span>
+            <span
+              style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}
+            >
+              + Add User
+            </span>
           </Button>
         </div>
 
         {/* Users Table */}
         {activeTab === "users" && (
           <div style={{ animation: "d2dFadeUp 0.7s ease-out 0.3s both" }}>
-            <div style={{ background: surface1, borderRadius: "20px", border: `1px solid ${border}`, overflow: "hidden" }}>
+            <div
+              style={{
+                background: surface1,
+                borderRadius: "20px",
+                border: `1px solid ${border}`,
+                overflow: "hidden",
+              }}
+            >
               {users.length === 0 ? (
                 <div className="p-8 text-center">
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", color: textSecondary }}>No users found</p>
+                  <p
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      color: textSecondary,
+                    }}
+                  >
+                    No users found
+                  </p>
                 </div>
               ) : (
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                   <thead>
                     <tr style={{ borderBottom: `1px solid ${border}` }}>
-                      <th style={{ padding: "1rem", textAlign: "left", fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>User</th>
-                      <th style={{ padding: "1rem", textAlign: "left", fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>Role</th>
-                      <th style={{ padding: "1rem", textAlign: "left", fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>Teams</th>
-                      <th style={{ padding: "1rem", textAlign: "left", fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>Projects</th>
-                      <th style={{ padding: "1rem", textAlign: "right", fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>Actions</th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontSize: "0.75rem",
+                          color: textTertiary,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                          fontWeight: 600,
+                        }}
+                      >
+                        User
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontSize: "0.75rem",
+                          color: textTertiary,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Role
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontSize: "0.75rem",
+                          color: textTertiary,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Teams
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontSize: "0.75rem",
+                          color: textTertiary,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Projects
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "right",
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontSize: "0.75rem",
+                          color: textTertiary,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {users.map((user, index) => (
-                      <tr key={user.id} style={{ borderBottom: `1px solid ${border}`, animation: `d2dFadeUp 0.5s ease-out ${index * 0.05}s both` }}>
+                      <tr
+                        key={user.id}
+                        style={{
+                          borderBottom: `1px solid ${border}`,
+                          animation: `d2dFadeUp 0.5s ease-out ${index * 0.05}s both`,
+                        }}
+                      >
                         <td style={{ padding: "1rem" }}>
                           <div className="flex items-center gap-3">
                             <div
@@ -422,11 +640,29 @@ export function AdminPage() {
                                 fontSize: "0.9rem",
                               }}
                             >
-                              {user.profileIcon?.initials || user.fullName?.charAt(0) || "?"}
+                              {user.profileIcon?.initials ||
+                                user.fullName?.charAt(0) ||
+                                "?"}
                             </div>
                             <div>
-                              <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: textPrimary }}>{user.fullName}</p>
-                              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", color: textSecondary }}>{user.email}</p>
+                              <p
+                                style={{
+                                  fontFamily: "'DM Sans', sans-serif",
+                                  fontWeight: 600,
+                                  color: textPrimary,
+                                }}
+                              >
+                                {user.fullName}
+                              </p>
+                              <p
+                                style={{
+                                  fontFamily: "'DM Sans', sans-serif",
+                                  fontSize: "0.8rem",
+                                  color: textSecondary,
+                                }}
+                              >
+                                {user.email}
+                              </p>
                             </div>
                           </div>
                         </td>
@@ -439,18 +675,36 @@ export function AdminPage() {
                               fontSize: "0.75rem",
                               fontWeight: 500,
                               textTransform: "uppercase",
-                              background: user.role?.code === "admin" ? `${terracotta}30` : `${sage}30`,
-                              color: user.role?.code === "admin" ? terracotta : sage,
+                              background:
+                                user.role?.code === "admin"
+                                  ? `${terracotta}30`
+                                  : `${sage}30`,
+                              color:
+                                user.role?.code === "admin" ? terracotta : sage,
                             }}
                           >
                             {user.role?.name || "Member"}
                           </span>
                         </td>
-                        <td style={{ padding: "1rem", fontFamily: "'DM Sans', sans-serif", color: textSecondary }}>
-                          {(user.owned?.teams?.length || 0) + (user.member?.teams?.length || 0)}
+                        <td
+                          style={{
+                            padding: "1rem",
+                            fontFamily: "'DM Sans', sans-serif",
+                            color: textSecondary,
+                          }}
+                        >
+                          {(user.owned?.teams?.length || 0) +
+                            (user.member?.teams?.length || 0)}
                         </td>
-                        <td style={{ padding: "1rem", fontFamily: "'DM Sans', sans-serif", color: textSecondary }}>
-                          {(user.owned?.projects?.length || 0) + (user.member?.projects?.length || 0)}
+                        <td
+                          style={{
+                            padding: "1rem",
+                            fontFamily: "'DM Sans', sans-serif",
+                            color: textSecondary,
+                          }}
+                        >
+                          {(user.owned?.projects?.length || 0) +
+                            (user.member?.projects?.length || 0)}
                         </td>
                         <td style={{ padding: "1rem", textAlign: "right" }}>
                           <button
@@ -481,25 +735,98 @@ export function AdminPage() {
         {/* Invited Users Table */}
         {activeTab === "invited" && (
           <div style={{ animation: "d2dFadeUp 0.7s ease-out 0.3s both" }}>
-            <div style={{ background: surface1, borderRadius: "20px", border: `1px solid ${border}`, overflow: "hidden" }}>
+            <div
+              style={{
+                background: surface1,
+                borderRadius: "20px",
+                border: `1px solid ${border}`,
+                overflow: "hidden",
+              }}
+            >
               {invitedUsers.length === 0 ? (
                 <div className="p-8 text-center">
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", color: textSecondary }}>No invited users</p>
+                  <p
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      color: textSecondary,
+                    }}
+                  >
+                    No invited users
+                  </p>
                 </div>
               ) : (
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
                   <thead>
                     <tr style={{ borderBottom: `1px solid ${border}` }}>
-                      <th style={{ padding: "1rem", textAlign: "left", fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>Email</th>
-                      <th style={{ padding: "1rem", textAlign: "left", fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>Invited On</th>
-                      <th style={{ padding: "1rem", textAlign: "right", fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>Actions</th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontSize: "0.75rem",
+                          color: textTertiary,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Email
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontSize: "0.75rem",
+                          color: textTertiary,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Invited On
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "right",
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontSize: "0.75rem",
+                          color: textTertiary,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {invitedUsers.map((user, index) => (
-                      <tr key={user.id} style={{ borderBottom: `1px solid ${border}`, animation: `d2dFadeUp 0.5s ease-out ${index * 0.05}s both` }}>
-                        <td style={{ padding: "1rem", fontFamily: "'DM Sans', sans-serif", color: textPrimary }}>{user.email}</td>
-                        <td style={{ padding: "1rem", fontFamily: "'DM Sans', sans-serif", color: textSecondary }}>
+                      <tr
+                        key={user.id}
+                        style={{
+                          borderBottom: `1px solid ${border}`,
+                          animation: `d2dFadeUp 0.5s ease-out ${index * 0.05}s both`,
+                        }}
+                      >
+                        <td
+                          style={{
+                            padding: "1rem",
+                            fontFamily: "'DM Sans', sans-serif",
+                            color: textPrimary,
+                          }}
+                        >
+                          {user.email}
+                        </td>
+                        <td
+                          style={{
+                            padding: "1rem",
+                            fontFamily: "'DM Sans', sans-serif",
+                            color: textSecondary,
+                          }}
+                        >
                           {new Date(user.invitedOn).toLocaleDateString()}
                         </td>
                         <td style={{ padding: "1rem", textAlign: "right" }}>
@@ -543,19 +870,53 @@ export function AdminPage() {
             animation: "d2dFadeUp 0.3s ease-out",
           }}
         >
-          <div style={{ background: surface1, borderRadius: "20px", border: `1px solid ${border}`, padding: "2rem", width: "100%", maxWidth: "500px" }}>
+          <div
+            style={{
+              background: surface1,
+              borderRadius: "20px",
+              border: `1px solid ${border}`,
+              padding: "2rem",
+              width: "100%",
+              maxWidth: "500px",
+            }}
+          >
             <div className="flex items-center justify-between mb-6">
-              <h2 style={{ fontFamily: "'Libre Baskerville', serif", fontSize: "1.5rem", color: textPrimary }}>Add New User</h2>
-              <button onClick={() => setShowAddUserModal(false)} style={{ color: textTertiary, fontSize: "1.5rem" }}>×</button>
+              <h2
+                style={{
+                  fontFamily: "'Libre Baskerville', serif",
+                  fontSize: "1.5rem",
+                  color: textPrimary,
+                }}
+              >
+                Add New User
+              </h2>
+              <button
+                onClick={() => setShowAddUserModal(false)}
+                style={{ color: textTertiary, fontSize: "1.5rem" }}
+              >
+                ×
+              </button>
             </div>
 
             <form onSubmit={handleCreateUser} className="space-y-4">
               <div>
-                <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Full Name</label>
+                <label
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "0.75rem",
+                    color: textTertiary,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  Full Name
+                </label>
                 <input
                   type="text"
                   value={formData.fullName}
-                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fullName: e.target.value })
+                  }
                   style={{
                     width: "100%",
                     padding: "0.75rem 1rem",
@@ -567,15 +928,37 @@ export function AdminPage() {
                     marginTop: "0.25rem",
                   }}
                 />
-                {formErrors.fullName && <p style={{ fontSize: "0.75rem", color: terracotta, marginTop: "0.25rem" }}>{formErrors.fullName}</p>}
+                {formErrors.fullName && (
+                  <p
+                    style={{
+                      fontSize: "0.75rem",
+                      color: terracotta,
+                      marginTop: "0.25rem",
+                    }}
+                  >
+                    {formErrors.fullName}
+                  </p>
+                )}
               </div>
 
               <div>
-                <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Email</label>
+                <label
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "0.75rem",
+                    color: textTertiary,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  Email
+                </label>
                 <input
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   style={{
                     width: "100%",
                     padding: "0.75rem 1rem",
@@ -587,16 +970,38 @@ export function AdminPage() {
                     marginTop: "0.25rem",
                   }}
                 />
-                {formErrors.email && <p style={{ fontSize: "0.75rem", color: terracotta, marginTop: "0.25rem" }}>{formErrors.email}</p>}
+                {formErrors.email && (
+                  <p
+                    style={{
+                      fontSize: "0.75rem",
+                      color: terracotta,
+                      marginTop: "0.25rem",
+                    }}
+                  >
+                    {formErrors.email}
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Username</label>
+                  <label
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: "0.75rem",
+                      color: textTertiary,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                    }}
+                  >
+                    Username
+                  </label>
                   <input
                     type="text"
                     value={formData.username}
-                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, username: e.target.value })
+                    }
                     style={{
                       width: "100%",
                       padding: "0.75rem 1rem",
@@ -608,15 +1013,37 @@ export function AdminPage() {
                       marginTop: "0.25rem",
                     }}
                   />
-                  {formErrors.username && <p style={{ fontSize: "0.75rem", color: terracotta, marginTop: "0.25rem" }}>{formErrors.username}</p>}
+                  {formErrors.username && (
+                    <p
+                      style={{
+                        fontSize: "0.75rem",
+                        color: terracotta,
+                        marginTop: "0.25rem",
+                      }}
+                    >
+                      {formErrors.username}
+                    </p>
+                  )}
                 </div>
 
                 <div>
-                  <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Initials</label>
+                  <label
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: "0.75rem",
+                      color: textTertiary,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                    }}
+                  >
+                    Initials
+                  </label>
                   <input
                     type="text"
                     value={formData.initials}
-                    onChange={(e) => setFormData({ ...formData, initials: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, initials: e.target.value })
+                    }
                     maxLength={3}
                     style={{
                       width: "100%",
@@ -629,16 +1056,38 @@ export function AdminPage() {
                       marginTop: "0.25rem",
                     }}
                   />
-                  {formErrors.initials && <p style={{ fontSize: "0.75rem", color: terracotta, marginTop: "0.25rem" }}>{formErrors.initials}</p>}
+                  {formErrors.initials && (
+                    <p
+                      style={{
+                        fontSize: "0.75rem",
+                        color: terracotta,
+                        marginTop: "0.25rem",
+                      }}
+                    >
+                      {formErrors.initials}
+                    </p>
+                  )}
                 </div>
               </div>
 
               <div>
-                <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Password</label>
+                <label
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "0.75rem",
+                    color: textTertiary,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  Password
+                </label>
                 <input
                   type="password"
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   style={{
                     width: "100%",
                     padding: "0.75rem 1rem",
@@ -650,14 +1099,36 @@ export function AdminPage() {
                     marginTop: "0.25rem",
                   }}
                 />
-                {formErrors.password && <p style={{ fontSize: "0.75rem", color: terracotta, marginTop: "0.25rem" }}>{formErrors.password}</p>}
+                {formErrors.password && (
+                  <p
+                    style={{
+                      fontSize: "0.75rem",
+                      color: terracotta,
+                      marginTop: "0.25rem",
+                    }}
+                  >
+                    {formErrors.password}
+                  </p>
+                )}
               </div>
 
               <div>
-                <label style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: textTertiary, textTransform: "uppercase", letterSpacing: "0.1em" }}>Role</label>
+                <label
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "0.75rem",
+                    color: textTertiary,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  Role
+                </label>
                 <select
                   value={formData.roleCode}
-                  onChange={(e) => setFormData({ ...formData, roleCode: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, roleCode: e.target.value })
+                  }
                   style={{
                     width: "100%",
                     padding: "0.75rem 1rem",
@@ -674,7 +1145,10 @@ export function AdminPage() {
                 </select>
               </div>
 
-              <div className="flex gap-3 pt-4" style={{ borderTop: `1px solid ${border}` }}>
+              <div
+                className="flex gap-3 pt-4"
+                style={{ borderTop: `1px solid ${border}` }}
+              >
                 <button
                   type="button"
                   onClick={() => setShowAddUserModal(false)}
@@ -729,12 +1203,38 @@ export function AdminPage() {
             animation: "d2dFadeUp 0.3s ease-out",
           }}
         >
-          <div style={{ background: surface1, borderRadius: "20px", border: `1px solid ${border}`, padding: "2rem", width: "100%", maxWidth: "400px" }}>
-            <h2 style={{ fontFamily: "'Libre Baskerville', serif", fontSize: "1.25rem", color: textPrimary, marginBottom: "1rem" }}>
+          <div
+            style={{
+              background: surface1,
+              borderRadius: "20px",
+              border: `1px solid ${border}`,
+              padding: "2rem",
+              width: "100%",
+              maxWidth: "400px",
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: "'Libre Baskerville', serif",
+                fontSize: "1.25rem",
+                color: textPrimary,
+                marginBottom: "1rem",
+              }}
+            >
               Delete User?
             </h2>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", color: textSecondary, marginBottom: "1.5rem" }}>
-              Are you sure you want to delete <strong style={{ color: textPrimary }}>{userToDelete.fullName}</strong>? This action cannot be undone.
+            <p
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                color: textSecondary,
+                marginBottom: "1.5rem",
+              }}
+            >
+              Are you sure you want to delete{" "}
+              <strong style={{ color: textPrimary }}>
+                {userToDelete.fullName}
+              </strong>
+              ? This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button
@@ -789,12 +1289,38 @@ export function AdminPage() {
             animation: "d2dFadeUp 0.3s ease-out",
           }}
         >
-          <div style={{ background: surface1, borderRadius: "20px", border: `1px solid ${border}`, padding: "2rem", width: "100%", maxWidth: "400px" }}>
-            <h2 style={{ fontFamily: "'Libre Baskerville', serif", fontSize: "1.25rem", color: textPrimary, marginBottom: "1rem" }}>
+          <div
+            style={{
+              background: surface1,
+              borderRadius: "20px",
+              border: `1px solid ${border}`,
+              padding: "2rem",
+              width: "100%",
+              maxWidth: "400px",
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: "'Libre Baskerville', serif",
+                fontSize: "1.25rem",
+                color: textPrimary,
+                marginBottom: "1rem",
+              }}
+            >
               Cancel Invitation?
             </h2>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", color: textSecondary, marginBottom: "1.5rem" }}>
-              Are you sure you want to cancel the invitation for <strong style={{ color: textPrimary }}>{invitedUserToDelete.email}</strong>?
+            <p
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                color: textSecondary,
+                marginBottom: "1.5rem",
+              }}
+            >
+              Are you sure you want to cancel the invitation for{" "}
+              <strong style={{ color: textPrimary }}>
+                {invitedUserToDelete.email}
+              </strong>
+              ?
             </p>
             <div className="flex gap-3">
               <button

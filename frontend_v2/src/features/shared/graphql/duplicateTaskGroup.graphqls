@@ -1,4 +1,9 @@
-mutation duplicateTaskGroup($taskGroupID: UUID!, $name: String!, $position: Float!, $projectID: UUID!) {
+mutation duplicateTaskGroup(
+  $taskGroupID: UUID!
+  $name: String!
+  $position: Float!
+  $projectID: UUID!
+) {
   duplicateTaskGroup(
     input: {
       projectID: $projectID

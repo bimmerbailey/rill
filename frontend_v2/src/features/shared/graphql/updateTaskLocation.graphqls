@@ -1,5 +1,11 @@
-mutation updateTaskLocation($taskID: UUID!, $taskGroupID: UUID!, $position: Float!) {
-  updateTaskLocation(input: { taskID: $taskID, taskGroupID: $taskGroupID, position: $position }) {
+mutation updateTaskLocation(
+  $taskID: UUID!
+  $taskGroupID: UUID!
+  $position: Float!
+) {
+  updateTaskLocation(
+    input: { taskID: $taskID, taskGroupID: $taskGroupID, position: $position }
+  ) {
     previousTaskGroupID
     task {
       id

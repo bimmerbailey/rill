@@ -76,8 +76,10 @@ export function MyTasksPage() {
 
   const taskProjectMap = useMemo(() => {
     return new Map(
-      data?.myTasks.projects.map((mapping) => [mapping.taskID, mapping.projectID]) ||
-        [],
+      data?.myTasks.projects.map((mapping) => [
+        mapping.taskID,
+        mapping.projectID,
+      ]) || [],
     );
   }, [data?.myTasks.projects]);
 
@@ -210,9 +212,7 @@ export function MyTasksPage() {
               <select
                 id="task-sort"
                 value={sort}
-                onChange={(event) =>
-                  setSort(event.target.value as MyTasksSort)
-                }
+                onChange={(event) => setSort(event.target.value as MyTasksSort)}
                 style={{
                   background: surface1,
                   border: `1px solid ${border}`,
@@ -233,7 +233,10 @@ export function MyTasksPage() {
         </header>
 
         {loading && (
-          <div className="space-y-4" style={{ animation: "d2dFadeUp 0.5s ease-out" }}>
+          <div
+            className="space-y-4"
+            style={{ animation: "d2dFadeUp 0.5s ease-out" }}
+          >
             {[...Array(3)].map((_, index) => (
               <div
                 key={index}
@@ -323,7 +326,8 @@ export function MyTasksPage() {
                         width: "8px",
                         height: "8px",
                         borderRadius: "50%",
-                        background: accentColors[groupIndex % accentColors.length],
+                        background:
+                          accentColors[groupIndex % accentColors.length],
                         boxShadow: `0 0 8px ${
                           accentColors[groupIndex % accentColors.length]
                         }40`,

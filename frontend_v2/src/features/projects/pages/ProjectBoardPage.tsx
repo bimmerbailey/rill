@@ -10,6 +10,7 @@ import {
 } from "@/features/projects/graphql/queries";
 import { useProjectBoard } from "@/features/projects/hooks/useProjectBoard";
 import { useTaskModal } from "@/hooks";
+import { useAuthStore } from "@/stores";
 import {
   useUpdateTaskLocationMutation,
   useUpdateTaskGroupLocationMutation,
@@ -95,8 +96,27 @@ export function ProjectBoardPage() {
     updateTaskName,
     updateTaskDescription,
     toggleTaskComplete,
+    toggleTaskWatch,
+    createComment,
+    updateComment,
+    deleteComment,
+    createChecklist,
+    deleteChecklist,
+    renameChecklist,
+    createChecklistItem,
+    deleteChecklistItem,
+    toggleChecklistItemComplete,
+    renameChecklistItem,
+    toggleLabel,
+    assign,
+    unassign,
+    updateDueDate,
+    createDueDateNotification,
+    deleteDueDateNotification,
     isUpdating: isTaskUpdating,
   } = useTaskModal();
+
+  const currentUserId = useAuthStore((state) => state.userId);
 
   const [filterText, setFilterText] = useState("");
   const [showCompleted, setShowCompleted] = useState(true);
@@ -890,10 +910,29 @@ export function ProjectBoardPage() {
         isOpen={isTaskModalOpen}
         onClose={closeTaskModal}
         task={selectedTask}
+        project={project}
+        currentUserId={currentUserId ?? undefined}
         loading={taskLoading}
         onUpdateName={updateTaskName}
         onUpdateDescription={updateTaskDescription}
         onToggleComplete={toggleTaskComplete}
+        onToggleWatch={toggleTaskWatch}
+        onCreateComment={createComment}
+        onUpdateComment={updateComment}
+        onDeleteComment={deleteComment}
+        onCreateChecklist={createChecklist}
+        onDeleteChecklist={deleteChecklist}
+        onRenameChecklist={renameChecklist}
+        onCreateChecklistItem={createChecklistItem}
+        onDeleteChecklistItem={deleteChecklistItem}
+        onToggleChecklistItemComplete={toggleChecklistItemComplete}
+        onRenameChecklistItem={renameChecklistItem}
+        onToggleLabel={toggleLabel}
+        onAssign={assign}
+        onUnassign={unassign}
+        onUpdateDueDate={updateDueDate}
+        onCreateDueDateNotification={createDueDateNotification}
+        onDeleteDueDateNotification={deleteDueDateNotification}
         isUpdating={isTaskUpdating}
       />
     </div>

@@ -5,7 +5,7 @@
 Dark theme palette "Soft Canvas — Evening":
 
 | Variable      | Value                  | Usage                |
-|---------------|------------------------|----------------------|
+| ------------- | ---------------------- | -------------------- |
 | surface1      | #231f1c                | Primary background   |
 | surface2      | #2c2724                | Secondary background |
 | surface3      | #3a3430                | Tertiary background  |

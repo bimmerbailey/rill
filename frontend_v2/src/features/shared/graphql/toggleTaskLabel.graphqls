@@ -1,10 +1,5 @@
 mutation toggleTaskLabel($taskID: UUID!, $projectLabelID: UUID!) {
-  toggleTaskLabel(
-    input: {
-      taskID: $taskID,
-      projectLabelID: $projectLabelID
-    }
-  ) {
+  toggleTaskLabel(input: { taskID: $taskID, projectLabelID: $projectLabelID }) {
     active
     task {
       id

@@ -1,21 +1,21 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { X, Check, Calendar, Clock, Tag, User, AlignLeft, MessageSquare, Activity, CheckSquare } from "lucide-react";
+import { X, Check, AlignLeft, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/utils";
-import type { FindTaskQuery } from "@/graphql/generated/graphql";
-import { Button } from "./Button";
+import type {
+  FindTaskQuery,
+  FindProjectQuery,
+  DueDateNotificationDuration,
+} from "@/graphql/generated/graphql";
+import { Button } from "@/components/common/Button";
+import {
+  TaskComments,
+  TaskActivityFeed,
+  TaskChecklists,
+  TaskLabels,
+  TaskAssignees,
+  TaskDueDate,
+} from "@/features/tasks";
 
-interface TaskDetailModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  task: FindTaskQuery["findTask"] | null;
-  loading?: boolean;
-  onUpdateName: (name: string) => Promise<void>;
-  onUpdateDescription: (description: string) => Promise<void>;
-  onToggleComplete: (complete: boolean) => Promise<void>;
-  isUpdating?: boolean;
-}
-
-// Dark theme palette matching TopNavbar
 const theme = {
   surface1: "#231f1c",
   surface2: "#2c2724",
@@ -27,59 +27,136 @@ const theme = {
   success: "#7fb069",
 };
 
+type TabType = "details" | "comments" | "activity";
+
+interface TaskDetailModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  task: FindTaskQuery["findTask"] | null;
+  project?: FindProjectQuery["findProject"] | null;
+  currentUserId?: string;
+  loading?: boolean;
+  onUpdateName: (name: string) => Promise<void>;
+  onUpdateDescription: (description: string) => Promise<void>;
+  onToggleComplete: (complete: boolean) => Promise<void>;
+  onToggleWatch?: () => Promise<void>;
+  onCreateComment?: (message: string) => Promise<void>;
+  onUpdateComment?: (commentID: string, message: string) => Promise<void>;
+  onDeleteComment?: (commentID: string) => Promise<void>;
+  onCreateChecklist?: (name: string, position: number) => Promise<void>;
+  onDeleteChecklist?: (checklistID: string) => Promise<void>;
+  onRenameChecklist?: (checklistID: string, name: string) => Promise<void>;
+  onCreateChecklistItem?: (
+    checklistID: string,
+    name: string,
+    position: number,
+  ) => Promise<void>;
+  onDeleteChecklistItem?: (itemID: string) => Promise<void>;
+  onToggleChecklistItemComplete?: (
+    itemID: string,
+    complete: boolean,
+  ) => Promise<void>;
+  onRenameChecklistItem?: (itemID: string, name: string) => Promise<void>;
+  onToggleLabel?: (projectLabelID: string) => Promise<void>;
+  onAssign?: (userID: string) => Promise<void>;
+  onUnassign?: (userID: string) => Promise<void>;
+  onUpdateDueDate?: (dueDate: string | null, hasTime: boolean) => Promise<void>;
+  onCreateDueDateNotification?: (
+    period: number,
+    duration: DueDateNotificationDuration,
+  ) => Promise<void>;
+  onDeleteDueDateNotification?: (notificationId: string) => Promise<void>;
+  isUpdating?: boolean;
+}
+
 export function TaskDetailModal({
   isOpen,
   onClose,
   task,
+  project,
+  currentUserId,
   loading = false,
   onUpdateName,
   onUpdateDescription,
   onToggleComplete,
+  onToggleWatch,
+  onCreateComment,
+  onUpdateComment,
+  onDeleteComment,
+  onCreateChecklist,
+  onDeleteChecklist,
+  onRenameChecklist,
+  onCreateChecklistItem,
+  onDeleteChecklistItem,
+  onToggleChecklistItemComplete,
+  onRenameChecklistItem,
+  onToggleLabel,
+  onAssign,
+  onUnassign,
+  onUpdateDueDate,
+  onCreateDueDateNotification,
+  onDeleteDueDateNotification,
   isUpdating = false,
 }: TaskDetailModalProps) {
-  const [editedName, setEditedName] = useState("");
-  const [editedDescription, setEditedDescription] = useState("");
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabType>("details");
+  const [editState, setEditState] = useState({
+    isEditingName: false,
+    isEditingDescription: false,
+    editedName: "",
+    editedDescription: "",
+  });
   const hasInitializedRef = useRef(false);
 
-  // Initialize edited values when starting to edit
   const startEditingName = useCallback(() => {
     if (task) {
-      setEditedName(task.name);
+      setEditState((prev) => ({
+        ...prev,
+        isEditingName: true,
+        editedName: task.name,
+      }));
+    } else {
+      setEditState((prev) => ({ ...prev, isEditingName: true }));
     }
-    setIsEditingName(true);
   }, [task]);
 
   const startEditingDescription = useCallback(() => {
     if (task) {
-      setEditedDescription(task.description || "");
+      setEditState((prev) => ({
+        ...prev,
+        isEditingDescription: true,
+        editedDescription: task.description || "",
+      }));
+    } else {
+      setEditState((prev) => ({ ...prev, isEditingDescription: true }));
     }
-    setIsEditingDescription(true);
   }, [task]);
 
   const cancelEditingName = useCallback(() => {
-    setIsEditingName(false);
-    setEditedName("");
+    setEditState((prev) => ({ ...prev, isEditingName: false, editedName: "" }));
   }, []);
 
   const cancelEditingDescription = useCallback(() => {
-    setIsEditingDescription(false);
-    setEditedDescription("");
+    setEditState((prev) => ({
+      ...prev,
+      isEditingDescription: false,
+      editedDescription: "",
+    }));
   }, []);
 
   // Reset editing state when modal closes
   useEffect(() => {
     if (!isOpen) {
       hasInitializedRef.current = false;
-      setIsEditingName(false);
-      setIsEditingDescription(false);
-      setEditedName("");
-      setEditedDescription("");
+      setEditState({
+        isEditingName: false,
+        isEditingDescription: false,
+        editedName: "",
+        editedDescription: "",
+      });
+      setActiveTab("details");
     }
   }, [isOpen]);
 
-  // Handle escape key and body scroll
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -95,29 +172,28 @@ export function TaskDetailModal({
   }, [isOpen, onClose]);
 
   const handleNameSubmit = useCallback(async () => {
-    if (editedName.trim() && editedName !== task?.name) {
-      await onUpdateName(editedName.trim());
+    if (editState.editedName.trim() && editState.editedName !== task?.name) {
+      await onUpdateName(editState.editedName.trim());
     }
-    setIsEditingName(false);
-    setEditedName("");
-  }, [editedName, task?.name, onUpdateName]);
+    setEditState((prev) => ({ ...prev, isEditingName: false, editedName: "" }));
+  }, [editState.editedName, task?.name, onUpdateName]);
 
   const handleDescriptionSubmit = useCallback(async () => {
-    if (editedDescription !== task?.description) {
-      await onUpdateDescription(editedDescription);
+    if (editState.editedDescription !== task?.description) {
+      await onUpdateDescription(editState.editedDescription);
     }
-    setIsEditingDescription(false);
-    setEditedDescription("");
-  }, [editedDescription, task?.description, onUpdateDescription]);
+    setEditState((prev) => ({
+      ...prev,
+      isEditingDescription: false,
+      editedDescription: "",
+    }));
+  }, [editState.editedDescription, task?.description, onUpdateDescription]);
 
-  const formatDate = (date: string | null | undefined) => {
-    if (!date) return null;
-    return new Date(date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
+  const tabs: { id: TabType; label: string; count?: number }[] = [
+    { id: "details", label: "Details" },
+    { id: "comments", label: "Comments", count: task?.comments?.length },
+    { id: "activity", label: "Activity" },
+  ];
 
   if (!isOpen) return null;
 
@@ -135,7 +211,6 @@ export function TaskDetailModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div
           className="flex items-center justify-between px-6 py-4 border-b"
           style={{ borderColor: theme.border }}
@@ -148,7 +223,7 @@ export function TaskDetailModal({
                 "w-6 h-6 rounded border-2 flex items-center justify-center transition-all",
                 task?.complete
                   ? "bg-[#7fb069] border-[#7fb069]"
-                  : "border-[rgba(245,238,230,0.3)] hover:border-[#c9805e]"
+                  : "border-[rgba(245,238,230,0.3)] hover:border-[#c9805e]",
               )}
             >
               {task?.complete && <Check size={14} className="text-white" />}
@@ -169,371 +244,282 @@ export function TaskDetailModal({
           </button>
         </div>
 
-        {/* Content */}
+        <div
+          className="flex gap-1 px-6 pt-4 border-b"
+          style={{ borderColor: theme.border }}
+        >
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "px-4 py-2 text-sm font-medium transition-colors relative",
+                activeTab === tab.id
+                  ? "text-[#c9805e]"
+                  : "text-[rgba(245,238,230,0.5)] hover:text-[rgba(245,238,230,0.87)]",
+              )}
+            >
+              {tab.label}
+              {tab.count !== undefined && tab.count > 0 && (
+                <span
+                  className="ml-1 px-1.5 py-0.5 text-xs rounded"
+                  style={{
+                    backgroundColor:
+                      activeTab === tab.id
+                        ? "rgba(201,128,94,0.2)"
+                        : theme.surface3,
+                  }}
+                >
+                  {tab.count}
+                </span>
+              )}
+              {activeTab === tab.id && (
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-0.5"
+                  style={{ backgroundColor: theme.terracotta }}
+                />
+              )}
+            </button>
+          ))}
+        </div>
+
         <div className="flex-1 overflow-y-auto">
           {loading ? (
             <div className="p-8 flex items-center justify-center">
               <div
                 className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin"
-                style={{ borderColor: `${theme.terracotta} transparent transparent transparent` }}
+                style={{
+                  borderColor: `${theme.terracotta} transparent transparent transparent`,
+                }}
               />
             </div>
           ) : task ? (
             <div className="flex flex-col lg:flex-row">
-              {/* Main Content */}
               <div className="flex-1 p-6">
-                {/* Task Name */}
-                <div className="mb-6">
-                  {isEditingName ? (
-                    <input
-                      type="text"
-                      value={editedName}
-                      onChange={(e) => setEditedName(e.target.value)}
-                      onBlur={handleNameSubmit}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") handleNameSubmit();
-                        if (e.key === "Escape") cancelEditingName();
-                      }}
-                      autoFocus
-                      className="w-full text-2xl font-bold bg-transparent border-b-2 outline-none px-0 py-1"
-                      style={{
-                        color: theme.textPrimary,
-                        borderColor: theme.terracotta,
-                        fontFamily: "'Libre Baskerville', Georgia, serif",
-                      }}
-                    />
-                  ) : (
-                    <h1
-                      onClick={startEditingName}
-                      className={cn(
-                        "text-2xl font-bold cursor-pointer transition-colors",
-                        task.complete && "line-through"
+                {activeTab === "details" && (
+                  <>
+                    <div className="mb-6">
+                      {editState.isEditingName ? (
+                        <input
+                          type="text"
+                          value={editState.editedName}
+                          onChange={(e) =>
+                            setEditState((prev) => ({
+                              ...prev,
+                              editedName: e.target.value,
+                            }))
+                          }
+                          onBlur={handleNameSubmit}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") handleNameSubmit();
+                            if (e.key === "Escape") cancelEditingName();
+                          }}
+                          autoFocus
+                          className="w-full text-2xl font-bold bg-transparent border-b-2 outline-none px-0 py-1"
+                          style={{
+                            color: theme.textPrimary,
+                            borderColor: theme.terracotta,
+                            fontFamily: "'Libre Baskerville', Georgia, serif",
+                          }}
+                        />
+                      ) : (
+                        <h1
+                          onClick={startEditingName}
+                          className={cn(
+                            "text-2xl font-bold cursor-pointer transition-colors",
+                            task.complete && "line-through",
+                          )}
+                          style={{
+                            color: task.complete
+                              ? theme.textSecondary
+                              : theme.textPrimary,
+                            fontFamily: "'Libre Baskerville', Georgia, serif",
+                          }}
+                        >
+                          {task.name}
+                        </h1>
                       )}
-                      style={{
-                        color: task.complete ? theme.textSecondary : theme.textPrimary,
-                        fontFamily: "'Libre Baskerville', Georgia, serif",
-                      }}
-                    >
-                      {task.name}
-                    </h1>
-                  )}
-                </div>
-
-                {/* In group */}
-                <div
-                  className="mb-6 text-sm"
-                  style={{ color: theme.textSecondary }}
-                >
-                  in list <span className="font-medium" style={{ color: theme.terracotta }}>{task.taskGroup.name}</span>
-                </div>
-
-                {/* Description */}
-                <div className="mb-8">
-                  <div
-                    className="flex items-center gap-2 mb-3"
-                    style={{ color: theme.textSecondary }}
-                  >
-                    <AlignLeft size={18} />
-                    <span className="font-medium">Description</span>
-                  </div>
-                  {isEditingDescription ? (
-                    <div className="space-y-3">
-                      <textarea
-                        value={editedDescription}
-                        onChange={(e) => setEditedDescription(e.target.value)}
-                        placeholder="Add a more detailed description..."
-                        autoFocus
-                        rows={5}
-                        className="w-full p-3 rounded-lg bg-transparent border outline-none resize-none"
-                        style={{
-                          color: theme.textPrimary,
-                          borderColor: theme.terracotta,
-                          backgroundColor: theme.surface2,
-                        }}
-                      />
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={handleDescriptionSubmit}
-                          disabled={isUpdating}
-                          className="px-4 py-2 text-sm"
-                        >
-                          Save
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          onClick={cancelEditingDescription}
-                          className="px-4 py-2 text-sm"
-                        >
-                          Cancel
-                        </Button>
-                      </div>
                     </div>
-                  ) : (
-                    <div
-                      onClick={startEditingDescription}
-                      className="p-3 rounded-lg cursor-pointer min-h-[80px] transition-colors hover:bg-[rgba(255,235,210,0.05)]"
-                      style={{
-                        color: task.description ? theme.textPrimary : theme.textSecondary,
-                        backgroundColor: theme.surface2,
-                      }}
-                    >
-                      {task.description || "Add a more detailed description..."}
-                    </div>
-                  )}
-                </div>
 
-                {/* Checklists */}
-                {task.checklists && task.checklists.length > 0 && (
-                  <div className="mb-8">
                     <div
-                      className="flex items-center gap-2 mb-4"
+                      className="mb-6 text-sm"
                       style={{ color: theme.textSecondary }}
                     >
-                      <CheckSquare size={18} />
-                      <span className="font-medium">Checklist</span>
-                      <span className="text-sm ml-2">
-                        {task.badges?.checklist?.complete || 0}/{task.badges?.checklist?.total || 0}
+                      in list{" "}
+                      <span
+                        className="font-medium"
+                        style={{ color: theme.terracotta }}
+                      >
+                        {task.taskGroup.name}
                       </span>
                     </div>
-                    {task.checklists.map((checklist) => (
-                      <div key={checklist.id} className="mb-4">
-                        <h4
-                          className="font-medium mb-2"
-                          style={{ color: theme.textPrimary }}
-                        >
-                          {checklist.name}
-                        </h4>
-                        <div className="space-y-2">
-                          {checklist.items.map((item) => (
-                            <div
-                              key={item.id}
-                              className="flex items-center gap-3 p-2 rounded hover:bg-[rgba(255,235,210,0.05)]"
-                            >
-                              <div
-                                className={cn(
-                                  "w-5 h-5 rounded border flex items-center justify-center",
-                                  item.complete
-                                    ? "bg-[#7fb069] border-[#7fb069]"
-                                    : "border-[rgba(245,238,230,0.3)]"
-                                )}
-                              >
-                                {item.complete && <Check size={12} className="text-white" />}
-                              </div>
-                              <span
-                                className={cn(
-                                  "text-sm",
-                                  item.complete && "line-through"
-                                )}
-                                style={{
-                                  color: item.complete ? theme.textSecondary : theme.textPrimary,
-                                }}
-                              >
-                                {item.name}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
+
+                    <div className="mb-8">
+                      <div
+                        className="flex items-center gap-2 mb-3"
+                        style={{ color: theme.textSecondary }}
+                      >
+                        <AlignLeft size={18} />
+                        <span className="font-medium">Description</span>
                       </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Comments */}
-                {task.comments && task.comments.length > 0 && (
-                  <div className="mb-8">
-                    <div
-                      className="flex items-center gap-2 mb-4"
-                      style={{ color: theme.textSecondary }}
-                    >
-                      <MessageSquare size={18} />
-                      <span className="font-medium">Comments</span>
-                      <span className="text-sm ml-2">{task.comments.length}</span>
-                    </div>
-                    <div className="space-y-4">
-                      {task.comments.map((comment) => (
-                        <div key={comment.id} className="flex gap-3">
-                          <div
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0"
+                      {editState.isEditingDescription ? (
+                        <div className="space-y-3">
+                          <textarea
+                            value={editState.editedDescription}
+                            onChange={(e) =>
+                              setEditState((prev) => ({
+                                ...prev,
+                                editedDescription: e.target.value,
+                              }))
+                            }
+                            placeholder="Add a more detailed description..."
+                            autoFocus
+                            rows={5}
+                            className="w-full p-3 rounded-lg bg-transparent border outline-none resize-none"
                             style={{
-                              backgroundColor: comment.createdBy.profileIcon?.bgColor || theme.surface3,
                               color: theme.textPrimary,
+                              borderColor: theme.terracotta,
+                              backgroundColor: theme.surface2,
                             }}
-                          >
-                            {comment.createdBy.profileIcon?.initials || comment.createdBy.fullName.charAt(0)}
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span
-                                className="font-medium text-sm"
-                                style={{ color: theme.textPrimary }}
-                              >
-                                {comment.createdBy.fullName}
-                              </span>
-                              <span
-                                className="text-xs"
-                                style={{ color: theme.textSecondary }}
-                              >
-                                {formatDate(comment.createdAt)}
-                              </span>
-                            </div>
-                            <p
-                              className="text-sm"
-                              style={{ color: theme.textPrimary }}
+                          />
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={handleDescriptionSubmit}
+                              disabled={isUpdating}
+                              className="px-4 py-2 text-sm"
                             >
-                              {comment.message}
-                            </p>
+                              Save
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              onClick={cancelEditingDescription}
+                              className="px-4 py-2 text-sm"
+                            >
+                              Cancel
+                            </Button>
                           </div>
                         </div>
-                      ))}
+                      ) : (
+                        <div
+                          onClick={startEditingDescription}
+                          className="p-3 rounded-lg cursor-pointer min-h-[80px] transition-colors hover:bg-[rgba(255,235,210,0.05)]"
+                          style={{
+                            color: task.description
+                              ? theme.textPrimary
+                              : theme.textSecondary,
+                            backgroundColor: theme.surface2,
+                          }}
+                        >
+                          {task.description ||
+                            "Add a more detailed description..."}
+                        </div>
+                      )}
                     </div>
-                  </div>
+
+                    {onCreateChecklist && (
+                      <TaskChecklists
+                        taskId={task.id}
+                        checklists={task.checklists}
+                        onCreateChecklist={onCreateChecklist}
+                        onDeleteChecklist={
+                          onDeleteChecklist || (() => Promise.resolve())
+                        }
+                        onRenameChecklist={
+                          onRenameChecklist || (() => Promise.resolve())
+                        }
+                        onCreateItem={
+                          onCreateChecklistItem || (() => Promise.resolve())
+                        }
+                        onDeleteItem={
+                          onDeleteChecklistItem || (() => Promise.resolve())
+                        }
+                        onToggleItemComplete={
+                          onToggleChecklistItemComplete ||
+                          (() => Promise.resolve())
+                        }
+                        onRenameItem={
+                          onRenameChecklistItem || (() => Promise.resolve())
+                        }
+                        loading={isUpdating}
+                      />
+                    )}
+                  </>
                 )}
 
-                {/* Activity */}
-                {task.activity && task.activity.length > 0 && (
-                  <div>
-                    <div
-                      className="flex items-center gap-2 mb-4"
-                      style={{ color: theme.textSecondary }}
-                    >
-                      <Activity size={18} />
-                      <span className="font-medium">Activity</span>
-                    </div>
-                    <div className="space-y-3">
-                      {task.activity.slice(0, 5).map((activity) => (
-                        <div key={activity.id} className="flex gap-3">
-                          <div
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0"
-                            style={{
-                              backgroundColor: activity.causedBy.profileIcon?.bgColor || theme.surface3,
-                              color: theme.textPrimary,
-                            }}
-                          >
-                            {activity.causedBy.profileIcon?.initials || activity.causedBy.fullName.charAt(0)}
-                          </div>
-                          <div className="flex-1">
-                            <p
-                              className="text-sm"
-                              style={{ color: theme.textPrimary }}
-                            >
-                              <span className="font-medium">{activity.causedBy.fullName}</span>{" "}
-                              {activity.type.toLowerCase().replace(/_/g, " ")}
-                            </p>
-                            <span
-                              className="text-xs"
-                              style={{ color: theme.textSecondary }}
-                            >
-                              {formatDate(activity.createdAt)}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                {activeTab === "comments" && onCreateComment && (
+                  <TaskComments
+                    comments={task.comments}
+                    currentUserId={currentUserId}
+                    onCreateComment={onCreateComment}
+                    onUpdateComment={
+                      onUpdateComment || (() => Promise.resolve())
+                    }
+                    onDeleteComment={
+                      onDeleteComment || (() => Promise.resolve())
+                    }
+                    loading={isUpdating}
+                  />
+                )}
+
+                {activeTab === "activity" && (
+                  <TaskActivityFeed activity={task.activity} />
                 )}
               </div>
 
-              {/* Sidebar */}
               <div
-                className="w-full lg:w-72 p-6 border-t lg:border-t-0 lg:border-l"
+                className="w-full lg:w-72 p-6 border-t lg:border-t-0 lg:border-l space-y-6"
                 style={{
                   borderColor: theme.border,
                   backgroundColor: theme.surface2,
                 }}
               >
-                {/* Due Date */}
-                {task.dueDate?.at && (
-                  <div className="mb-6">
-                    <div
-                      className="flex items-center gap-2 mb-2 text-sm font-medium"
-                      style={{ color: theme.textSecondary }}
-                    >
-                      <Calendar size={16} />
-                      Due Date
-                    </div>
-                    <div
-                      className="flex items-center gap-2 p-2 rounded"
-                      style={{
-                        color: theme.textPrimary,
-                        backgroundColor: theme.surface1,
-                      }}
-                    >
-                      <Clock size={14} />
-                      <span className="text-sm">{formatDate(task.dueDate.at)}</span>
-                    </div>
-                  </div>
+                {onUpdateDueDate && (
+                  <TaskDueDate
+                    dueDate={task.dueDate}
+                    hasTime={task.hasTime}
+                    onUpdateDueDate={onUpdateDueDate}
+                    onCreateNotification={
+                      onCreateDueDateNotification || (() => Promise.resolve())
+                    }
+                    onDeleteNotification={
+                      onDeleteDueDateNotification || (() => Promise.resolve())
+                    }
+                    loading={isUpdating}
+                  />
                 )}
 
-                {/* Labels */}
-                {task.labels && task.labels.length > 0 && (
-                  <div className="mb-6">
-                    <div
-                      className="flex items-center gap-2 mb-2 text-sm font-medium"
-                      style={{ color: theme.textSecondary }}
-                    >
-                      <Tag size={16} />
-                      Labels
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {task.labels.map((label) => (
-                        <span
-                          key={label.id}
-                          className="px-3 py-1 rounded text-xs font-medium"
-                          style={{
-                            backgroundColor: label.projectLabel.labelColor.colorHex,
-                            color: "#fff",
-                          }}
-                        >
-                          {label.projectLabel.name}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                {onToggleLabel && project && (
+                  <TaskLabels
+                    taskLabels={task.labels}
+                    projectLabels={project.labels}
+                    onToggleLabel={onToggleLabel}
+                    loading={isUpdating}
+                  />
                 )}
 
-                {/* Assignees */}
-                {task.assigned && task.assigned.length > 0 && (
-                  <div className="mb-6">
-                    <div
-                      className="flex items-center gap-2 mb-2 text-sm font-medium"
-                      style={{ color: theme.textSecondary }}
-                    >
-                      <User size={16} />
-                      Assignees
-                    </div>
-                    <div className="space-y-2">
-                      {task.assigned.map((user) => (
-                        <div key={user.id} className="flex items-center gap-2">
-                          <div
-                            className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium"
-                            style={{
-                              backgroundColor: user.profileIcon?.bgColor || theme.surface3,
-                              color: theme.textPrimary,
-                            }}
-                          >
-                            {user.profileIcon?.initials || user.fullName.charAt(0)}
-                          </div>
-                          <span
-                            className="text-sm"
-                            style={{ color: theme.textPrimary }}
-                          >
-                            {user.fullName}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                {onAssign && project && (
+                  <TaskAssignees
+                    assignees={task.assigned}
+                    projectMembers={project.members}
+                    onAssign={onAssign}
+                    onUnassign={onUnassign || (() => Promise.resolve())}
+                    loading={isUpdating}
+                  />
                 )}
 
-                {/* Watched */}
-                {task.watched && (
-                  <div
-                    className="flex items-center gap-2 text-sm"
-                    style={{ color: theme.textSecondary }}
+                {onToggleWatch && (
+                  <button
+                    onClick={onToggleWatch}
+                    className="flex items-center gap-2 text-sm transition-colors hover:opacity-80"
+                    style={{
+                      color: task.watched
+                        ? theme.terracotta
+                        : theme.textSecondary,
+                    }}
                   >
-                    <div className="w-2 h-2 rounded-full bg-[#c9805e]" />
-                    You are watching this task
-                  </div>
+                    {task.watched ? <Eye size={16} /> : <EyeOff size={16} />}
+                    {task.watched ? "Watching this task" : "Watch this task"}
+                  </button>
                 )}
               </div>
             </div>

@@ -112,10 +112,7 @@ export function RegisterPage() {
           >
             Create Account
           </div>
-          <h1
-            className="text-4xl leading-tight"
-            style={{ color: textPrimary }}
-          >
+          <h1 className="text-4xl leading-tight" style={{ color: textPrimary }}>
             {registered ? (
               <span style={{ color: terracotta }}>Success!</span>
             ) : (
@@ -141,9 +138,7 @@ export function RegisterPage() {
         {!registered && (
           <>
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-              <div
-                className="animate-[d2dFadeUp_0.7s_ease-out_0.1s_both]"
-              >
+              <div className="animate-[d2dFadeUp_0.7s_ease-out_0.1s_both]">
                 <Input
                   type="text"
                   placeholder="Username"
@@ -161,9 +156,7 @@ export function RegisterPage() {
                 />
               </div>
 
-              <div
-                className="animate-[d2dFadeUp_0.7s_ease-out_0.2s_both]"
-              >
+              <div className="animate-[d2dFadeUp_0.7s_ease-out_0.2s_both]">
                 <Input
                   type="email"
                   placeholder="Email"
@@ -181,9 +174,7 @@ export function RegisterPage() {
                 />
               </div>
 
-              <div
-                className="animate-[d2dFadeUp_0.7s_ease-out_0.3s_both]"
-              >
+              <div className="animate-[d2dFadeUp_0.7s_ease-out_0.3s_both]">
                 <Input
                   type="password"
                   placeholder="Password"
@@ -214,9 +205,7 @@ export function RegisterPage() {
                 </div>
               ) : null}
 
-              <div
-                className="pt-2 animate-[d2dFadeUp_0.7s_ease-out_0.4s_both]"
-              >
+              <div className="pt-2 animate-[d2dFadeUp_0.7s_ease-out_0.4s_both]">
                 <Button
                   type="submit"
                   variant="primary"
@@ -228,7 +217,12 @@ export function RegisterPage() {
                     borderRadius: "8px",
                   }}
                 >
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+                  <span
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: 500,
+                    }}
+                  >
                     {isLoading ? "Creating..." : "Sign Up"}
                   </span>
                 </Button>
@@ -236,9 +230,7 @@ export function RegisterPage() {
             </form>
 
             {/* Sign In Link */}
-            <p
-              className="mt-8 text-center animate-[d2dFadeUp_0.7s_ease-out_0.5s_both]"
-            >
+            <p className="mt-8 text-center animate-[d2dFadeUp_0.7s_ease-out_0.5s_both]">
               <span
                 style={{
                   fontFamily: "'DM Sans', sans-serif",

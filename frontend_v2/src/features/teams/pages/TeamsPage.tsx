@@ -38,7 +38,12 @@ export function TeamsPage() {
       >
         <div className="space-y-6 animate-pulse">
           <div
-            style={{ background: surface2, height: "32px", width: "220px", borderRadius: "10px" }}
+            style={{
+              background: surface2,
+              height: "32px",
+              width: "220px",
+              borderRadius: "10px",
+            }}
           />
           {[...Array(2)].map((_, idx) => (
             <div

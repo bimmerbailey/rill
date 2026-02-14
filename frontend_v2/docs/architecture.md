@@ -31,8 +31,8 @@ Run `bun run codegen` after modifying GraphQL files.
 Use path aliases (configured in tsconfig.json):
 
 ```tsx
-import {Button} from "@/components/common";
-import {useAuth} from "@/features/auth/hooks/useAuth";
+import { Button } from "@/components/common";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 ```
 
 Avoid relative paths like `../../components/common`.
