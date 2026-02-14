@@ -51,7 +51,7 @@ export function DashboardLayout() {
       </div>
 
       <TopNavbar />
-      <main className="flex-1 p-6 relative z-10">
+      <main className="flex-1 p-6 relative z-10 overflow-x-hidden">
         <Outlet />
       </main>
     </div>

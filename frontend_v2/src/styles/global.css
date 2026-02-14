@@ -118,35 +118,3 @@ body {
     transform: translateY(0);
   }
 }
-
-/* Drag and Drop Portal Z-Index Fix */
-/* @hello-pangea/dnd creates portals for dragging items - ensure they're on top */
-[data-rfd-draggable-context-id],
-[data-rfd-drag-handle-context-id],
-[data-rbd-draggable-context-id],
-[data-rbd-drag-handle-context-id] {
-  z-index: 99999 !important;
-}
-
-/* Dragging clone/portal container - must be above everything */
-body > div[style*="position: fixed"],
-body > div[style*="position:fixed"] {
-  z-index: 99999 !important;
-}
-
-/* Ensure all children of portal also have high z-index */
-body > div[style*="position: fixed"] > *,
-body > div[style*="position:fixed"] > * {
-  z-index: 99999 !important;
-}
-
-/* Force any element with position fixed to have high z-index (for dragging) */
-[style*="position: fixed"][style*="cursor: grabbing"],
-[style*="position:fixed"][style*="cursor:grabbing"],
-[data-rbd-draggable-id][style*="position: fixed"],
-[data-rbd-draggable-id][style*="position:fixed"],
-div[style*="position: fixed"][style*="transform"] {
-  z-index: 99999 !important;
-  position: fixed !important;
-  will-change: transform !important;
-}

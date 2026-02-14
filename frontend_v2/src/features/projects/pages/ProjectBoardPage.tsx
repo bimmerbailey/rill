@@ -68,8 +68,9 @@ const DELETE_TASK = gql`
 
 export function ProjectBoardPage() {
   const { projectId } = useParams<{ projectId: string }>();
-  const { project, taskGroups, loading, error } =
-    useProjectBoard(projectId || "");
+  const { project, taskGroups, loading, error } = useProjectBoard(
+    projectId || "",
+  );
 
   const [newGroupName, setNewGroupName] = useState("");
   const [newTaskNames, setNewTaskNames] = useState<Record<string, string>>({});
@@ -527,7 +528,7 @@ export function ProjectBoardPage() {
   }
 
   return (
-    <div className="w-full mx-auto p-6 relative z-10">
+    <div className="w-full">
       <div
         className="mb-6"
         style={{ animation: "d2dFadeUp 0.7s ease-out both" }}
@@ -606,8 +607,8 @@ export function ProjectBoardPage() {
         </div>
       </div>
 
-      <div className="flex gap-6">
-        <div className="flex-1">
+      <div className="flex gap-6 flex-col">
+        <div className="flex-1 min-w-0 overflow-x-auto">
           {taskGroups.length === 0 ? (
             <div
               className="p-6"
@@ -629,7 +630,7 @@ export function ProjectBoardPage() {
               </p>
             </div>
           ) : (
-            <div className="flex gap-4 overflow-x-auto pb-4">
+            <div className="flex gap-4 pb-4">
               {taskGroups.map((group, groupIndex) => {
                 const displayTasks = getFilteredAndSortedTasks(group.tasks);
                 const isTaskDragDisabled = sortBy !== "position";
@@ -823,78 +824,78 @@ export function ProjectBoardPage() {
               })}
             </div>
           )}
+        </div>
 
-          <div
-            className="mt-6 p-4"
-            style={{
-              background: surface1,
-              border: `1px solid ${border}`,
-              borderRadius: "20px",
-            }}
-          >
-            <div className="flex gap-3">
-              <input
-                type="text"
-                placeholder="New group name..."
-                value={newGroupName}
-                onChange={(e) => setNewGroupName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleCreateGroup();
-                }}
-                className="flex-1 px-4 py-2 rounded-lg"
-                style={{
-                  background: surface3,
-                  border: `1px solid ${border}`,
-                  color: textPrimary,
-                  fontFamily: "'DM Sans', sans-serif",
-                }}
-              />
-              <Button
-                onClick={handleCreateGroup}
-                disabled={creatingGroup}
-                style={{
-                  background: terracotta,
-                  color: surface0,
-                  borderRadius: "8px",
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontWeight: 500,
-                  }}
-                >
-                  {creatingGroup ? "Adding..." : "Add Group"}
-                </span>
-              </Button>
-            </div>
-            {groupError && (
+        <div
+          className="mt-6 p-4"
+          style={{
+            background: surface1,
+            border: `1px solid ${border}`,
+            borderRadius: "20px",
+          }}
+        >
+          <div className="flex gap-3">
+            <input
+              type="text"
+              placeholder="New group name..."
+              value={newGroupName}
+              onChange={(e) => setNewGroupName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleCreateGroup();
+              }}
+              className="flex-1 px-4 py-2 rounded-lg"
+              style={{
+                background: surface3,
+                border: `1px solid ${border}`,
+                color: textPrimary,
+                fontFamily: "'DM Sans', sans-serif",
+              }}
+            />
+            <Button
+              onClick={handleCreateGroup}
+              disabled={creatingGroup}
+              style={{
+                background: terracotta,
+                color: surface0,
+                borderRadius: "8px",
+              }}
+            >
               <span
                 style={{
                   fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "0.8rem",
-                  color: terracotta,
-                  marginTop: "0.5rem",
-                  display: "block",
+                  fontWeight: 500,
                 }}
               >
-                {groupError}
+                {creatingGroup ? "Adding..." : "Add Group"}
               </span>
-            )}
+            </Button>
           </div>
+          {groupError && (
+            <span
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "0.8rem",
+                color: terracotta,
+                marginTop: "0.5rem",
+                display: "block",
+              }}
+            >
+              {groupError}
+            </span>
+          )}
         </div>
-
-        <TaskDetailModal
-          isOpen={isTaskModalOpen}
-          onClose={closeTaskModal}
-          task={selectedTask}
-          loading={taskLoading}
-          onUpdateName={updateTaskName}
-          onUpdateDescription={updateTaskDescription}
-          onToggleComplete={toggleTaskComplete}
-          isUpdating={isTaskUpdating}
-        />
       </div>
+
+      <TaskDetailModal
+        isOpen={isTaskModalOpen}
+        onClose={closeTaskModal}
+        task={selectedTask}
+        loading={taskLoading}
+        onUpdateName={updateTaskName}
+        onUpdateDescription={updateTaskDescription}
+        onToggleComplete={toggleTaskComplete}
+        isUpdating={isTaskUpdating}
+      />
     </div>
   );
 }
