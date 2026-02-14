@@ -23,6 +23,7 @@ export interface TeamMember {
 
 export interface TeamProject {
   id: string;
+  shortId: string;
   name: string;
   team?: {
     id: string;

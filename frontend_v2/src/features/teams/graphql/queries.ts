@@ -43,6 +43,7 @@ export const GET_TEAM = gql`
     }
     projects(input: { teamID: $teamID }) {
       id
+      shortId
       name
       team {
         id

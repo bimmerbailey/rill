@@ -3278,6 +3278,7 @@ export type GetTeamQuery = {
   projects: Array<{
     __typename?: "Project";
     id: string;
+    shortId: string;
     name: string;
     team?: { __typename?: "Team"; id: string; name: string } | null;
   }>;
@@ -8802,6 +8803,7 @@ export const GetTeamDocument = gql`
     }
     projects(input: { teamID: $teamID }) {
       id
+      shortId
       name
       team {
         id
