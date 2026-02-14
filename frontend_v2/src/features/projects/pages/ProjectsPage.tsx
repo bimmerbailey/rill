@@ -55,7 +55,7 @@ export function ProjectsPage() {
 
   const teamOptions = useMemo(
     () => [{ id: "no-team", name: "No team" }, ...teams],
-    [teams]
+    [teams],
   );
 
   const openProjectModal = (teamId: string | null) => {
@@ -129,10 +129,22 @@ export function ProjectsPage() {
             style={{ background: surface2 }}
           ></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="h-28 rounded" style={{ background: surface1 }}></div>
-            <div className="h-28 rounded" style={{ background: surface1 }}></div>
-            <div className="h-28 rounded" style={{ background: surface1 }}></div>
-            <div className="h-28 rounded" style={{ background: surface1 }}></div>
+            <div
+              className="h-28 rounded"
+              style={{ background: surface1 }}
+            ></div>
+            <div
+              className="h-28 rounded"
+              style={{ background: surface1 }}
+            ></div>
+            <div
+              className="h-28 rounded"
+              style={{ background: surface1 }}
+            ></div>
+            <div
+              className="h-28 rounded"
+              style={{ background: surface1 }}
+            ></div>
           </div>
         </div>
       </div>
@@ -151,11 +163,19 @@ export function ProjectsPage() {
         >
           <h2
             className="font-semibold mb-2"
-            style={{ color: terracotta, fontFamily: "'Libre Baskerville', serif" }}
+            style={{
+              color: terracotta,
+              fontFamily: "'Libre Baskerville', serif",
+            }}
           >
             Error loading projects
           </h2>
-          <p style={{ color: textSecondary, fontFamily: "'DM Sans', sans-serif" }}>
+          <p
+            style={{
+              color: textSecondary,
+              fontFamily: "'DM Sans', sans-serif",
+            }}
+          >
             {error.message}
           </p>
         </div>
@@ -204,14 +224,19 @@ export function ProjectsPage() {
             borderRadius: "8px",
           }}
         >
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+          <span
+            style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}
+          >
             Add Team
           </span>
         </Button>
       </div>
 
       {/* Personal Projects Section */}
-      <section className="mb-10" style={{ animation: "d2dFadeUp 0.7s ease-out 0.1s both" }}>
+      <section
+        className="mb-10"
+        style={{ animation: "d2dFadeUp 0.7s ease-out 0.1s both" }}
+      >
         <div className="flex items-center justify-between mb-4">
           <h2
             style={{
@@ -472,7 +497,12 @@ export function ProjectsPage() {
                     border: "none",
                   }}
                 >
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+                  <span
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: 500,
+                    }}
+                  >
                     Cancel
                   </span>
                 </Button>
@@ -485,7 +515,12 @@ export function ProjectsPage() {
                     borderRadius: "8px",
                   }}
                 >
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+                  <span
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: 500,
+                    }}
+                  >
                     {creatingTeam ? "Creating..." : "Create Team"}
                   </span>
                 </Button>
@@ -592,7 +627,12 @@ export function ProjectsPage() {
                     border: "none",
                   }}
                 >
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+                  <span
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: 500,
+                    }}
+                  >
                     Cancel
                   </span>
                 </Button>
@@ -605,7 +645,12 @@ export function ProjectsPage() {
                     borderRadius: "8px",
                   }}
                 >
-                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+                  <span
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: 500,
+                    }}
+                  >
                     {creatingProject ? "Creating..." : "Create Project"}
                   </span>
                 </Button>
