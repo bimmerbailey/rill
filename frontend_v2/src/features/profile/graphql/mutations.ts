@@ -30,3 +30,17 @@ export const UPDATE_USER_PASSWORD = gql`
     }
   }
 `;
+
+export const CLEAR_PROFILE_AVATAR = gql`
+  mutation clearProfileAvatar {
+    clearProfileAvatar {
+      id
+      fullName
+      profileIcon {
+        initials
+        bgColor
+        url
+      }
+    }
+  }
+`;

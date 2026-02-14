@@ -1502,6 +1502,58 @@ export type UpdateUserPasswordMutation = {
   updateUserPassword: { __typename?: "UpdateUserPasswordPayload"; ok: boolean };
 };
 
+export type ClearProfileAvatarMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type ClearProfileAvatarMutation = {
+  __typename?: "Mutation";
+  clearProfileAvatar: {
+    __typename?: "UserAccount";
+    id: string;
+    fullName: string;
+    profileIcon: {
+      __typename?: "ProfileIcon";
+      initials?: string | null;
+      bgColor?: string | null;
+      url?: string | null;
+    };
+  };
+};
+
+export type GetMyProfileQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMyProfileQuery = {
+  __typename?: "Query";
+  me?: {
+    __typename?: "MePayload";
+    user: {
+      __typename?: "UserAccount";
+      id: string;
+      fullName: string;
+      username: string;
+      email: string;
+      bio: string;
+      profileIcon: {
+        __typename?: "ProfileIcon";
+        initials?: string | null;
+        bgColor?: string | null;
+        url?: string | null;
+      };
+    };
+    teamRoles: Array<{
+      __typename?: "TeamRole";
+      teamID: string;
+      roleCode: RoleCode;
+    }>;
+    projectRoles: Array<{
+      __typename?: "ProjectRole";
+      projectID: string;
+      roleCode: RoleCode;
+    }>;
+  } | null;
+};
+
 export type FindProjectQueryVariables = Exact<{
   projectID: Scalars["UUID"]["input"];
 }>;
@@ -1933,25 +1985,6 @@ export type AssignTaskMutation = {
     __typename?: "Task";
     id: string;
     assigned: Array<{ __typename?: "Member"; id: string; fullName: string }>;
-  };
-};
-
-export type ClearProfileAvatarMutationVariables = Exact<{
-  [key: string]: never;
-}>;
-
-export type ClearProfileAvatarMutation = {
-  __typename?: "Mutation";
-  clearProfileAvatar: {
-    __typename?: "UserAccount";
-    id: string;
-    fullName: string;
-    profileIcon: {
-      __typename?: "ProfileIcon";
-      initials?: string | null;
-      bgColor?: string | null;
-      url?: string | null;
-    };
   };
 };
 
@@ -3738,6 +3771,175 @@ export type UpdateUserPasswordMutationOptions = Apollo.BaseMutationOptions<
   UpdateUserPasswordMutation,
   UpdateUserPasswordMutationVariables
 >;
+export const ClearProfileAvatarDocument = gql`
+  mutation clearProfileAvatar {
+    clearProfileAvatar {
+      id
+      fullName
+      profileIcon {
+        initials
+        bgColor
+        url
+      }
+    }
+  }
+`;
+export type ClearProfileAvatarMutationFn = Apollo.MutationFunction<
+  ClearProfileAvatarMutation,
+  ClearProfileAvatarMutationVariables
+>;
+
+/**
+ * __useClearProfileAvatarMutation__
+ *
+ * To run a mutation, you first call `useClearProfileAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useClearProfileAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [clearProfileAvatarMutation, { data, loading, error }] = useClearProfileAvatarMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useClearProfileAvatarMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ClearProfileAvatarMutation,
+    ClearProfileAvatarMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ClearProfileAvatarMutation,
+    ClearProfileAvatarMutationVariables
+  >(ClearProfileAvatarDocument, options);
+}
+export type ClearProfileAvatarMutationHookResult = ReturnType<
+  typeof useClearProfileAvatarMutation
+>;
+export type ClearProfileAvatarMutationResult =
+  Apollo.MutationResult<ClearProfileAvatarMutation>;
+export type ClearProfileAvatarMutationOptions = Apollo.BaseMutationOptions<
+  ClearProfileAvatarMutation,
+  ClearProfileAvatarMutationVariables
+>;
+export const GetMyProfileDocument = gql`
+  query GetMyProfile {
+    me {
+      user {
+        id
+        fullName
+        username
+        email
+        bio
+        profileIcon {
+          initials
+          bgColor
+          url
+        }
+      }
+      teamRoles {
+        teamID
+        roleCode
+      }
+      projectRoles {
+        projectID
+        roleCode
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetMyProfileQuery__
+ *
+ * To run a query within a React component, call `useGetMyProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyProfileQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetMyProfileQuery,
+    GetMyProfileQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetMyProfileQuery, GetMyProfileQueryVariables>(
+    GetMyProfileDocument,
+    options,
+  );
+}
+export function useGetMyProfileLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetMyProfileQuery,
+    GetMyProfileQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetMyProfileQuery, GetMyProfileQueryVariables>(
+    GetMyProfileDocument,
+    options,
+  );
+}
+// @ts-ignore
+export function useGetMyProfileSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetMyProfileQuery,
+    GetMyProfileQueryVariables
+  >,
+): Apollo.UseSuspenseQueryResult<GetMyProfileQuery, GetMyProfileQueryVariables>;
+export function useGetMyProfileSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetMyProfileQuery,
+        GetMyProfileQueryVariables
+      >,
+): Apollo.UseSuspenseQueryResult<
+  GetMyProfileQuery | undefined,
+  GetMyProfileQueryVariables
+>;
+export function useGetMyProfileSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetMyProfileQuery,
+        GetMyProfileQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetMyProfileQuery, GetMyProfileQueryVariables>(
+    GetMyProfileDocument,
+    options,
+  );
+}
+export type GetMyProfileQueryHookResult = ReturnType<
+  typeof useGetMyProfileQuery
+>;
+export type GetMyProfileLazyQueryHookResult = ReturnType<
+  typeof useGetMyProfileLazyQuery
+>;
+export type GetMyProfileSuspenseQueryHookResult = ReturnType<
+  typeof useGetMyProfileSuspenseQuery
+>;
+export type GetMyProfileQueryResult = Apollo.QueryResult<
+  GetMyProfileQuery,
+  GetMyProfileQueryVariables
+>;
 export const FindProjectDocument = gql`
   query FindProject($projectID: UUID!) {
     findProject(input: { projectID: $projectID }) {
@@ -4787,61 +4989,6 @@ export type AssignTaskMutationResult =
 export type AssignTaskMutationOptions = Apollo.BaseMutationOptions<
   AssignTaskMutation,
   AssignTaskMutationVariables
->;
-export const ClearProfileAvatarDocument = gql`
-  mutation clearProfileAvatar {
-    clearProfileAvatar {
-      id
-      fullName
-      profileIcon {
-        initials
-        bgColor
-        url
-      }
-    }
-  }
-`;
-export type ClearProfileAvatarMutationFn = Apollo.MutationFunction<
-  ClearProfileAvatarMutation,
-  ClearProfileAvatarMutationVariables
->;
-
-/**
- * __useClearProfileAvatarMutation__
- *
- * To run a mutation, you first call `useClearProfileAvatarMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useClearProfileAvatarMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [clearProfileAvatarMutation, { data, loading, error }] = useClearProfileAvatarMutation({
- *   variables: {
- *   },
- * });
- */
-export function useClearProfileAvatarMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    ClearProfileAvatarMutation,
-    ClearProfileAvatarMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    ClearProfileAvatarMutation,
-    ClearProfileAvatarMutationVariables
-  >(ClearProfileAvatarDocument, options);
-}
-export type ClearProfileAvatarMutationHookResult = ReturnType<
-  typeof useClearProfileAvatarMutation
->;
-export type ClearProfileAvatarMutationResult =
-  Apollo.MutationResult<ClearProfileAvatarMutation>;
-export type ClearProfileAvatarMutationOptions = Apollo.BaseMutationOptions<
-  ClearProfileAvatarMutation,
-  ClearProfileAvatarMutationVariables
 >;
 export const LegacyCreateProjectDocument = gql`
   mutation LegacyCreateProject($teamID: UUID, $name: String!) {
