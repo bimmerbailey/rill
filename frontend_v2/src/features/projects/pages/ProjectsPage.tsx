@@ -254,7 +254,7 @@ export function ProjectsPage() {
           {personalProjects.map((project, index) => (
             <Link
               key={project.id}
-              to={`/projects/${project.id}`}
+              to={`/projects/${project.shortId}`}
               className="relative overflow-hidden p-4 min-h-[96px] transition-all duration-300"
               style={{
                 background: surface1,
@@ -363,7 +363,7 @@ export function ProjectsPage() {
             {team.projects.map((project, index) => (
               <Link
                 key={project.id}
-                to={`/projects/${project.id}`}
+                to={`/projects/${project.shortId}`}
                 className="relative overflow-hidden p-4 min-h-[96px] transition-all duration-300"
                 style={{
                   background: surface1,

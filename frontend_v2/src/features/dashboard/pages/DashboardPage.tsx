@@ -344,7 +344,7 @@ export function DashboardPage() {
                 {projects.slice(0, 6).map((project, i) => (
                   <Link
                     key={project.id}
-                    to={`/projects/${project.id}`}
+                    to={`/projects/${project.shortId}`}
                     className="no-underline"
                     style={{
                       display: "block",

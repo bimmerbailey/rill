@@ -250,7 +250,7 @@ export function TeamsPage() {
                     {team.projects.map((project) => (
                       <Link
                         key={project.id}
-                        to={`/projects/${project.id}`}
+                        to={`/projects/${project.shortId}`}
                         className="transition-all duration-300"
                         style={{
                           background: surface2,

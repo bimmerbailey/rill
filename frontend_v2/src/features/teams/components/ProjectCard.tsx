@@ -18,7 +18,7 @@ export function ProjectCard({ project, colorIndex }: ProjectCardProps) {
 
   return (
     <Link
-      to={`/projects/${project.id}`}
+      to={`/projects/${project.shortId}`}
       className="block transition-all duration-300"
       style={{
         minHeight: "96px",
