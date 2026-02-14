@@ -147,13 +147,16 @@ export function TaskDetailModal({
   useEffect(() => {
     if (!isOpen) {
       hasInitializedRef.current = false;
-      setEditState({
-        isEditingName: false,
-        isEditingDescription: false,
-        editedName: "",
-        editedDescription: "",
+      // Use queueMicrotask to avoid synchronous setState during render
+      queueMicrotask(() => {
+        setEditState({
+          isEditingName: false,
+          isEditingDescription: false,
+          editedName: "",
+          editedDescription: "",
+        });
+        setActiveTab("details");
       });
-      setActiveTab("details");
     }
   }, [isOpen]);
 

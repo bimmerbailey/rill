@@ -594,7 +594,9 @@ export function ProjectBoardPage() {
             />
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) =>
+                setSortBy(e.target.value as "position" | "dueDate" | "name")
+              }
               className="px-3 py-1.5 rounded-lg text-sm"
               style={{
                 background: surface2,

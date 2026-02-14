@@ -85,8 +85,11 @@ export function MyTasksPage() {
     );
   }, [data?.myTasks.projects]);
 
-  const tasks = data?.myTasks.tasks || [];
-  const completedCount = tasks.filter((task) => task.complete).length;
+  const tasks = useMemo(() => data?.myTasks.tasks || [], [data?.myTasks.tasks]);
+  const completedCount = useMemo(
+    () => tasks.filter((task) => task.complete).length,
+    [tasks],
+  );
 
   const groupedTasks = useMemo(() => {
     const buckets = new Map<string, GroupedTasks>();

@@ -136,7 +136,14 @@ export function DraggableTask({
         onDrop: () => setClosestEdge(null),
       }),
     );
-  }, [task.id, columnId, task.position, isDragDisabled]);
+  }, [
+    task.id,
+    task.name,
+    task.shortId,
+    columnId,
+    task.position,
+    isDragDisabled,
+  ]);
 
   return (
     <div
