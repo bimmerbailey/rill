@@ -1,10 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Bell, UserCircle, CheckCircle, Circle } from "lucide-react";
 import { ProfileAvatar } from "@/features/profile/components/ProfileAvatar";
-import {
-  ActionType,
-  type NotificationEntry,
-} from "@/graphql/generated/graphql";
+import { ActionType } from "@/graphql/generated/graphql";
+import { type NotificationEntry } from "@/features/notifications";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -155,7 +153,7 @@ export function NotificationItem({
               url: null,
               initials: causedBy.fullname
                 .split(" ")
-                .map((n) => n[0])
+                .map((n: string) => n[0])
                 .join(""),
               bgColor: accent,
             }}
