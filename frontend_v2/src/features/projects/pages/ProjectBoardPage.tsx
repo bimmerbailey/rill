@@ -1,5 +1,5 @@
-import { useMemo, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useMemo, useState, useCallback, useEffect } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { gql } from "@apollo/client";
 import { Button, TaskDetailModal } from "@/components/common";
@@ -142,6 +142,16 @@ export function ProjectBoardPage() {
     deleteDueDateNotification,
     isUpdating: isTaskUpdating,
   } = useTaskModal();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const taskParam = searchParams.get("task");
+
+  useEffect(() => {
+    if (taskParam && openTaskModal) {
+      openTaskModal(taskParam);
+      setSearchParams({});
+    }
+  }, [taskParam, openTaskModal, setSearchParams]);
 
   const currentUserId = useAuthStore((state) => state.userId);
 
@@ -577,7 +587,7 @@ export function ProjectBoardPage() {
   return (
     <div className="w-full">
       <div
-        className="mb-6"
+        className="mb-6 relative z-20"
         style={{ animation: "d2dFadeUp 0.7s ease-out both" }}
       >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

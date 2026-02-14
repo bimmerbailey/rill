@@ -1555,7 +1555,7 @@ export type GetMyProfileQuery = {
 };
 
 export type FindProjectQueryVariables = Exact<{
-  projectID: Scalars["UUID"]["input"];
+  projectID: Scalars["String"]["input"];
 }>;
 
 export type FindProjectQuery = {
@@ -3941,8 +3941,8 @@ export type GetMyProfileQueryResult = Apollo.QueryResult<
   GetMyProfileQueryVariables
 >;
 export const FindProjectDocument = gql`
-  query FindProject($projectID: UUID!) {
-    findProject(input: { projectID: $projectID }) {
+  query FindProject($projectID: String!) {
+    findProject(input: { projectShortID: $projectID }) {
       id
       name
       publicOn

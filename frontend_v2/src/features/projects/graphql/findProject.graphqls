@@ -1,5 +1,5 @@
-query FindProject($projectID: UUID!) {
-  findProject(input: { projectID: $projectID }) {
+query FindProject($projectID: String!) {
+  findProject(input: { projectShortID: $projectID }) {
     id
     name
     publicOn

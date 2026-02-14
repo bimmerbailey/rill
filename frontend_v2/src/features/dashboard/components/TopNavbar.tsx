@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useAuthStore } from "@/stores/authStore";
+import { NotificationBell } from "@/features/notifications/components/NotificationBell";
 
 /**
  * Top Navbar with "Soft Canvas — Evening" dark theme
@@ -168,7 +169,8 @@ export function TopNavbar() {
           </button>
         )}
       </div>
-      <div>
+      <div className="flex items-center gap-4">
+        {isAuthenticated && <NotificationBell />}
         <Link
           to="/profile"
           style={{
