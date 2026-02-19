@@ -331,55 +331,61 @@ export function ProjectBoardPage() {
     update: (client, result) => {
       if (!result.data) return;
       const { previousTaskGroupID, task } = result.data.updateTaskLocation;
+      const cacheData = client.readQuery<FindProjectQuery>({
+        query: GET_PROJECT_BOARD,
+        variables: { projectID: projectUUID },
+      });
+      if (!cacheData?.findProject) return;
+
+      const groups = cacheData.findProject.taskGroups;
+      const oldGroupIdx = groups.findIndex((g) => g.id === previousTaskGroupID);
+      if (oldGroupIdx === -1) return;
+
+      const oldTask = groups[oldGroupIdx].tasks.find((t) => t.id === task.id);
+      if (!oldTask) return;
+
+      const newGroups = [...groups];
+
       if (previousTaskGroupID !== task.taskGroup.id) {
-        const cacheData = client.readQuery<FindProjectQuery>({
-          query: GET_PROJECT_BOARD,
-          variables: { projectID: projectUUID },
-        });
-        if (cacheData?.findProject) {
-          const groups = cacheData.findProject.taskGroups;
-          const oldGroupIdx = groups.findIndex(
-            (g) => g.id === previousTaskGroupID,
-          );
-          const newGroupIdx = groups.findIndex(
-            (g) => g.id === task.taskGroup.id,
-          );
-          if (oldGroupIdx !== -1 && newGroupIdx !== -1) {
-            const oldTask = groups[oldGroupIdx].tasks.find(
-              (t) => t.id === task.id,
-            );
-            const newGroups = [...groups];
-            newGroups[oldGroupIdx] = {
-              ...groups[oldGroupIdx],
-              tasks: groups[oldGroupIdx].tasks.filter((t) => t.id !== task.id),
-            };
-            if (oldTask) {
-              newGroups[newGroupIdx] = {
-                ...groups[newGroupIdx],
-                tasks: [
-                  ...groups[newGroupIdx].tasks,
-                  {
-                    ...oldTask,
-                    position: task.position,
-                    taskGroup: { ...oldTask.taskGroup, id: task.taskGroup.id },
-                  },
-                ],
-              };
-            }
-            client.writeQuery<FindProjectQuery>({
-              query: GET_PROJECT_BOARD,
-              variables: { projectID: projectUUID },
-              data: {
-                ...cacheData,
-                findProject: {
-                  ...cacheData.findProject,
-                  taskGroups: newGroups,
-                },
-              },
-            });
-          }
-        }
+        const newGroupIdx = groups.findIndex((g) => g.id === task.taskGroup.id);
+        if (newGroupIdx === -1) return;
+
+        newGroups[oldGroupIdx] = {
+          ...groups[oldGroupIdx],
+          tasks: groups[oldGroupIdx].tasks.filter((t) => t.id !== task.id),
+        };
+        newGroups[newGroupIdx] = {
+          ...groups[newGroupIdx],
+          tasks: [
+            ...groups[newGroupIdx].tasks,
+            {
+              ...oldTask,
+              position: task.position,
+              taskGroup: { ...oldTask.taskGroup, id: task.taskGroup.id },
+            },
+          ],
+        };
+      } else {
+        const updatedTasks = groups[oldGroupIdx].tasks.map((t) =>
+          t.id === task.id ? { ...t, position: task.position } : t,
+        );
+        newGroups[oldGroupIdx] = {
+          ...groups[oldGroupIdx],
+          tasks: updatedTasks,
+        };
       }
+
+      client.writeQuery<FindProjectQuery>({
+        query: GET_PROJECT_BOARD,
+        variables: { projectID: projectUUID },
+        data: {
+          ...cacheData,
+          findProject: {
+            ...cacheData.findProject,
+            taskGroups: newGroups,
+          },
+        },
+      });
     },
   });
 
@@ -405,6 +411,12 @@ export function ProjectBoardPage() {
           taskGroupID: variables.taskGroupID,
           position: variables.position,
         },
+        refetchQueries: [
+          {
+            query: GET_PROJECT_BOARD,
+            variables: { projectID: projectUUID },
+          },
+        ],
         optimisticResponse: {
           __typename: "Mutation",
           updateTaskLocation: {
@@ -425,7 +437,7 @@ export function ProjectBoardPage() {
         },
       });
     },
-    [taskGroups, updateTaskLocation],
+    [taskGroups, updateTaskLocation, projectUUID],
   );
 
   const handleColumnMove = useCallback(
