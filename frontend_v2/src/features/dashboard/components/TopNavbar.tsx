@@ -67,20 +67,9 @@ export function TopNavbar() {
   const surface2 = "var(--color-surface-2)";
   const border = "var(--color-border)";
   const borderStrong = "var(--color-border-strong)";
-  const textPrimary = "var(--color-text-primary)";
   const textSecondary = "var(--color-text-secondary)";
   const terracotta = "var(--color-terracotta)";
-  const fontBody = "var(--font-body)";
   const fontHeading = "var(--font-heading)";
-
-  const navLinkStyle = {
-    color: textPrimary,
-    fontFamily: fontBody,
-    fontSize: "0.9rem",
-    fontWeight: 500,
-    textDecoration: "none",
-    transition: "color 0.2s ease",
-  };
 
   return (
     <nav
@@ -112,7 +101,7 @@ export function TopNavbar() {
             <span
               style={{
                 color: "var(--color-text-tertiary)",
-                fontFamily: fontBody,
+                fontFamily: "var(--font-body)",
                 fontSize: "1rem",
                 userSelect: "none",
               }}
@@ -125,16 +114,7 @@ export function TopNavbar() {
       </div>
 
       <div className="flex items-center gap-4">
-        <Link
-          to="/dashboard"
-          style={navLinkStyle}
-          onMouseEnter={(e) =>
-            Object.assign(e.currentTarget.style, { color: terracotta })
-          }
-          onMouseLeave={(e) =>
-            Object.assign(e.currentTarget.style, { color: textPrimary })
-          }
-        >
+        <Link to="/dashboard" className="nav-link">
           Dashboard
         </Link>
 
@@ -145,25 +125,12 @@ export function TopNavbar() {
               ref={triggerRef}
               onClick={handleFinderToggle}
               title="Find a project"
+              className="nav-link"
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: 6,
-                color: finderOpen ? terracotta : textPrimary,
-                fontFamily: fontBody,
-                fontSize: "0.9rem",
-                fontWeight: 500,
-                background: "transparent",
-                border: "none",
-                cursor: "pointer",
-                padding: 0,
-                transition: "color 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (!finderOpen) e.currentTarget.style.color = terracotta;
-              }}
-              onMouseLeave={(e) => {
-                if (!finderOpen) e.currentTarget.style.color = textPrimary;
+                color: finderOpen ? terracotta : "var(--color-text-primary)",
               }}
             >
               Projects
@@ -185,7 +152,6 @@ export function TopNavbar() {
                   borderRadius: 8,
                   border: `1px solid ${borderStrong}`,
                   background: surface2,
-                  // arrow
                 }}
               >
                 {/* Diamond / caret arrow */}
@@ -211,102 +177,33 @@ export function TopNavbar() {
 
         {/* Projects link (when not authenticated) */}
         {!isAuthenticated && (
-          <Link
-            to="/projects"
-            style={navLinkStyle}
-            onMouseEnter={(e) =>
-              Object.assign(e.currentTarget.style, { color: terracotta })
-            }
-            onMouseLeave={(e) =>
-              Object.assign(e.currentTarget.style, { color: textPrimary })
-            }
-          >
+          <Link to="/projects" className="nav-link">
             Projects
           </Link>
         )}
 
-        <Link
-          to="/my-tasks"
-          style={navLinkStyle}
-          onMouseEnter={(e) =>
-            Object.assign(e.currentTarget.style, { color: terracotta })
-          }
-          onMouseLeave={(e) =>
-            Object.assign(e.currentTarget.style, { color: textPrimary })
-          }
-        >
+        <Link to="/my-tasks" className="nav-link">
           My Tasks
         </Link>
-        <Link
-          to="/teams"
-          style={navLinkStyle}
-          onMouseEnter={(e) =>
-            Object.assign(e.currentTarget.style, { color: terracotta })
-          }
-          onMouseLeave={(e) =>
-            Object.assign(e.currentTarget.style, { color: textPrimary })
-          }
-        >
+        <Link to="/teams" className="nav-link">
           Teams
         </Link>
         {isAuthenticated && isAdmin && (
-          <Link
-            to="/admin"
-            style={navLinkStyle}
-            onMouseEnter={(e) =>
-              Object.assign(e.currentTarget.style, { color: terracotta })
-            }
-            onMouseLeave={(e) =>
-              Object.assign(e.currentTarget.style, { color: textPrimary })
-            }
-          >
+          <Link to="/admin" className="nav-link">
             Admin
           </Link>
         )}
         {!isAuthenticated ? (
           <>
-            <Link
-              to="/login"
-              style={navLinkStyle}
-              onMouseEnter={(e) =>
-                Object.assign(e.currentTarget.style, { color: terracotta })
-              }
-              onMouseLeave={(e) =>
-                Object.assign(e.currentTarget.style, { color: textPrimary })
-              }
-            >
+            <Link to="/login" className="nav-link">
               Login
             </Link>
-            <Link
-              to="/register"
-              style={navLinkStyle}
-              onMouseEnter={(e) =>
-                Object.assign(e.currentTarget.style, { color: terracotta })
-              }
-              onMouseLeave={(e) =>
-                Object.assign(e.currentTarget.style, { color: textPrimary })
-              }
-            >
+            <Link to="/register" className="nav-link">
               Register
             </Link>
           </>
         ) : (
-          <button
-            type="button"
-            onClick={handleLogout}
-            style={{
-              ...navLinkStyle,
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) =>
-              Object.assign(e.currentTarget.style, { color: terracotta })
-            }
-            onMouseLeave={(e) =>
-              Object.assign(e.currentTarget.style, { color: textPrimary })
-            }
-          >
+          <button type="button" onClick={handleLogout} className="nav-link">
             Logout
           </button>
         )}
@@ -316,19 +213,8 @@ export function TopNavbar() {
         {isAuthenticated && <NotificationBell />}
         <Link
           to="/profile"
-          style={{
-            color: textSecondary,
-            textDecoration: "none",
-            fontFamily: fontBody,
-            fontSize: "0.9rem",
-            transition: "color 0.2s ease",
-          }}
-          onMouseEnter={(e) =>
-            Object.assign(e.currentTarget.style, { color: textPrimary })
-          }
-          onMouseLeave={(e) =>
-            Object.assign(e.currentTarget.style, { color: textSecondary })
-          }
+          className="nav-link"
+          style={{ color: textSecondary }}
         >
           Profile
         </Link>

@@ -1,4 +1,5 @@
 import { ProfileSettings } from "../components/ProfileSettings";
+import { ThemeSwitcher } from "@/components/common";
 
 export function ProfilePage() {
   // Dark palette — warm charcoal tones
@@ -33,6 +34,20 @@ export function ProfilePage() {
           <h1 className="text-5xl leading-tight" style={{ color: textPrimary }}>
             Your <span className="italic">Profile</span>
           </h1>
+        </div>
+
+        {/* Theme Switcher - Test */}
+        <div
+          className="mb-10 p-6 rounded-lg"
+          style={{ background: "var(--color-surface-2)" }}
+        >
+          <h2
+            className="text-xl mb-4"
+            style={{ color: textPrimary, fontFamily: fontBody }}
+          >
+            Theme
+          </h2>
+          <ThemeSwitcher />
         </div>
 
         <ProfileSettings />
