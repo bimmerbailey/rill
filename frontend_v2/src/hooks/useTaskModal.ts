@@ -28,6 +28,9 @@ import {
   useUpdateTaskDueDateMutation,
   useCreateDueDateNotificationsMutation,
   useDeleteDueDateNotificationsMutation,
+  useCreateProjectLabelMutation,
+  useUpdateProjectLabelMutation,
+  useDeleteProjectLabelMutation,
   FindTaskDocument,
 } from "@/graphql/generated/graphql";
 
@@ -61,6 +64,17 @@ interface UseTaskModalReturn {
   ) => Promise<void>;
   renameChecklistItem: (itemID: string, name: string) => Promise<void>;
   toggleLabel: (projectLabelID: string) => Promise<void>;
+  createLabel: (
+    projectId: string,
+    name: string,
+    labelColorId: string,
+  ) => Promise<void>;
+  updateLabel: (
+    labelId: string,
+    name: string,
+    labelColorId: string,
+  ) => Promise<void>;
+  deleteLabel: (labelId: string) => Promise<void>;
   assign: (userID: string) => Promise<void>;
   unassign: (userID: string) => Promise<void>;
   updateDueDate: (dueDate: string | null, hasTime: boolean) => Promise<void>;
@@ -124,6 +138,13 @@ export function useTaskModal(): UseTaskModalReturn {
     useCreateDueDateNotificationsMutation();
   const [deleteNotificationMutation, { loading: deletingNotification }] =
     useDeleteDueDateNotificationsMutation();
+
+  const [createLabelMutation, { loading: creatingLabel }] =
+    useCreateProjectLabelMutation();
+  const [updateLabelMutation, { loading: updatingLabel }] =
+    useUpdateProjectLabelMutation();
+  const [deleteLabelMutation, { loading: deletingLabel }] =
+    useDeleteProjectLabelMutation();
 
   const openModal = useCallback((id: string) => {
     setTaskId(id);
@@ -405,6 +426,43 @@ export function useTaskModal(): UseTaskModalReturn {
     [fullTaskId, toggleLabelMutation],
   );
 
+  const createLabel = useCallback(
+    async (projectId: string, name: string, labelColorId: string) => {
+      await createLabelMutation({
+        variables: {
+          projectID: projectId,
+          name,
+          labelColorID: labelColorId,
+        },
+      });
+    },
+    [createLabelMutation],
+  );
+
+  const updateLabel = useCallback(
+    async (labelId: string, name: string, labelColorId: string) => {
+      await updateLabelMutation({
+        variables: {
+          projectLabelID: labelId,
+          name,
+          labelColorID: labelColorId,
+        },
+      });
+    },
+    [updateLabelMutation],
+  );
+
+  const deleteLabel = useCallback(
+    async (labelId: string) => {
+      await deleteLabelMutation({
+        variables: {
+          projectLabelID: labelId,
+        },
+      });
+    },
+    [deleteLabelMutation],
+  );
+
   const assign = useCallback(
     async (userID: string) => {
       if (!fullTaskId) return;
@@ -488,6 +546,9 @@ export function useTaskModal(): UseTaskModalReturn {
     toggleChecklistItemComplete,
     renameChecklistItem,
     toggleLabel,
+    createLabel,
+    updateLabel,
+    deleteLabel,
     assign,
     unassign,
     updateDueDate,
@@ -509,6 +570,9 @@ export function useTaskModal(): UseTaskModalReturn {
       togglingChecklistItem ||
       renamingChecklistItem ||
       togglingLabel ||
+      creatingLabel ||
+      updatingLabel ||
+      deletingLabel ||
       assigning ||
       unassigning ||
       updatingDueDate ||

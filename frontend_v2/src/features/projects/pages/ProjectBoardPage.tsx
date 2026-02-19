@@ -158,6 +158,9 @@ export function ProjectBoardPage() {
     toggleChecklistItemComplete,
     renameChecklistItem,
     toggleLabel,
+    createLabel,
+    updateLabel,
+    deleteLabel,
     assign,
     unassign,
     updateDueDate,
@@ -1129,6 +1132,7 @@ export function ProjectBoardPage() {
         onClose={closeTaskModal}
         task={selectedTask}
         project={project}
+        labelColors={labelColors}
         currentUserId={currentUserId ?? undefined}
         loading={taskLoading}
         onUpdateName={updateTaskName}
@@ -1146,6 +1150,22 @@ export function ProjectBoardPage() {
         onToggleChecklistItemComplete={toggleChecklistItemComplete}
         onRenameChecklistItem={renameChecklistItem}
         onToggleLabel={toggleLabel}
+        onCreateLabel={
+          projectUUID
+            ? async (name, labelColorId) => {
+                await createLabel(projectUUID, name, labelColorId);
+                await refetch();
+              }
+            : undefined
+        }
+        onUpdateLabel={async (labelId, name, labelColorId) => {
+          await updateLabel(labelId, name, labelColorId);
+          await refetch();
+        }}
+        onDeleteLabel={async (labelId) => {
+          await deleteLabel(labelId);
+          await refetch();
+        }}
         onAssign={assign}
         onUnassign={unassign}
         onUpdateDueDate={updateDueDate}

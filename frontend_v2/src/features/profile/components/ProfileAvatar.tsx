@@ -3,11 +3,12 @@ import type { ProfileIcon } from "@/graphql/generated/graphql";
 interface ProfileAvatarProps {
   profileIcon: ProfileIcon;
   fullName: string;
-  size?: "sm" | "md" | "lg" | "xl" | "2xl";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
   className?: string;
 }
 
 const sizeClasses = {
+  xs: "w-5 h-5 text-xs",
   sm: "w-8 h-8 text-xs",
   md: "w-10 h-10 text-sm",
   lg: "w-12 h-12 text-base",

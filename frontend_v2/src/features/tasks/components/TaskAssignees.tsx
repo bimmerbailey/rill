@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { User, Plus, X, Check } from "lucide-react";
 import { cn } from "@/utils";
+import { ProfileAvatar } from "@/features/profile/components/ProfileAvatar";
 import type {
   FindTaskQuery,
   FindProjectQuery,
@@ -103,16 +104,11 @@ export function TaskAssignees({
                   className="flex items-center gap-2 px-2 py-1 rounded"
                   style={{ backgroundColor: theme.surface3 }}
                 >
-                  <div
-                    className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-medium"
-                    style={{
-                      backgroundColor:
-                        user.profileIcon?.bgColor || theme.surface3,
-                      color: theme.textPrimary,
-                    }}
-                  >
-                    {user.profileIcon?.initials || user.fullName.charAt(0)}
-                  </div>
+                  <ProfileAvatar
+                    profileIcon={user.profileIcon}
+                    fullName={user.fullName}
+                    size="xs"
+                  />
                   <span
                     className="text-sm"
                     style={{ color: theme.textPrimary }}
@@ -191,17 +187,11 @@ export function TaskAssignees({
                         "hover:bg-[rgba(255,235,210,0.05)] disabled:opacity-50",
                       )}
                     >
-                      <div
-                        className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0"
-                        style={{
-                          backgroundColor:
-                            member.profileIcon?.bgColor || theme.surface3,
-                          color: theme.textPrimary,
-                        }}
-                      >
-                        {member.profileIcon?.initials ||
-                          member.fullName.charAt(0)}
-                      </div>
+                      <ProfileAvatar
+                        profileIcon={member.profileIcon}
+                        fullName={member.fullName}
+                        size="sm"
+                      />
                       <div className="flex-1 text-left">
                         <div
                           className="text-sm"

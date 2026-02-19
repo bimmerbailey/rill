@@ -6,6 +6,8 @@ import type {
   FindProjectQuery,
   DueDateNotificationDuration,
 } from "@/graphql/generated/graphql";
+
+type LabelColor = FindProjectQuery["labelColors"][number];
 import { Button } from "@/components/common/Button";
 import {
   TaskComments,
@@ -34,6 +36,7 @@ interface TaskDetailModalProps {
   onClose: () => void;
   task: FindTaskQuery["findTask"] | null;
   project?: FindProjectQuery["findProject"] | null;
+  labelColors?: LabelColor[];
   currentUserId?: string;
   loading?: boolean;
   onUpdateName: (name: string) => Promise<void>;
@@ -58,6 +61,13 @@ interface TaskDetailModalProps {
   ) => Promise<void>;
   onRenameChecklistItem?: (itemID: string, name: string) => Promise<void>;
   onToggleLabel?: (projectLabelID: string) => Promise<void>;
+  onCreateLabel?: (name: string, labelColorId: string) => Promise<void>;
+  onUpdateLabel?: (
+    labelId: string,
+    name: string,
+    labelColorId: string,
+  ) => Promise<void>;
+  onDeleteLabel?: (labelId: string) => Promise<void>;
   onAssign?: (userID: string) => Promise<void>;
   onUnassign?: (userID: string) => Promise<void>;
   onUpdateDueDate?: (dueDate: string | null, hasTime: boolean) => Promise<void>;
@@ -74,6 +84,7 @@ export function TaskDetailModal({
   onClose,
   task,
   project,
+  labelColors,
   currentUserId,
   loading = false,
   onUpdateName,
@@ -91,6 +102,9 @@ export function TaskDetailModal({
   onToggleChecklistItemComplete,
   onRenameChecklistItem,
   onToggleLabel,
+  onCreateLabel,
+  onUpdateLabel,
+  onDeleteLabel,
   onAssign,
   onUnassign,
   onUpdateDueDate,
@@ -495,7 +509,11 @@ export function TaskDetailModal({
                   <TaskLabels
                     taskLabels={task.labels}
                     projectLabels={project.labels}
+                    labelColors={labelColors}
                     onToggleLabel={onToggleLabel}
+                    onCreateLabel={onCreateLabel}
+                    onUpdateLabel={onUpdateLabel}
+                    onDeleteLabel={onDeleteLabel}
                     loading={isUpdating}
                   />
                 )}

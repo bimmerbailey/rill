@@ -66,9 +66,12 @@ export function DueDateManager({
     if (!selectedDate) {
       onSave(null, false);
     } else {
-      const isoDate = includeTime
+      // Backend requires RFC3339 (with timezone). Build a local datetime and
+      // convert to an ISO-8601 string that includes the UTC offset.
+      const localStr = includeTime
         ? `${selectedDate}T${selectedTime}:00`
         : `${selectedDate}T00:00:00`;
+      const isoDate = new Date(localStr).toISOString();
       onSave(isoDate, includeTime);
     }
     onClose();
