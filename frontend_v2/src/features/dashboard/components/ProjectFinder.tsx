@@ -220,7 +220,7 @@ export function ProjectFinder({ onClose }: ProjectFinderProps) {
                   {group.projects.map((project) => (
                     <Link
                       key={project.id}
-                      to={`/projects/${project.id}`}
+                      to={`/projects/${project.shortId}`}
                       onClick={onClose}
                       style={{
                         display: "flex",

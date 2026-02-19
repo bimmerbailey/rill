@@ -1,10 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useMatch } from "react-router-dom";
 import { Search } from "lucide-react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useAuthStore } from "@/stores/authStore";
 import { NotificationBell } from "@/features/notifications/components/NotificationBell";
 import { ProjectFinder } from "./ProjectFinder";
+import { ProjectNavPopup } from "./ProjectNavPopup";
 
 /**
  * Top Navbar with "Soft Canvas — Evening" dark theme
@@ -14,6 +15,10 @@ export function TopNavbar() {
   const { logout } = useAuth();
   const { isAuthenticated, userRole } = useAuthStore();
   const isAdmin = userRole === "admin";
+
+  // Detect project board route to show project name + popup
+  const projectMatch = useMatch("/projects/:projectId");
+  const activeProjectId = projectMatch?.params.projectId ?? null;
 
   const [finderOpen, setFinderOpen] = useState(false);
   const finderRef = useRef<HTMLDivElement>(null);
@@ -86,17 +91,37 @@ export function TopNavbar() {
         fontFamily: fontHeading,
       }}
     >
-      <div className="text-xl font-bold">
-        <Link
-          to="/"
-          style={{
-            color: terracotta,
-            textDecoration: "none",
-            fontFamily: fontHeading,
-          }}
-        >
-          Taskcafe
-        </Link>
+      {/* Left: Logo + project name (when on a project board) */}
+      <div className="flex items-center gap-3">
+        <div className="text-xl font-bold">
+          <Link
+            to="/"
+            style={{
+              color: terracotta,
+              textDecoration: "none",
+              fontFamily: fontHeading,
+            }}
+          >
+            Taskcafe
+          </Link>
+        </div>
+
+        {/* Separator + project name popup when viewing a project */}
+        {isAuthenticated && activeProjectId && (
+          <>
+            <span
+              style={{
+                color: "var(--color-text-tertiary)",
+                fontFamily: fontBody,
+                fontSize: "1rem",
+                userSelect: "none",
+              }}
+            >
+              /
+            </span>
+            <ProjectNavPopup projectId={activeProjectId} />
+          </>
+        )}
       </div>
 
       <div className="flex items-center gap-4">
