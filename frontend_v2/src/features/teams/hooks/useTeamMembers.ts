@@ -6,7 +6,7 @@ import {
   GetTeamDocument,
   type GetTeamQuery,
 } from "@/graphql/generated/graphql";
-import { toast } from "react-toastify";
+import { showSuccess, showError } from "@/utils/toast";
 
 export function useTeamMembers(teamId: string) {
   const [createMember] = useCreateTeamMemberMutation({
@@ -105,9 +105,9 @@ export function useTeamMembers(teamId: string) {
       await createMember({
         variables: { teamID: teamId, userID: userId },
       });
-      toast.success("Member invited successfully");
+      showSuccess("Member invited successfully");
     } catch (error) {
-      toast.error("Failed to invite member");
+      showError("Failed to invite member");
       throw error;
     }
   };
@@ -121,9 +121,9 @@ export function useTeamMembers(teamId: string) {
           newOwnerID: newOwnerId || undefined,
         },
       });
-      toast.success("Member removed successfully");
+      showSuccess("Member removed successfully");
     } catch (error) {
-      toast.error("Failed to remove member");
+      showError("Failed to remove member");
       throw error;
     }
   };
@@ -133,9 +133,9 @@ export function useTeamMembers(teamId: string) {
       await updateRole({
         variables: { teamID: teamId, userID: userId, roleCode },
       });
-      toast.success("Role updated successfully");
+      showSuccess("Role updated successfully");
     } catch (error) {
-      toast.error("Failed to update role");
+      showError("Failed to update role");
       throw error;
     }
   };

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ChevronDown, Globe, Lock, Trash2 } from "lucide-react";
-import { toast } from "react-toastify";
+import { showSuccess, showError } from "@/utils/toast";
 import { useNavigate } from "react-router-dom";
 import { useFindProjectQuery } from "@/graphql/generated/graphql";
 import {
@@ -76,9 +76,9 @@ export function ProjectNavPopup({ projectId }: ProjectNavPopupProps) {
       await toggleVisibility({
         variables: { projectID: projectUUID, isPublic: false },
       });
-      toast.success("Project is now private");
+      showSuccess("Project is now private");
     } catch {
-      toast.error("Failed to update visibility");
+      showError("Failed to update visibility");
     } finally {
       setTogglingVisibility(false);
     }
@@ -90,10 +90,10 @@ export function ProjectNavPopup({ projectId }: ProjectNavPopupProps) {
       await toggleVisibility({
         variables: { projectID: projectUUID, isPublic: true },
       });
-      toast.success("Project is now public");
+      showSuccess("Project is now public");
       setShowPublicConfirm(false);
     } catch {
-      toast.error("Failed to update visibility");
+      showError("Failed to update visibility");
     } finally {
       setTogglingVisibility(false);
     }
@@ -121,11 +121,11 @@ export function ProjectNavPopup({ projectId }: ProjectNavPopupProps) {
           }
         },
       });
-      toast.success("Project deleted");
+      showSuccess("Project deleted");
       navigate("/projects");
       return true;
     } catch {
-      toast.error("Failed to delete project");
+      showError("Failed to delete project");
       return false;
     }
   }, [projectUUID, deleteProject, navigate]);

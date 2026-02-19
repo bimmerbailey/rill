@@ -1,45 +1,9 @@
 import { toast } from "react-toastify";
 
-export const showSuccess = (message: string) => {
-  toast.success(message, {
-    position: "top-right",
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
-};
+// Thin wrappers so call sites don't need to import react-toastify directly.
+// Options (position, autoClose, etc.) are set on <ToastContainer> in providers/index.tsx.
 
-export const showError = (message: string) => {
-  toast.error(message, {
-    position: "top-right",
-    autoClose: 4000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
-};
-
-export const showInfo = (message: string) => {
-  toast.info(message, {
-    position: "top-right",
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
-};
-
-export const showWarning = (message: string) => {
-  toast.warning(message, {
-    position: "top-right",
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-  });
-};
+export const showSuccess = (message: string) => toast.success(message);
+export const showError = (message: string) => toast.error(message);
+export const showInfo = (message: string) => toast.info(message);
+export const showWarning = (message: string) => toast.warning(message);

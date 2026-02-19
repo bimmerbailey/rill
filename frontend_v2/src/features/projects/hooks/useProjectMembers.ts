@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { toast } from "react-toastify";
+import { showSuccess, showError } from "@/utils/toast";
 import {
   FindProjectDocument,
   useInviteProjectMembersMutation,
@@ -68,11 +68,11 @@ export function useProjectMembers({
             });
           },
         });
-        toast.success("Members invited successfully");
+        showSuccess("Members invited successfully");
         onMembersChanged?.();
         return true;
       } catch (err) {
-        toast.error("Failed to invite members");
+        showError("Failed to invite members");
         console.error(err);
         return false;
       }
@@ -111,11 +111,11 @@ export function useProjectMembers({
             });
           },
         });
-        toast.success("Member removed from project");
+        showSuccess("Member removed from project");
         onMembersChanged?.();
         return true;
       } catch (err) {
-        toast.error("Failed to remove member");
+        showError("Failed to remove member");
         console.error(err);
         return false;
       }
@@ -154,11 +154,11 @@ export function useProjectMembers({
             });
           },
         });
-        toast.success("Invite cancelled");
+        showSuccess("Invite cancelled");
         onMembersChanged?.();
         return true;
       } catch (err) {
-        toast.error("Failed to cancel invite");
+        showError("Failed to cancel invite");
         console.error(err);
         return false;
       }
@@ -203,11 +203,11 @@ export function useProjectMembers({
             });
           },
         });
-        toast.success("Role updated successfully");
+        showSuccess("Role updated successfully");
         onMembersChanged?.();
         return true;
       } catch (err) {
-        toast.error("Failed to update role");
+        showError("Failed to update role");
         console.error(err);
         return false;
       }

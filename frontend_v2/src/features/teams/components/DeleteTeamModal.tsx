@@ -6,7 +6,7 @@ import {
   GetProjectsDocument,
   type GetProjectsQuery,
 } from "@/graphql/generated/graphql";
-import { toast } from "react-toastify";
+import { showSuccess, showError } from "@/utils/toast";
 
 interface DeleteTeamModalProps {
   teamId: string;
@@ -65,10 +65,10 @@ export function DeleteTeamModal({
       await deleteTeam({
         variables: { teamID: teamId },
       });
-      toast.success("Team deleted successfully");
+      showSuccess("Team deleted successfully");
       navigate("/teams");
     } catch {
-      toast.error("Failed to delete team");
+      showError("Failed to delete team");
       setDeleting(false);
     }
   };

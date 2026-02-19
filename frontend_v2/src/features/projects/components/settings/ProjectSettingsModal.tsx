@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X, Trash2 } from "lucide-react";
-import { toast } from "react-toastify";
+import { showSuccess, showError } from "@/utils/toast";
 import { useNavigate } from "react-router-dom";
 import { VisibilityToggle } from "./VisibilityToggle";
 import { DeleteProjectModal } from "./DeleteProjectModal";
@@ -50,13 +50,13 @@ export function ProjectSettingsModal({
           isPublic,
         },
       });
-      toast.success(
+      showSuccess(
         isPublic ? "Project is now public" : "Project is now private",
       );
       onSettingsChanged?.();
       return true;
     } catch (err) {
-      toast.error("Failed to update visibility");
+      showError("Failed to update visibility");
       console.error(err);
       return false;
     }
@@ -88,11 +88,11 @@ export function ProjectSettingsModal({
           }
         },
       });
-      toast.success("Project deleted successfully");
+      showSuccess("Project deleted successfully");
       navigate("/projects");
       return true;
     } catch (err) {
-      toast.error("Failed to delete project");
+      showError("Failed to delete project");
       console.error(err);
       return false;
     }

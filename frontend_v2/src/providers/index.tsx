@@ -13,7 +13,17 @@ export function AppProviders({ children }: AppProvidersProps) {
     <BrowserRouter>
       <GraphQLProvider>
         {children}
-        <ToastContainer />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </GraphQLProvider>
     </BrowserRouter>
   );

@@ -6,7 +6,7 @@ import { useLegacyCreateProjectMutation } from "@/graphql/generated/graphql";
 import { useTeamDetail } from "../hooks";
 import { ProjectCard } from "./ProjectCard";
 import type { SortOption } from "../types";
-import { toast } from "react-toastify";
+import { showSuccess } from "@/utils/toast";
 
 export function TeamProjectsTab() {
   const { teamId } = useParams<{ teamId: string }>();
@@ -74,7 +74,7 @@ export function TeamProjectsTab() {
           teamID: teamId || null,
         },
       });
-      toast.success("Project created successfully");
+      showSuccess("Project created successfully");
       setShowCreateModal(false);
       setProjectName("");
     } catch {
