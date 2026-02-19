@@ -14,12 +14,16 @@ import type {
 } from "@/features/projects/types";
 
 interface UseProjectMembersOptions {
-  projectId: string;
+  /** Short ID from URL params — used as the cache key for FindProjectDocument */
+  projectShortId: string;
+  /** Full UUID from findProject result — used in mutation variables */
+  projectUUID: string;
   onMembersChanged?: () => void;
 }
 
 export function useProjectMembers({
-  projectId,
+  projectShortId,
+  projectUUID,
   onMembersChanged,
 }: UseProjectMembersOptions) {
   const [inviteMembers] = useInviteProjectMembersMutation();
@@ -32,7 +36,7 @@ export function useProjectMembers({
       try {
         await inviteMembers({
           variables: {
-            projectID: projectId,
+            projectID: projectUUID,
             members,
           },
           update: (cache, result) => {
@@ -40,7 +44,7 @@ export function useProjectMembers({
 
             const data = cache.readQuery<FindProjectQuery>({
               query: FindProjectDocument,
-              variables: { projectID: projectId },
+              variables: { projectID: projectShortId },
             });
 
             if (!data?.findProject) return;
@@ -50,7 +54,7 @@ export function useProjectMembers({
 
             cache.writeQuery<FindProjectQuery>({
               query: FindProjectDocument,
-              variables: { projectID: projectId },
+              variables: { projectID: projectShortId },
               data: {
                 ...data,
                 findProject: {
@@ -77,7 +81,7 @@ export function useProjectMembers({
         return false;
       }
     },
-    [projectId, inviteMembers, onMembersChanged],
+    [projectShortId, projectUUID, inviteMembers, onMembersChanged],
   );
 
   const removeProjectMember = useCallback(
@@ -85,20 +89,20 @@ export function useProjectMembers({
       try {
         await removeMember({
           variables: {
-            projectID: projectId,
+            projectID: projectUUID,
             userID: userId,
           },
           update: (cache) => {
             const data = cache.readQuery<FindProjectQuery>({
               query: FindProjectDocument,
-              variables: { projectID: projectId },
+              variables: { projectID: projectShortId },
             });
 
             if (!data?.findProject) return;
 
             cache.writeQuery<FindProjectQuery>({
               query: FindProjectDocument,
-              variables: { projectID: projectId },
+              variables: { projectID: projectShortId },
               data: {
                 ...data,
                 findProject: {
@@ -120,7 +124,7 @@ export function useProjectMembers({
         return false;
       }
     },
-    [projectId, removeMember, onMembersChanged],
+    [projectShortId, projectUUID, removeMember, onMembersChanged],
   );
 
   const cancelProjectInvite = useCallback(
@@ -128,20 +132,20 @@ export function useProjectMembers({
       try {
         await cancelInvite({
           variables: {
-            projectID: projectId,
+            projectID: projectUUID,
             email,
           },
           update: (cache) => {
             const data = cache.readQuery<FindProjectQuery>({
               query: FindProjectDocument,
-              variables: { projectID: projectId },
+              variables: { projectID: projectShortId },
             });
 
             if (!data?.findProject) return;
 
             cache.writeQuery<FindProjectQuery>({
               query: FindProjectDocument,
-              variables: { projectID: projectId },
+              variables: { projectID: projectShortId },
               data: {
                 ...data,
                 findProject: {
@@ -163,7 +167,7 @@ export function useProjectMembers({
         return false;
       }
     },
-    [projectId, cancelInvite, onMembersChanged],
+    [projectShortId, projectUUID, cancelInvite, onMembersChanged],
   );
 
   const changeProjectMemberRole = useCallback(
@@ -171,7 +175,7 @@ export function useProjectMembers({
       try {
         await changeRole({
           variables: {
-            projectID: projectId,
+            projectID: projectUUID,
             userID: userId,
             roleCode,
           },
@@ -180,7 +184,7 @@ export function useProjectMembers({
 
             const data = cache.readQuery<FindProjectQuery>({
               query: FindProjectDocument,
-              variables: { projectID: projectId },
+              variables: { projectID: projectShortId },
             });
 
             if (!data?.findProject) return;
@@ -192,7 +196,7 @@ export function useProjectMembers({
 
             cache.writeQuery<FindProjectQuery>({
               query: FindProjectDocument,
-              variables: { projectID: projectId },
+              variables: { projectID: projectShortId },
               data: {
                 ...data,
                 findProject: {
@@ -212,7 +216,7 @@ export function useProjectMembers({
         return false;
       }
     },
-    [projectId, changeRole, onMembersChanged],
+    [projectShortId, projectUUID, changeRole, onMembersChanged],
   );
 
   return {

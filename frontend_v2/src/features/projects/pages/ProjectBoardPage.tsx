@@ -86,13 +86,16 @@ export function ProjectBoardPage() {
     refetch,
   } = useProjectBoard(projectId || "");
 
+  const projectUUID = project?.id;
+
   const {
     inviteProjectMembers,
     removeProjectMember,
     cancelProjectInvite,
     changeProjectMemberRole,
   } = useProjectMembers({
-    projectId: projectId || "",
+    projectShortId: projectId || "",
+    projectUUID: projectUUID || "",
     onMembersChanged: () => refetch(),
   });
 
@@ -181,45 +184,45 @@ export function ProjectBoardPage() {
   const [createTaskGroup, { loading: creatingGroup }] = useMutation(
     CREATE_TASK_GROUP,
     {
-      refetchQueries: projectId
-        ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectId } }]
+      refetchQueries: projectUUID
+        ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectUUID } }]
         : [],
     },
   );
 
   const [createTask] = useMutation(CREATE_TASK, {
-    refetchQueries: projectId
-      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectId } }]
+    refetchQueries: projectUUID
+      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectUUID } }]
       : [],
   });
 
   const [setTaskComplete] = useMutation(SET_TASK_COMPLETE, {
-    refetchQueries: projectId
-      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectId } }]
+    refetchQueries: projectUUID
+      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectUUID } }]
       : [],
   });
 
   const [updateTaskNameMutation] = useMutation(UPDATE_TASK_NAME, {
-    refetchQueries: projectId
-      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectId } }]
+    refetchQueries: projectUUID
+      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectUUID } }]
       : [],
   });
 
   const [updateTaskGroupName] = useMutation(UPDATE_TASK_GROUP_NAME, {
-    refetchQueries: projectId
-      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectId } }]
+    refetchQueries: projectUUID
+      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectUUID } }]
       : [],
   });
 
   const [deleteTaskGroup] = useMutation(DELETE_TASK_GROUP, {
-    refetchQueries: projectId
-      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectId } }]
+    refetchQueries: projectUUID
+      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectUUID } }]
       : [],
   });
 
   const [deleteTask] = useMutation(DELETE_TASK, {
-    refetchQueries: projectId
-      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectId } }]
+    refetchQueries: projectUUID
+      ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectUUID } }]
       : [],
   });
 
@@ -230,7 +233,7 @@ export function ProjectBoardPage() {
       if (previousTaskGroupID !== task.taskGroup.id) {
         const cacheData = client.readQuery<FindProjectQuery>({
           query: GET_PROJECT_BOARD,
-          variables: { projectID: projectId },
+          variables: { projectID: projectUUID },
         });
         if (cacheData?.findProject) {
           const groups = cacheData.findProject.taskGroups;
@@ -264,7 +267,7 @@ export function ProjectBoardPage() {
             }
             client.writeQuery<FindProjectQuery>({
               query: GET_PROJECT_BOARD,
-              variables: { projectID: projectId },
+              variables: { projectID: projectUUID },
               data: {
                 ...cacheData,
                 findProject: {
@@ -353,7 +356,7 @@ export function ProjectBoardPage() {
   }, [taskGroups]);
 
   const handleCreateGroup = async () => {
-    if (!projectId) return;
+    if (!projectUUID) return;
     if (!newGroupName.trim()) {
       setGroupError("Group name is required.");
       return;
@@ -362,7 +365,7 @@ export function ProjectBoardPage() {
     try {
       await createTaskGroup({
         variables: {
-          projectID: projectId,
+          projectID: projectUUID,
           name: newGroupName.trim(),
           position: nextGroupPosition,
         },
@@ -375,7 +378,7 @@ export function ProjectBoardPage() {
 
   const handleCreateTask = async (groupId: string) => {
     const taskName = newTaskNames[groupId] || "";
-    if (!projectId || !taskName.trim()) {
+    if (!projectUUID || !taskName.trim()) {
       setTaskError((prev) => ({
         ...prev,
         [groupId]: "Task name is required.",
@@ -985,7 +988,7 @@ export function ProjectBoardPage() {
       <LabelManagerModal
         isOpen={showLabelsModal}
         onClose={() => setShowLabelsModal(false)}
-        projectId={projectId || ""}
+        projectId={project?.id || ""}
         labels={labels}
         labelColors={labelColors}
         onLabelChanged={() => refetch()}
@@ -1007,7 +1010,7 @@ export function ProjectBoardPage() {
       <ProjectSettingsModal
         isOpen={showSettingsModal}
         onClose={() => setShowSettingsModal(false)}
-        projectId={projectId || ""}
+        projectId={projectUUID || ""}
         projectName={project?.name || ""}
         publicOn={project?.publicOn}
         onSettingsChanged={() => refetch()}
