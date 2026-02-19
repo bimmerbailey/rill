@@ -23,6 +23,28 @@ import { ProjectSettingsMenu } from "@/features/projects/components/ProjectSetti
 import { LabelManagerModal } from "@/features/projects/components/labels";
 import { MemberManagementModal } from "@/features/projects/components/members";
 import { ProjectSettingsModal } from "@/features/projects/components/settings";
+import { BoardControls } from "@/features/projects/components/controls";
+import { CardComposer } from "@/features/projects/components/task";
+import {
+  type TaskFilters,
+  type TaskSorting,
+  type TaskStatusFilter,
+  TaskSortingType,
+  TaskSortingDirection,
+  TaskStatus,
+  TaskSince,
+  DueDateFilterType,
+  DEFAULT_FILTERS,
+  DEFAULT_SORTING,
+  DEFAULT_STATUS_FILTER,
+} from "@/features/projects/types";
+import {
+  useAssignTaskMutation,
+  useUnassignTaskMutation,
+  useUpdateTaskDueDateMutation,
+  useToggleTaskLabelMutation,
+} from "@/graphql/generated/graphql";
+import dayjs from "dayjs";
 
 const SET_TASK_COMPLETE = gql`
   mutation SetTaskComplete($taskID: UUID!, $complete: Boolean!) {
@@ -104,9 +126,7 @@ export function ProjectBoardPage() {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   const [newGroupName, setNewGroupName] = useState("");
-  const [newTaskNames, setNewTaskNames] = useState<Record<string, string>>({});
   const [groupError, setGroupError] = useState<string | null>(null);
-  const [taskError, setTaskError] = useState<Record<string, string>>({});
 
   const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
   const [editingGroupName, setEditingGroupName] = useState("");
@@ -158,10 +178,10 @@ export function ProjectBoardPage() {
 
   const currentUserId = useAuthStore((state) => state.userId);
 
-  const [filterText, setFilterText] = useState("");
-  const [showCompleted, setShowCompleted] = useState(true);
-  const [sortBy, setSortBy] = useState<"position" | "dueDate" | "name">(
-    "position",
+  const [filters, setFilters] = useState<TaskFilters>(DEFAULT_FILTERS);
+  const [sorting, setSorting] = useState<TaskSorting>(DEFAULT_SORTING);
+  const [statusFilter, setStatusFilter] = useState<TaskStatusFilter>(
+    DEFAULT_STATUS_FILTER,
   );
 
   const surface0 = "var(--color-surface-0)";
@@ -225,6 +245,84 @@ export function ProjectBoardPage() {
       ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectUUID } }]
       : [],
   });
+
+  // ── Quick card editor mutations ────────────────────────────────────────────
+  const refetchBoard = projectUUID
+    ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectUUID } }]
+    : [];
+
+  const [assignTask] = useAssignTaskMutation({ refetchQueries: refetchBoard });
+  const [unassignTask] = useUnassignTaskMutation({
+    refetchQueries: refetchBoard,
+  });
+  const [updateTaskDueDate] = useUpdateTaskDueDateMutation({
+    refetchQueries: refetchBoard,
+  });
+  const [toggleTaskLabel] = useToggleTaskLabelMutation({
+    refetchQueries: refetchBoard,
+  });
+
+  const handleQuickSaveName = useCallback(
+    async (taskId: string, name: string) => {
+      await updateTaskNameMutation({ variables: { taskID: taskId, name } });
+    },
+    [updateTaskNameMutation],
+  );
+
+  const handleQuickToggleComplete = useCallback(
+    async (taskId: string, complete: boolean) => {
+      await setTaskComplete({ variables: { taskID: taskId, complete } });
+    },
+    [setTaskComplete],
+  );
+
+  const handleToggleLabel = useCallback(
+    async (taskId: string, projectLabelId: string) => {
+      await toggleTaskLabel({
+        variables: { taskID: taskId, projectLabelID: projectLabelId },
+      });
+    },
+    [toggleTaskLabel],
+  );
+
+  const handleAssign = useCallback(
+    async (taskId: string, userId: string) => {
+      await assignTask({ variables: { taskID: taskId, userID: userId } });
+    },
+    [assignTask],
+  );
+
+  const handleUnassign = useCallback(
+    async (taskId: string, userId: string) => {
+      await unassignTask({ variables: { taskID: taskId, userID: userId } });
+    },
+    [unassignTask],
+  );
+
+  const handleUpdateDueDate = useCallback(
+    async (taskId: string, dueDate: string | null, hasTime: boolean) => {
+      await updateTaskDueDate({
+        variables: {
+          taskID: taskId,
+          dueDate,
+          hasTime,
+          createNotifications: [],
+          updateNotifications: [],
+          deleteNotifications: [],
+        },
+      });
+    },
+    [updateTaskDueDate],
+  );
+
+  const handleQuickDelete = useCallback(
+    async (taskId: string) => {
+      if (!confirm("Are you sure you want to delete this task?")) return;
+      await deleteTask({ variables: { taskID: taskId } });
+      if (selectedTask?.id === taskId) closeTaskModal();
+    },
+    [deleteTask, selectedTask, closeTaskModal],
+  );
 
   const [updateTaskLocation] = useUpdateTaskLocationMutation({
     update: (client, result) => {
@@ -376,20 +474,12 @@ export function ProjectBoardPage() {
     }
   };
 
-  const handleCreateTask = async (groupId: string) => {
-    const taskName = newTaskNames[groupId] || "";
-    if (!projectUUID || !taskName.trim()) {
-      setTaskError((prev) => ({
-        ...prev,
-        [groupId]: "Task name is required.",
-      }));
-      return;
-    }
+  const handleCreateTask = async (groupId: string, taskName: string) => {
+    if (!projectUUID || !taskName.trim()) return;
     const group = taskGroups.find((item) => item.id === groupId);
     const nextTaskPosition = group?.tasks.length
       ? Math.max(...group.tasks.map((task) => task.position)) + 1
       : 1;
-    setTaskError((prev) => ({ ...prev, [groupId]: "" }));
     try {
       await createTask({
         variables: {
@@ -399,12 +489,8 @@ export function ProjectBoardPage() {
           assigned: [],
         },
       });
-      setNewTaskNames((prev) => ({ ...prev, [groupId]: "" }));
     } catch {
-      setTaskError((prev) => ({
-        ...prev,
-        [groupId]: "Unable to create task. Please try again.",
-      }));
+      // silent — CardComposer handles its own state
     }
   };
 
@@ -465,37 +551,162 @@ export function ProjectBoardPage() {
 
   const getFilteredAndSortedTasks = useCallback(
     (tasks: (typeof taskGroups)[0]["tasks"]) => {
-      let filtered = tasks;
+      let filtered = [...tasks];
 
-      if (filterText.trim()) {
-        const search = filterText.toLowerCase();
+      // ── Task name filter ────────────────────────────────────────────────
+      if (filters.taskName) {
+        const search = filters.taskName.toLowerCase();
         filtered = filtered.filter((t) =>
           t.name.toLowerCase().includes(search),
         );
       }
 
-      if (!showCompleted) {
-        filtered = filtered.filter((t) => !t.complete);
+      // ── Member filter ───────────────────────────────────────────────────
+      if (filters.members.length > 0) {
+        const memberIds = new Set(filters.members.map((m) => m.id));
+        filtered = filtered.filter((t) =>
+          t.assigned?.some((a) => a && memberIds.has(a.id)),
+        );
       }
 
-      const sorted = [...filtered];
-      if (sortBy === "dueDate") {
-        sorted.sort((a, b) => {
-          if (!a.dueDate?.at) return 1;
-          if (!b.dueDate?.at) return -1;
-          return (
-            new Date(a.dueDate.at).getTime() - new Date(b.dueDate.at).getTime()
-          );
+      // ── Label filter ────────────────────────────────────────────────────
+      if (filters.labels.length > 0) {
+        const labelIds = new Set(filters.labels.map((l) => l.id));
+        filtered = filtered.filter((t) =>
+          t.labels?.some((l) => l && labelIds.has(l.projectLabel?.id ?? "")),
+        );
+      }
+
+      // ── Due date filter ─────────────────────────────────────────────────
+      if (filters.dueDate) {
+        const now = dayjs();
+        filtered = filtered.filter((t) => {
+          const dd = t.dueDate?.at ? dayjs(t.dueDate.at) : null;
+          switch (filters.dueDate!.type) {
+            case DueDateFilterType.TODAY:
+              return dd?.isSame(now, "day") ?? false;
+            case DueDateFilterType.TOMORROW:
+              return dd?.isSame(now.add(1, "day"), "day") ?? false;
+            case DueDateFilterType.THIS_WEEK:
+              return (
+                (dd?.isAfter(now.subtract(1, "day")) &&
+                  dd?.isBefore(now.endOf("week").add(1, "day"))) ??
+                false
+              );
+            case DueDateFilterType.NEXT_WEEK:
+              return (
+                (dd?.isAfter(now.endOf("week")) &&
+                  dd?.isBefore(now.add(2, "week").startOf("week"))) ??
+                false
+              );
+            case DueDateFilterType.ONE_WEEK:
+              return (
+                (dd?.isAfter(now.subtract(1, "day")) &&
+                  dd?.isBefore(now.add(1, "week").add(1, "day"))) ??
+                false
+              );
+            case DueDateFilterType.TWO_WEEKS:
+              return (
+                (dd?.isAfter(now.subtract(1, "day")) &&
+                  dd?.isBefore(now.add(2, "week").add(1, "day"))) ??
+                false
+              );
+            case DueDateFilterType.THREE_WEEKS:
+              return (
+                (dd?.isAfter(now.subtract(1, "day")) &&
+                  dd?.isBefore(now.add(3, "week").add(1, "day"))) ??
+                false
+              );
+            case DueDateFilterType.OVERDUE:
+              return dd ? dd.isBefore(now) && !t.complete : false;
+            case DueDateFilterType.NO_DUE_DATE:
+              return !t.dueDate?.at;
+            default:
+              return true;
+          }
         });
-      } else if (sortBy === "name") {
-        sorted.sort((a, b) => a.name.localeCompare(b.name));
-      } else {
-        sorted.sort((a, b) => a.position - b.position);
       }
 
-      return sorted;
+      // ── Status filter ───────────────────────────────────────────────────
+      if (statusFilter.status === TaskStatus.INCOMPLETE) {
+        filtered = filtered.filter((t) => !t.complete);
+      } else if (statusFilter.status === TaskStatus.COMPLETE) {
+        filtered = filtered.filter((t) => t.complete);
+        // Apply "since" sub-filter
+        if (statusFilter.since !== TaskSince.ALL) {
+          const cutoff = (() => {
+            const now = dayjs();
+            switch (statusFilter.since) {
+              case TaskSince.TODAY:
+                return now.startOf("day");
+              case TaskSince.YESTERDAY:
+                return now.subtract(1, "day").startOf("day");
+              case TaskSince.ONE_WEEK:
+                return now.subtract(1, "week");
+              case TaskSince.TWO_WEEKS:
+                return now.subtract(2, "week");
+              case TaskSince.THREE_WEEKS:
+                return now.subtract(3, "week");
+              default:
+                return null;
+            }
+          })();
+          if (cutoff) {
+            filtered = filtered.filter(
+              (t) => t.completedAt && dayjs(t.completedAt).isAfter(cutoff),
+            );
+          }
+        }
+      }
+      // TaskStatus.ALL — no status filter applied
+
+      // ── Sorting ─────────────────────────────────────────────────────────
+      const dir = sorting.direction === TaskSortingDirection.DESC ? -1 : 1;
+      switch (sorting.type) {
+        case TaskSortingType.DUE_DATE:
+          filtered.sort((a, b) => {
+            if (!a.dueDate?.at) return 1;
+            if (!b.dueDate?.at) return -1;
+            return (
+              dir *
+              (new Date(a.dueDate.at).getTime() -
+                new Date(b.dueDate.at).getTime())
+            );
+          });
+          break;
+        case TaskSortingType.NAME:
+          filtered.sort((a, b) => dir * a.name.localeCompare(b.name));
+          break;
+        case TaskSortingType.MEMBERS:
+          filtered.sort((a, b) => {
+            const aCount = a.assigned?.length ?? 0;
+            const bCount = b.assigned?.length ?? 0;
+            return dir * (bCount - aCount);
+          });
+          break;
+        case TaskSortingType.LABELS:
+          filtered.sort((a, b) => {
+            const aCount = a.labels?.length ?? 0;
+            const bCount = b.labels?.length ?? 0;
+            return dir * (bCount - aCount);
+          });
+          break;
+        case TaskSortingType.COMPLETE:
+          filtered.sort((a, b) => {
+            const aVal = a.complete ? 1 : 0;
+            const bVal = b.complete ? 1 : 0;
+            return dir * (bVal - aVal);
+          });
+          break;
+        case TaskSortingType.NONE:
+        default:
+          filtered.sort((a, b) => a.position - b.position);
+          break;
+      }
+
+      return filtered;
     },
-    [filterText, showCompleted, sortBy],
+    [filters, sorting, statusFilter],
   );
 
   if (loading) {
@@ -626,52 +837,26 @@ export function ProjectBoardPage() {
               onOpenMembers={() => setShowMembersModal(true)}
               onOpenSettings={() => setShowSettingsModal(true)}
             />
-            <input
-              type="text"
-              placeholder="Filter tasks..."
-              value={filterText}
-              onChange={(e) => setFilterText(e.target.value)}
-              className="px-3 py-1.5 rounded-lg text-sm"
-              style={{
-                background: surface2,
-                border: `1px solid ${border}`,
-                color: textPrimary,
-                fontFamily: fontBody,
-              }}
+            <BoardControls
+              filters={filters}
+              sorting={sorting}
+              statusFilter={statusFilter}
+              currentUserId={currentUserId ?? undefined}
+              members={members.map((m) => ({
+                id: m.id,
+                fullName: m.fullName,
+                username: m.username,
+                profileIcon: m.profileIcon,
+              }))}
+              labels={labels.map((l) => ({
+                id: l.id,
+                name: l.name,
+                labelColor: l.labelColor,
+              }))}
+              onFiltersChange={setFilters}
+              onSortingChange={setSorting}
+              onStatusFilterChange={setStatusFilter}
             />
-            <select
-              value={sortBy}
-              onChange={(e) =>
-                setSortBy(e.target.value as "position" | "dueDate" | "name")
-              }
-              className="px-3 py-1.5 rounded-lg text-sm"
-              style={{
-                background: surface2,
-                border: `1px solid ${border}`,
-                color: textPrimary,
-                fontFamily: fontBody,
-              }}
-            >
-              <option value="position">Sort by Position</option>
-              <option value="dueDate">Sort by Due Date</option>
-              <option value="name">Sort by Name</option>
-            </select>
-            <label
-              className="flex items-center gap-2 cursor-pointer"
-              style={{
-                fontFamily: fontBody,
-                fontSize: "0.85rem",
-                color: textSecondary,
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={showCompleted}
-                onChange={(e) => setShowCompleted(e.target.checked)}
-                style={{ accentColor: terracotta }}
-              />
-              Show completed
-            </label>
           </div>
         </div>
       </div>
@@ -702,7 +887,8 @@ export function ProjectBoardPage() {
             <div className="flex gap-4 pb-4">
               {taskGroups.map((group, groupIndex) => {
                 const displayTasks = getFilteredAndSortedTasks(group.tasks);
-                const isTaskDragDisabled = sortBy !== "position";
+                const isTaskDragDisabled =
+                  sorting.type !== TaskSortingType.NONE;
                 const isDraggedOver = columnDragOverState[group.id] || false;
 
                 return (
@@ -827,6 +1013,16 @@ export function ProjectBoardPage() {
                           editingTaskName={editingTaskName}
                           setEditingTaskName={setEditingTaskName}
                           onUpdateTaskName={() => handleUpdateTaskName(task.id)}
+                          projectLabels={labels}
+                          projectMembers={members}
+                          onSaveName={handleQuickSaveName}
+                          onQuickToggleComplete={handleQuickToggleComplete}
+                          onToggleLabel={handleToggleLabel}
+                          onAssign={handleAssign}
+                          onUnassign={handleUnassign}
+                          onUpdateDueDate={handleUpdateDueDate}
+                          onQuickDelete={handleQuickDelete}
+                          onOpenModal={openTaskModal}
                           surface0={surface0}
                           surface2={surface2}
                           surface3={surface3}
@@ -855,38 +1051,11 @@ export function ProjectBoardPage() {
                     </div>
 
                     <div className="p-4 pt-0">
-                      <input
-                        type="text"
-                        placeholder="Add a task..."
-                        value={newTaskNames[group.id] || ""}
-                        onChange={(e) =>
-                          setNewTaskNames((prev) => ({
-                            ...prev,
-                            [group.id]: e.target.value,
-                          }))
+                      <CardComposer
+                        onCreateCard={(name) =>
+                          handleCreateTask(group.id, name)
                         }
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") handleCreateTask(group.id);
-                        }}
-                        className="w-full px-3 py-2 rounded-lg text-sm"
-                        style={{
-                          background: surface3,
-                          border: `1px solid ${border}`,
-                          color: textPrimary,
-                          fontFamily: fontBody,
-                        }}
                       />
-                      {taskError[group.id] && (
-                        <span
-                          style={{
-                            fontFamily: fontBody,
-                            fontSize: "0.75rem",
-                            color: terracotta,
-                          }}
-                        >
-                          {taskError[group.id]}
-                        </span>
-                      )}
                     </div>
                   </DraggableColumn>
                 );
