@@ -18,4 +18,19 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 500,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("@apollo/client")) {
+              return "apollo";
+            }
+            return "vendor";
+          }
+        },
+      },
+    },
+  },
 });
