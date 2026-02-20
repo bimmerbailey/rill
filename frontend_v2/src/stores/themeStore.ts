@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type ThemeName = "evening" | "ocean" | "forest";
+export type ThemeName = "evening" | "ocean" | "forest" | "twilight";
 
 export interface ThemeColors {
   surfaceBase: string;
@@ -91,6 +91,27 @@ export const themes: Record<ThemeName, Theme> = {
       ochre: "#dce775",
     },
   },
+  twilight: {
+    name: "twilight",
+    colors: {
+      surfaceBase: "#10163a",
+      surface0: "#161e3a",
+      surface1: "#1c2646",
+      surface2: "#262e52",
+      surface3: "#30385e",
+      border: "rgba(115,103,240,0.1)",
+      borderStrong: "rgba(115,103,240,0.2)",
+      textPrimary: "rgba(194,198,220,0.9)",
+      textSecondary: "rgba(194,198,220,0.55)",
+      textTertiary: "rgba(194,198,220,0.35)",
+      terracotta: "#7367f0",
+      success: "#28c76f",
+      danger: "#ea5455",
+      sage: "#28c76f",
+      slate: "#7367f0",
+      ochre: "#ff9f43",
+    },
+  },
 };
 
 interface ThemeState {
@@ -102,8 +123,8 @@ interface ThemeState {
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      themeName: "evening",
-      theme: themes.evening,
+      themeName: "twilight",
+      theme: themes.twilight,
       setTheme: (name: ThemeName) =>
         set({
           themeName: name,

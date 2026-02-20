@@ -4,6 +4,7 @@ const themeLabels: Record<ThemeName, string> = {
   evening: "Evening",
   ocean: "Ocean",
   forest: "Forest",
+  twilight: "Twilight",
 };
 
 export function ThemeSwitcher() {
