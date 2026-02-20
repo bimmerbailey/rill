@@ -1,0 +1,33 @@
+mutation createUserAccount(
+  $email: String!
+  $username: String!
+  $fullName: String!
+  $initials: String!
+  $password: String!
+  $roleCode: String!
+) {
+  createUserAccount(
+    input: {
+      email: $email
+      username: $username
+      fullName: $fullName
+      initials: $initials
+      password: $password
+      roleCode: $roleCode
+    }
+  ) {
+    id
+    email
+    fullName
+    username
+    role {
+      code
+      name
+    }
+    profileIcon {
+      url
+      initials
+      bgColor
+    }
+  }
+}

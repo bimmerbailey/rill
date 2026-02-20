@@ -1,0 +1,6 @@
+mutation updateTaskGroupName($taskGroupID: UUID!, $name: String!) {
+  updateTaskGroupName(input: { taskGroupID: $taskGroupID, name: $name }) {
+    id
+    name
+  }
+}

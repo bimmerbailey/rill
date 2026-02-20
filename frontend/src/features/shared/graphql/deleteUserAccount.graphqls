@@ -1,0 +1,9 @@
+mutation deleteUserAccount($userID: UUID!, $newOwnerID: UUID) {
+  deleteUserAccount(input: { userID: $userID, newOwnerID: $newOwnerID }) {
+    userAccount {
+      id
+      email
+      fullName
+    }
+  }
+}

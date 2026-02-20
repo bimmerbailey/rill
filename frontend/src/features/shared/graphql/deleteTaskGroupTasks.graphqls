@@ -1,0 +1,6 @@
+mutation deleteTaskGroupTasks($taskGroupID: UUID!) {
+  deleteTaskGroupTasks(input: { taskGroupID: $taskGroupID }) {
+    tasks
+    taskGroupID
+  }
+}

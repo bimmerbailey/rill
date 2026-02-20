@@ -43,27 +43,26 @@ type Frontend mg.Namespace
 
 // Install the npm dependencies for the React frontend
 func (Frontend) Install() error {
-	return sh.RunV("yarn", "--cwd", "frontend", "install")
+	return sh.RunV("bun", "run", "--cwd", "frontend_v2", "install")
 }
 
-// Eslint runs eslint on the frontend source
-func (Frontend) Eslint() error {
-	return sh.RunV("yarn", "--cwd", "frontend", "lint")
+// Lint runs eslint on the frontend source
+func (Frontend) Lint() error {
+	return sh.RunV("bun", "run", "--cwd", "frontend_v2", "lint")
 }
 
-// Tsc runs tsc on the frontend source
-func (Frontend) Tsc() error {
-	return sh.RunV("yarn", "--cwd", "frontend", "tsc")
-}
-
-// Lint the frontend source
-func (Frontend) Lint() {
-	mg.SerialDeps(Frontend.Eslint, Frontend.Tsc)
+// Format runs prettier formatting
+func (Frontend) Format() error {
+	return sh.RunV("bun", "run", "--cwd", "frontend_v2", "format")
 }
 
 // Build the React frontend
 func (Frontend) Build() error {
-	return sh.RunV("yarn", "--cwd", "frontend", "build")
+	return sh.RunV("bun", "run", "--cwd", "frontend_v2", "build")
+}
+
+func (Frontend) Dev() error {
+	return sh.RunV("bun", "run", "--cwd", "frontend_v2", "dev")
 }
 
 // Backend is the namespace for all commands that interact with the backend
@@ -229,7 +228,7 @@ type Docker mg.Namespace
 
 // Up runs the main docker compose file
 func (Docker) Up() error {
-	return sh.RunV("docker-compose", "-p", "taskcafe", "up", "-d")
+	return sh.RunV("docker", "compose", "up", "frontend", "backend", "worker")
 }
 
 // Migrate runs the migration command for the docker-compose network

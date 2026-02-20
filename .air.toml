@@ -22,7 +22,7 @@ full_bin = "./tmp/taskcafe web"
 include_ext = ["go"]
 
 # Ignore these directories
-exclude_dir = ["dist", "frontend", "tmp", "migrations", "testing", "templates", "uploads", "internal/migrations"]
+exclude_dir = ["dist", "frontend", "tmp", "migrations", "testing", "templates", "uploads", "internal/migrations", "frontend/node_modules", "frontend_v2/node_modules"]
 
 # Ignore these specific files
 exclude_file = ["*_test.go", "*.gen.go"]

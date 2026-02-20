@@ -1,0 +1,74 @@
+mutation duplicateTaskGroup(
+  $taskGroupID: UUID!
+  $name: String!
+  $position: Float!
+  $projectID: UUID!
+) {
+  duplicateTaskGroup(
+    input: {
+      projectID: $projectID
+      taskGroupID: $taskGroupID
+      name: $name
+      position: $position
+    }
+  ) {
+    taskGroup {
+      id
+      name
+      position
+      tasks {
+        id
+        shortId
+        name
+        description
+        dueDate {
+          at
+        }
+        hasTime
+        complete
+        watched
+        completedAt
+        position
+        badges {
+          checklist {
+            complete
+            total
+          }
+          comments {
+            unread
+            total
+          }
+        }
+        taskGroup {
+          id
+          name
+          position
+        }
+        labels {
+          id
+          assignedDate
+          projectLabel {
+            id
+            name
+            createdDate
+            labelColor {
+              id
+              colorHex
+              position
+              name
+            }
+          }
+        }
+        assigned {
+          id
+          fullName
+          profileIcon {
+            url
+            initials
+            bgColor
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+mutation deleteInvitedUserAccount($invitedUserID: UUID!) {
+  deleteInvitedUserAccount(input: { invitedUserID: $invitedUserID }) {
+    invitedUser {
+      id
+      email
+    }
+  }
+}
