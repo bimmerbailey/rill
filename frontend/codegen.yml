@@ -1,18 +1,15 @@
 overwrite: true
 schema:
-  - '../internal/graph/schema/*.gql'
+  - "../internal/graph/schema/*.gql"
 documents:
-  - 'src/shared/graphql/*.graphqls'
-  - 'src/shared/graphql/**/*.ts'
+  - "src/features/**/graphql/**/*.{ts,tsx,graphqls}"
 generates:
-  src/shared/generated/graphql.tsx:
+  src/graphql/generated/graphql.tsx:
     plugins:
-      - 'typescript'
-      - 'typescript-operations'
-      - 'typescript-react-apollo'
+      - "typescript"
+      - "typescript-operations"
+      - "typed-document-node"
     config:
-      withHOC: false
-      withComponent: false
-      withHooks: true
       scalars:
         UUID: string
+      useTypeImports: true

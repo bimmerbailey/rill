@@ -6,4 +6,4 @@ internal/frontend/frontend_generated.go
 internal/migrations/migrations_generated.go
 taskcafe
 conf/taskcafe.toml
-frontend_v2/node_modules
+frontend/node_modules/

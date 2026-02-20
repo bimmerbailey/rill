@@ -1,7 +1,7 @@
 services:
   frontend:
     build:
-      context: ./frontend_v2
+      context: frontend
       target: dev
     ports:
       - '5173:5173'
@@ -9,7 +9,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
     volumes:
-      - ./frontend_v2:/app
+      - ./frontend:/app
       - node_modules:/app/node_modules
 
   # Development backend with Air hot-reload
