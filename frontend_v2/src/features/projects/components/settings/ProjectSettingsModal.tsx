@@ -4,10 +4,11 @@ import { showSuccess, showError } from "@/utils/toast";
 import { useNavigate } from "react-router-dom";
 import { VisibilityToggle } from "./VisibilityToggle";
 import { DeleteProjectModal } from "./DeleteProjectModal";
+import { useMutation } from "@apollo/client/react";
 import {
   GetProjectsDocument,
-  useToggleProjectVisibilityMutation,
-  useDeleteProjectMutation,
+  ToggleProjectVisibilityDocument,
+  DeleteProjectDocument,
   type GetProjectsQuery,
 } from "@/graphql/generated/graphql";
 
@@ -31,8 +32,8 @@ export function ProjectSettingsModal({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const navigate = useNavigate();
 
-  const [toggleVisibility] = useToggleProjectVisibilityMutation();
-  const [deleteProject] = useDeleteProjectMutation();
+  const [toggleVisibility] = useMutation(ToggleProjectVisibilityDocument);
+  const [deleteProject] = useMutation(DeleteProjectDocument);
 
   const surface1 = "var(--color-surface-0)";
   const border = "var(--color-border-strong)";

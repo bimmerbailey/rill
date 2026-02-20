@@ -1,37 +1,34 @@
 import { useState, useCallback } from "react";
+import { useQuery, useMutation } from "@apollo/client/react";
 import type {
   FindTaskQuery,
   DueDateNotificationDuration,
-  TaskChecklist,
-  TaskChecklistItem,
-  TaskComment,
 } from "@/graphql/generated/graphql";
 import {
-  useFindTaskQuery,
-  useUpdateTaskNameMutation,
-  useUpdateTaskDescriptionMutation,
-  useSetTaskCompleteMutation,
-  useToggleTaskWatchMutation,
-  useCreateTaskCommentMutation,
-  useUpdateTaskCommentMutation,
-  useDeleteTaskCommentMutation,
-  useCreateTaskChecklistMutation,
-  useDeleteTaskChecklistMutation,
-  useUpdateTaskChecklistNameMutation,
-  useCreateTaskChecklistItemMutation,
-  useDeleteTaskChecklistItemMutation,
-  useSetTaskChecklistItemCompleteMutation,
-  useUpdateTaskChecklistItemNameMutation,
-  useToggleTaskLabelMutation,
-  useAssignTaskMutation,
-  useUnassignTaskMutation,
-  useUpdateTaskDueDateMutation,
-  useCreateDueDateNotificationsMutation,
-  useDeleteDueDateNotificationsMutation,
-  useCreateProjectLabelMutation,
-  useUpdateProjectLabelMutation,
-  useDeleteProjectLabelMutation,
   FindTaskDocument,
+  UpdateTaskNameDocument,
+  UpdateTaskDescriptionDocument,
+  SetTaskCompleteDocument,
+  ToggleTaskWatchDocument,
+  CreateTaskCommentDocument,
+  UpdateTaskCommentDocument,
+  DeleteTaskCommentDocument,
+  CreateTaskChecklistDocument,
+  DeleteTaskChecklistDocument,
+  UpdateTaskChecklistNameDocument,
+  CreateTaskChecklistItemDocument,
+  DeleteTaskChecklistItemDocument,
+  SetTaskChecklistItemCompleteDocument,
+  UpdateTaskChecklistItemNameDocument,
+  ToggleTaskLabelDocument,
+  AssignTaskDocument,
+  UnassignTaskDocument,
+  UpdateTaskDueDateDocument,
+  CreateDueDateNotificationsDocument,
+  DeleteDueDateNotificationsDocument,
+  CreateProjectLabelDocument,
+  UpdateProjectLabelDocument,
+  DeleteProjectLabelDocument,
 } from "@/graphql/generated/graphql";
 
 interface UseTaskModalReturn {
@@ -90,61 +87,61 @@ export function useTaskModal(): UseTaskModalReturn {
   const [isOpen, setIsOpen] = useState(false);
   const [taskId, setTaskId] = useState<string | null>(null);
 
-  const { data, loading, error } = useFindTaskQuery({
+  const { data, loading, error } = useQuery(FindTaskDocument, {
     variables: { taskID: taskId || "" },
     skip: !taskId || !isOpen,
   });
 
   const [updateNameMutation, { loading: updatingName }] =
-    useUpdateTaskNameMutation();
+    useMutation(UpdateTaskNameDocument);
   const [updateDescriptionMutation, { loading: updatingDescription }] =
-    useUpdateTaskDescriptionMutation();
+    useMutation(UpdateTaskDescriptionDocument);
   const [setCompleteMutation, { loading: updatingComplete }] =
-    useSetTaskCompleteMutation();
+    useMutation(SetTaskCompleteDocument);
   const [toggleWatchMutation, { loading: updatingWatch }] =
-    useToggleTaskWatchMutation();
+    useMutation(ToggleTaskWatchDocument);
 
   const [createCommentMutation, { loading: creatingComment }] =
-    useCreateTaskCommentMutation();
+    useMutation(CreateTaskCommentDocument);
   const [updateCommentMutation, { loading: updatingComment }] =
-    useUpdateTaskCommentMutation();
+    useMutation(UpdateTaskCommentDocument);
   const [deleteCommentMutation, { loading: deletingComment }] =
-    useDeleteTaskCommentMutation();
+    useMutation(DeleteTaskCommentDocument);
 
   const [createChecklistMutation, { loading: creatingChecklist }] =
-    useCreateTaskChecklistMutation();
+    useMutation(CreateTaskChecklistDocument);
   const [deleteChecklistMutation, { loading: deletingChecklist }] =
-    useDeleteTaskChecklistMutation();
+    useMutation(DeleteTaskChecklistDocument);
   const [renameChecklistMutation, { loading: renamingChecklist }] =
-    useUpdateTaskChecklistNameMutation();
+    useMutation(UpdateTaskChecklistNameDocument);
   const [createChecklistItemMutation, { loading: creatingChecklistItem }] =
-    useCreateTaskChecklistItemMutation();
+    useMutation(CreateTaskChecklistItemDocument);
   const [deleteChecklistItemMutation, { loading: deletingChecklistItem }] =
-    useDeleteTaskChecklistItemMutation();
+    useMutation(DeleteTaskChecklistItemDocument);
   const [toggleChecklistItemMutation, { loading: togglingChecklistItem }] =
-    useSetTaskChecklistItemCompleteMutation();
+    useMutation(SetTaskChecklistItemCompleteDocument);
   const [renameChecklistItemMutation, { loading: renamingChecklistItem }] =
-    useUpdateTaskChecklistItemNameMutation();
+    useMutation(UpdateTaskChecklistItemNameDocument);
 
   const [toggleLabelMutation, { loading: togglingLabel }] =
-    useToggleTaskLabelMutation();
-  const [assignMutation, { loading: assigning }] = useAssignTaskMutation();
+    useMutation(ToggleTaskLabelDocument);
+  const [assignMutation, { loading: assigning }] = useMutation(AssignTaskDocument);
   const [unassignMutation, { loading: unassigning }] =
-    useUnassignTaskMutation();
+    useMutation(UnassignTaskDocument);
 
   const [updateDueDateMutation, { loading: updatingDueDate }] =
-    useUpdateTaskDueDateMutation();
+    useMutation(UpdateTaskDueDateDocument);
   const [createNotificationMutation, { loading: creatingNotification }] =
-    useCreateDueDateNotificationsMutation();
+    useMutation(CreateDueDateNotificationsDocument);
   const [deleteNotificationMutation, { loading: deletingNotification }] =
-    useDeleteDueDateNotificationsMutation();
+    useMutation(DeleteDueDateNotificationsDocument);
 
   const [createLabelMutation, { loading: creatingLabel }] =
-    useCreateProjectLabelMutation();
+    useMutation(CreateProjectLabelDocument);
   const [updateLabelMutation, { loading: updatingLabel }] =
-    useUpdateProjectLabelMutation();
+    useMutation(UpdateProjectLabelDocument);
   const [deleteLabelMutation, { loading: deletingLabel }] =
-    useDeleteProjectLabelMutation();
+    useMutation(DeleteProjectLabelDocument);
 
   const openModal = useCallback((id: string) => {
     setTaskId(id);
@@ -204,7 +201,7 @@ export function useTaskModal(): UseTaskModalReturn {
           if (!data?.createTaskComment) return;
           const newComment = data.createTaskComment.comment;
           cache.updateQuery(
-            { query: FindTaskDocument, variables: { taskID: taskId } },
+            { query: FindTaskDocument, variables: { taskID: taskId! } },
             (prev) => {
               if (!prev?.findTask) return prev;
               return {
@@ -247,7 +244,7 @@ export function useTaskModal(): UseTaskModalReturn {
                 findTask: {
                   ...prev.findTask,
                   comments: prev.findTask.comments?.filter(
-                    (c: TaskComment) => c.id !== commentID,
+                    (c) => c.id !== commentID,
                   ),
                 },
               };
@@ -268,7 +265,7 @@ export function useTaskModal(): UseTaskModalReturn {
           if (!data?.createTaskChecklist) return;
           const newChecklist = data.createTaskChecklist;
           cache.updateQuery(
-            { query: FindTaskDocument, variables: { taskID: taskId } },
+            { query: FindTaskDocument, variables: { taskID: taskId! } },
             (prev) => {
               if (!prev?.findTask) return prev;
               return {
@@ -297,7 +294,7 @@ export function useTaskModal(): UseTaskModalReturn {
           if (!data?.deleteTaskChecklist || !data.deleteTaskChecklist.ok)
             return;
           cache.updateQuery(
-            { query: FindTaskDocument, variables: { taskID: taskId } },
+            { query: FindTaskDocument, variables: { taskID: taskId! } },
             (prev) => {
               if (!prev?.findTask) return prev;
               return {
@@ -305,7 +302,7 @@ export function useTaskModal(): UseTaskModalReturn {
                 findTask: {
                   ...prev.findTask,
                   checklists: prev.findTask.checklists?.filter(
-                    (c: TaskChecklist) => c.id !== checklistID,
+                    (c) => c.id !== checklistID,
                   ),
                 },
               };
@@ -334,7 +331,7 @@ export function useTaskModal(): UseTaskModalReturn {
           if (!data?.createTaskChecklistItem) return;
           const newItem = data.createTaskChecklistItem;
           cache.updateQuery(
-            { query: FindTaskDocument, variables: { taskID: taskId } },
+            { query: FindTaskDocument, variables: { taskID: taskId! } },
             (prev) => {
               if (!prev?.findTask) return prev;
               return {
@@ -342,7 +339,7 @@ export function useTaskModal(): UseTaskModalReturn {
                 findTask: {
                   ...prev.findTask,
                   checklists: prev.findTask.checklists?.map(
-                    (c: TaskChecklist) =>
+                    (c) =>
                       c.id === checklistID
                         ? { ...c, items: [...c.items, newItem] }
                         : c,
@@ -370,7 +367,7 @@ export function useTaskModal(): UseTaskModalReturn {
           const { taskChecklistID } =
             data.deleteTaskChecklistItem.taskChecklistItem;
           cache.updateQuery(
-            { query: FindTaskDocument, variables: { taskID: taskId } },
+            { query: FindTaskDocument, variables: { taskID: taskId! } },
             (prev) => {
               if (!prev?.findTask) return prev;
               return {
@@ -378,12 +375,12 @@ export function useTaskModal(): UseTaskModalReturn {
                 findTask: {
                   ...prev.findTask,
                   checklists: prev.findTask.checklists?.map(
-                    (c: TaskChecklist) =>
+                    (c) =>
                       c.id === taskChecklistID
                         ? {
                             ...c,
                             items: c.items.filter(
-                              (i: TaskChecklistItem) => i.id !== itemID,
+                              (i) => i.id !== itemID,
                             ),
                           }
                         : c,

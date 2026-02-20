@@ -2,7 +2,8 @@ import { useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { Input } from "@/components/common/Input";
 import { Button } from "@/components/common/Button";
-import { useLegacyCreateProjectMutation } from "@/graphql/generated/graphql";
+import { useMutation } from "@apollo/client/react";
+import { LegacyCreateProjectDocument } from "@/graphql/generated/graphql";
 import { useTeamDetail } from "../hooks";
 import { ProjectCard } from "./ProjectCard";
 import type { SortOption } from "../types";
@@ -18,7 +19,7 @@ export function TeamProjectsTab() {
   const [projectError, setProjectError] = useState<string | null>(null);
 
   const [createProject, { loading: creatingProject }] =
-    useLegacyCreateProjectMutation({
+    useMutation(LegacyCreateProjectDocument, {
       refetchQueries: ["getTeam"],
     });
 

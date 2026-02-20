@@ -1,6 +1,7 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Bell } from "lucide-react";
-import { useHasUnreadNotificationsQuery } from "@/graphql/generated/graphql";
+import { useQuery } from "@apollo/client/react";
+import { HasUnreadNotificationsDocument } from "@/graphql/generated/graphql";
 import { NotificationPopup } from "./NotificationPopup";
 
 interface NotificationBellProps {
@@ -14,9 +15,13 @@ export function NotificationBell({
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const bellRef = useRef<HTMLButtonElement>(null);
 
-  const { data } = useHasUnreadNotificationsQuery({
-    pollInterval,
-  });
+  const { data, refetch } = useQuery(HasUnreadNotificationsDocument);
+
+  // pollInterval is broken in Apollo Client v4.x — use setInterval + refetch instead
+  useEffect(() => {
+    const id = setInterval(() => { refetch(); }, pollInterval);
+    return () => clearInterval(id);
+  }, [refetch, pollInterval]);
 
   const hasUnread = data?.hasUnreadNotifications.unread ?? false;
 

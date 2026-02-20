@@ -1,6 +1,7 @@
 import { useMemo } from "react";
+import { useQuery } from "@apollo/client/react";
 import type { GetProjectsQuery } from "@/graphql/generated/graphql";
-import { useGetProjectsQuery } from "@/graphql/generated/graphql";
+import { GetProjectsDocument } from "@/graphql/generated/graphql";
 
 const sortByName = <T extends { name: string }>(items: T[]) =>
   [...items].sort((a, b) =>
@@ -16,7 +17,7 @@ interface TeamWithProjects extends Team {
 }
 
 export function useProjectsData() {
-  const { data, loading, error } = useGetProjectsQuery();
+  const { data, loading, error } = useQuery(GetProjectsDocument);
 
   const organizations = useMemo(
     () => data?.organizations || [],

@@ -1,5 +1,6 @@
 import { useCallback } from "react";
-import { useToggleTaskLabelMutation } from "@/graphql/generated/graphql";
+import { useMutation } from "@apollo/client/react";
+import { ToggleTaskLabelDocument } from "@/graphql/generated/graphql";
 
 interface UseTaskLabelsReturn {
   toggleLabel: (taskID: string, projectLabelID: string) => Promise<boolean>;
@@ -7,7 +8,7 @@ interface UseTaskLabelsReturn {
 }
 
 export function useTaskLabels(): UseTaskLabelsReturn {
-  const [toggleMutation, { loading }] = useToggleTaskLabelMutation();
+  const [toggleMutation, { loading }] = useMutation(ToggleTaskLabelDocument);
 
   const toggleLabel = useCallback(
     async (taskID: string, projectLabelID: string): Promise<boolean> => {

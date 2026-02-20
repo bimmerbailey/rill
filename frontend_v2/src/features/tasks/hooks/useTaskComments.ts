@@ -1,10 +1,10 @@
 import { useCallback } from "react";
+import { useMutation } from "@apollo/client/react";
 import {
-  useCreateTaskCommentMutation,
-  useUpdateTaskCommentMutation,
-  useDeleteTaskCommentMutation,
+  CreateTaskCommentDocument,
+  UpdateTaskCommentDocument,
+  DeleteTaskCommentDocument,
   FindTaskDocument,
-  type TaskComment,
 } from "@/graphql/generated/graphql";
 
 interface UseTaskCommentsReturn {
@@ -16,11 +16,11 @@ interface UseTaskCommentsReturn {
 
 export function useTaskComments(): UseTaskCommentsReturn {
   const [createMutation, { loading: creating }] =
-    useCreateTaskCommentMutation();
+    useMutation(CreateTaskCommentDocument);
   const [updateMutation, { loading: updating }] =
-    useUpdateTaskCommentMutation();
+    useMutation(UpdateTaskCommentDocument);
   const [deleteMutation, { loading: deleting }] =
-    useDeleteTaskCommentMutation();
+    useMutation(DeleteTaskCommentDocument);
 
   const createComment = useCallback(
     async (taskID: string, message: string) => {
@@ -77,7 +77,7 @@ export function useTaskComments(): UseTaskCommentsReturn {
                 findTask: {
                   ...prev.findTask,
                   comments: prev.findTask.comments?.filter(
-                    (c: TaskComment) => c.id !== deletedId,
+                    (c) => c.id !== deletedId,
                   ),
                 },
               };

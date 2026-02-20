@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/common/Button";
+import { useMutation } from "@apollo/client/react";
 import {
-  useDeleteTeamMutation,
+  DeleteTeamDocument,
   GetProjectsDocument,
   type GetProjectsQuery,
 } from "@/graphql/generated/graphql";
@@ -24,7 +25,7 @@ export function DeleteTeamModal({
   const navigate = useNavigate();
   const [deleting, setDeleting] = useState(false);
 
-  const [deleteTeam] = useDeleteTeamMutation({
+  const [deleteTeam] = useMutation(DeleteTeamDocument, {
     update: (cache, { data }) => {
       if (!data?.deleteTeam) return;
 

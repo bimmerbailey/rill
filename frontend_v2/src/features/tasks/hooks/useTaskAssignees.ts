@@ -1,7 +1,8 @@
 import { useCallback } from "react";
+import { useMutation } from "@apollo/client/react";
 import {
-  useAssignTaskMutation,
-  useUnassignTaskMutation,
+  AssignTaskDocument,
+  UnassignTaskDocument,
 } from "@/graphql/generated/graphql";
 
 interface UseTaskAssigneesReturn {
@@ -11,9 +12,9 @@ interface UseTaskAssigneesReturn {
 }
 
 export function useTaskAssignees(): UseTaskAssigneesReturn {
-  const [assignMutation, { loading: assigning }] = useAssignTaskMutation();
+  const [assignMutation, { loading: assigning }] = useMutation(AssignTaskDocument);
   const [unassignMutation, { loading: unassigning }] =
-    useUnassignTaskMutation();
+    useMutation(UnassignTaskDocument);
 
   const assign = useCallback(
     async (taskID: string, userID: string) => {

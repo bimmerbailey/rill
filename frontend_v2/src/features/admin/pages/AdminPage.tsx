@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { Button } from "@/components/common";
 
 // GraphQL Queries and Mutations
@@ -107,6 +108,11 @@ const DELETE_INVITED_USER_ACCOUNT = gql`
   }
 `;
 
+interface GetUsersQueryResult {
+  users: User[];
+  invitedUsers: InvitedUser[];
+}
+
 interface User {
   id: string;
   email: string;
@@ -173,49 +179,11 @@ export function AdminPage() {
   const slate = "var(--color-slate)";
 
   // GraphQL operations
-  const { data, loading, error, refetch } = useQuery(GET_USERS);
+  const { data, loading, error, refetch } = useQuery<GetUsersQueryResult>(GET_USERS);
 
-  const [createUser, { loading: creatingUser }] = useMutation(
-    CREATE_USER_ACCOUNT,
-    {
-      onCompleted: () => {
-        setShowAddUserModal(false);
-        setFormData({
-          fullName: "",
-          email: "",
-          username: "",
-          initials: "",
-          password: "",
-          roleCode: "member",
-        });
-        setFormErrors({});
-        refetch();
-      },
-      onError: (error) => {
-        setFormErrors({ email: error.message });
-      },
-    },
-  );
-
-  const [deleteUser, { loading: deletingUser }] = useMutation(
-    DELETE_USER_ACCOUNT,
-    {
-      onCompleted: () => {
-        setUserToDelete(null);
-        refetch();
-      },
-    },
-  );
-
-  const [deleteInvitedUser, { loading: deletingInvitedUser }] = useMutation(
-    DELETE_INVITED_USER_ACCOUNT,
-    {
-      onCompleted: () => {
-        setInvitedUserToDelete(null);
-        refetch();
-      },
-    },
-  );
+  const [createUser, { loading: creatingUser }] = useMutation(CREATE_USER_ACCOUNT);
+  const [deleteUser, { loading: deletingUser }] = useMutation(DELETE_USER_ACCOUNT);
+  const [deleteInvitedUser, { loading: deletingInvitedUser }] = useMutation(DELETE_INVITED_USER_ACCOUNT);
 
   const users: User[] = data?.users || [];
   const invitedUsers: InvitedUser[] = data?.invitedUsers || [];
@@ -238,12 +206,27 @@ export function AdminPage() {
     e.preventDefault();
     if (!validateForm()) return;
 
-    await createUser({
-      variables: {
-        ...formData,
-        roleCode: formData.roleCode,
-      },
-    });
+    try {
+      await createUser({
+        variables: {
+          ...formData,
+          roleCode: formData.roleCode,
+        },
+      });
+      setShowAddUserModal(false);
+      setFormData({
+        fullName: "",
+        email: "",
+        username: "",
+        initials: "",
+        password: "",
+        roleCode: "member",
+      });
+      setFormErrors({});
+      refetch();
+    } catch (err) {
+      setFormErrors({ email: err instanceof Error ? err.message : "An error occurred" });
+    }
   };
 
   const handleDeleteUser = async () => {
@@ -251,6 +234,8 @@ export function AdminPage() {
     await deleteUser({
       variables: { userID: userToDelete.id },
     });
+    setUserToDelete(null);
+    refetch();
   };
 
   const handleDeleteInvitedUser = async () => {
@@ -258,6 +243,8 @@ export function AdminPage() {
     await deleteInvitedUser({
       variables: { invitedUserID: invitedUserToDelete.id },
     });
+    setInvitedUserToDelete(null);
+    refetch();
   };
 
   if (loading) {

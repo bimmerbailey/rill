@@ -1,11 +1,12 @@
 import { useCallback } from "react";
+import { useMutation } from "@apollo/client/react";
 import { showSuccess, showError } from "@/utils/toast";
 import {
   FindProjectDocument,
-  useInviteProjectMembersMutation,
-  useDeleteProjectMemberMutation,
-  useDeleteInvitedProjectMemberMutation,
-  useUpdateProjectMemberRoleMutation,
+  InviteProjectMembersDocument,
+  DeleteProjectMemberDocument,
+  DeleteInvitedProjectMemberDocument,
+  UpdateProjectMemberRoleDocument,
   type FindProjectQuery,
 } from "@/graphql/generated/graphql";
 import type {
@@ -26,10 +27,10 @@ export function useProjectMembers({
   projectUUID,
   onMembersChanged,
 }: UseProjectMembersOptions) {
-  const [inviteMembers] = useInviteProjectMembersMutation();
-  const [removeMember] = useDeleteProjectMemberMutation();
-  const [cancelInvite] = useDeleteInvitedProjectMemberMutation();
-  const [changeRole] = useUpdateProjectMemberRoleMutation();
+  const [inviteMembers] = useMutation(InviteProjectMembersDocument);
+  const [removeMember] = useMutation(DeleteProjectMemberDocument);
+  const [cancelInvite] = useMutation(DeleteInvitedProjectMemberDocument);
+  const [changeRole] = useMutation(UpdateProjectMemberRoleDocument);
 
   const inviteProjectMembers = useCallback(
     async (members: InviteMemberData[]) => {

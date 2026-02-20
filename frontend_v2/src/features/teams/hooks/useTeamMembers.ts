@@ -1,7 +1,8 @@
+import { useMutation } from "@apollo/client/react";
 import {
-  useCreateTeamMemberMutation,
-  useDeleteTeamMemberMutation,
-  useUpdateTeamMemberRoleMutation,
+  CreateTeamMemberDocument,
+  DeleteTeamMemberDocument,
+  UpdateTeamMemberRoleDocument,
   RoleCode,
   GetTeamDocument,
   type GetTeamQuery,
@@ -9,7 +10,7 @@ import {
 import { showSuccess, showError } from "@/utils/toast";
 
 export function useTeamMembers(teamId: string) {
-  const [createMember] = useCreateTeamMemberMutation({
+  const [createMember] = useMutation(CreateTeamMemberDocument, {
     update: (cache, { data }) => {
       if (!data?.createTeamMember) return;
 
@@ -41,7 +42,7 @@ export function useTeamMembers(teamId: string) {
     },
   });
 
-  const [deleteMember] = useDeleteTeamMemberMutation({
+  const [deleteMember] = useMutation(DeleteTeamMemberDocument, {
     update: (cache, { data }) => {
       if (!data?.deleteTeamMember) return;
 
@@ -68,7 +69,7 @@ export function useTeamMembers(teamId: string) {
     },
   });
 
-  const [updateRole] = useUpdateTeamMemberRoleMutation({
+  const [updateRole] = useMutation(UpdateTeamMemberRoleDocument, {
     update: (cache, { data }) => {
       if (!data?.updateTeamMemberRole) return;
 

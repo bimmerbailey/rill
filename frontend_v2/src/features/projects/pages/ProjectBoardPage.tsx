@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { gql } from "@apollo/client";
 import { Button, TaskDetailModal } from "@/components/common";
 import {
@@ -12,8 +12,8 @@ import { useProjectBoard, useProjectMembers } from "@/features/projects/hooks";
 import { useTaskModal } from "@/hooks";
 import { useAuthStore } from "@/stores";
 import {
-  useUpdateTaskLocationMutation,
-  useUpdateTaskGroupLocationMutation,
+  UpdateTaskLocationDocument,
+  UpdateTaskGroupLocationDocument,
   type FindProjectQuery,
 } from "@/graphql/generated/graphql";
 import { DraggableTask } from "@/features/projects/components/DraggableTask";
@@ -39,10 +39,10 @@ import {
   DEFAULT_STATUS_FILTER,
 } from "@/features/projects/types";
 import {
-  useAssignTaskMutation,
-  useUnassignTaskMutation,
-  useUpdateTaskDueDateMutation,
-  useToggleTaskLabelMutation,
+  AssignTaskDocument,
+  UnassignTaskDocument,
+  UpdateTaskDueDateDocument,
+  ToggleTaskLabelDocument,
 } from "@/graphql/generated/graphql";
 import dayjs from "dayjs";
 
@@ -254,14 +254,14 @@ export function ProjectBoardPage() {
     ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectUUID } }]
     : [];
 
-  const [assignTask] = useAssignTaskMutation({ refetchQueries: refetchBoard });
-  const [unassignTask] = useUnassignTaskMutation({
+  const [assignTask] = useMutation(AssignTaskDocument, { refetchQueries: refetchBoard });
+  const [unassignTask] = useMutation(UnassignTaskDocument, {
     refetchQueries: refetchBoard,
   });
-  const [updateTaskDueDate] = useUpdateTaskDueDateMutation({
+  const [updateTaskDueDate] = useMutation(UpdateTaskDueDateDocument, {
     refetchQueries: refetchBoard,
   });
-  const [toggleTaskLabel] = useToggleTaskLabelMutation({
+  const [toggleTaskLabel] = useMutation(ToggleTaskLabelDocument, {
     refetchQueries: refetchBoard,
   });
 
@@ -327,7 +327,7 @@ export function ProjectBoardPage() {
     [deleteTask, selectedTask, closeTaskModal],
   );
 
-  const [updateTaskLocation] = useUpdateTaskLocationMutation({
+  const [updateTaskLocation] = useMutation(UpdateTaskLocationDocument, {
     update: (client, result) => {
       if (!result.data) return;
       const { previousTaskGroupID, task } = result.data.updateTaskLocation;
@@ -389,7 +389,7 @@ export function ProjectBoardPage() {
     },
   });
 
-  const [updateTaskGroupLocation] = useUpdateTaskGroupLocationMutation({});
+  const [updateTaskGroupLocation] = useMutation(UpdateTaskGroupLocationDocument, {});
 
   const handleTaskMove = useCallback(
     (variables: {

@@ -1,12 +1,13 @@
+import { useQuery } from "@apollo/client/react";
 import {
   MyTasksSort,
   MyTasksStatus,
-  useGetDashboardDataQuery,
-  useGetMyTasksQuery,
+  GetDashboardDataDocument,
+  GetMyTasksDocument,
 } from "@/graphql/generated/graphql";
 
 export function useDashboardData() {
-  const { data, loading, error } = useGetDashboardDataQuery();
+  const { data, loading, error } = useQuery(GetDashboardDataDocument);
 
   return {
     user: data?.me?.user,
@@ -21,7 +22,7 @@ export function useMyTasks(
   status: MyTasksStatus = MyTasksStatus.All,
   sort: MyTasksSort = MyTasksSort.DueDate,
 ) {
-  const { data, loading, error } = useGetMyTasksQuery({
+  const { data, loading, error } = useQuery(GetMyTasksDocument, {
     variables: { status, sort },
   });
 

@@ -1,15 +1,14 @@
 import { useCallback } from "react";
+import { useMutation } from "@apollo/client/react";
 import {
-  useCreateTaskChecklistMutation,
-  useDeleteTaskChecklistMutation,
-  useUpdateTaskChecklistNameMutation,
-  useCreateTaskChecklistItemMutation,
-  useSetTaskChecklistItemCompleteMutation,
-  useDeleteTaskChecklistItemMutation,
-  useUpdateTaskChecklistItemNameMutation,
+  CreateTaskChecklistDocument,
+  DeleteTaskChecklistDocument,
+  UpdateTaskChecklistNameDocument,
+  CreateTaskChecklistItemDocument,
+  SetTaskChecklistItemCompleteDocument,
+  DeleteTaskChecklistItemDocument,
+  UpdateTaskChecklistItemNameDocument,
   FindTaskDocument,
-  type TaskChecklist,
-  type TaskChecklistItem,
 } from "@/graphql/generated/graphql";
 
 interface UseTaskChecklistsReturn {
@@ -33,19 +32,19 @@ interface UseTaskChecklistsReturn {
 
 export function useTaskChecklists(): UseTaskChecklistsReturn {
   const [createChecklistMutation, { loading: creatingChecklist }] =
-    useCreateTaskChecklistMutation();
+    useMutation(CreateTaskChecklistDocument);
   const [deleteChecklistMutation, { loading: deletingChecklist }] =
-    useDeleteTaskChecklistMutation();
+    useMutation(DeleteTaskChecklistDocument);
   const [renameChecklistMutation, { loading: renamingChecklist }] =
-    useUpdateTaskChecklistNameMutation();
+    useMutation(UpdateTaskChecklistNameDocument);
   const [createItemMutation, { loading: creatingItem }] =
-    useCreateTaskChecklistItemMutation();
+    useMutation(CreateTaskChecklistItemDocument);
   const [toggleItemMutation, { loading: togglingItem }] =
-    useSetTaskChecklistItemCompleteMutation();
+    useMutation(SetTaskChecklistItemCompleteDocument);
   const [deleteItemMutation, { loading: deletingItem }] =
-    useDeleteTaskChecklistItemMutation();
+    useMutation(DeleteTaskChecklistItemDocument);
   const [renameItemMutation, { loading: renamingItem }] =
-    useUpdateTaskChecklistItemNameMutation();
+    useMutation(UpdateTaskChecklistItemNameDocument);
 
   const createChecklist = useCallback(
     async (taskID: string, name: string, position: number) => {
@@ -95,7 +94,7 @@ export function useTaskChecklists(): UseTaskChecklistsReturn {
               findTask: {
                 ...prev.findTask,
                 checklists: prev.findTask.checklists?.filter(
-                  (c: TaskChecklist) => c.id !== deletedId,
+                  (c) => c.id !== deletedId,
                 ),
               },
             };
@@ -131,7 +130,7 @@ export function useTaskChecklists(): UseTaskChecklistsReturn {
               findTask: {
                 ...prev.findTask,
                 checklists: prev.findTask.checklists?.map(
-                  (checklist: TaskChecklist) => {
+                  (checklist) => {
                     if (checklist.id === checklistID) {
                       return {
                         ...checklist,
@@ -171,12 +170,12 @@ export function useTaskChecklists(): UseTaskChecklistsReturn {
               findTask: {
                 ...prev.findTask,
                 checklists: prev.findTask.checklists?.map(
-                  (checklist: TaskChecklist) => {
+                  (checklist) => {
                     if (checklist.id === taskChecklistID) {
                       return {
                         ...checklist,
                         items: checklist.items.filter(
-                          (item: TaskChecklistItem) => item.id !== itemID,
+                          (item) => item.id !== itemID,
                         ),
                       };
                     }

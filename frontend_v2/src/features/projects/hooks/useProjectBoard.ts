@@ -1,6 +1,7 @@
 import { useMemo } from "react";
+import { useQuery } from "@apollo/client/react";
 import type { FindProjectQuery } from "@/graphql/generated/graphql";
-import { useFindProjectQuery } from "@/graphql/generated/graphql";
+import { FindProjectDocument } from "@/graphql/generated/graphql";
 
 const sortByPosition = <T extends { position: number }>(items: T[]) =>
   [...items].sort((a, b) => a.position - b.position);
@@ -13,7 +14,7 @@ type LabelColor = FindProjectQuery["labelColors"][number];
 type User = FindProjectQuery["users"][number];
 
 export function useProjectBoard(projectID: string) {
-  const { data, loading, error, refetch } = useFindProjectQuery({
+  const { data, loading, error, refetch } = useQuery(FindProjectDocument, {
     variables: { projectID },
     skip: !projectID,
   });

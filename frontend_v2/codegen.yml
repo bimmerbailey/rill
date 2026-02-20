@@ -8,10 +8,8 @@ generates:
     plugins:
       - "typescript"
       - "typescript-operations"
-      - "typescript-react-apollo"
+      - "typed-document-node"
     config:
-      withHOC: false
-      withComponent: false
-      withHooks: true
       scalars:
         UUID: string
+      useTypeImports: true

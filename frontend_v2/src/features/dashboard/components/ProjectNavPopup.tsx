@@ -2,11 +2,12 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { ChevronDown, Globe, Lock, Trash2 } from "lucide-react";
 import { showSuccess, showError } from "@/utils/toast";
 import { useNavigate } from "react-router-dom";
-import { useFindProjectQuery } from "@/graphql/generated/graphql";
+import { useQuery, useMutation } from "@apollo/client/react";
 import {
+  FindProjectDocument,
   GetProjectsDocument,
-  useToggleProjectVisibilityMutation,
-  useDeleteProjectMutation,
+  ToggleProjectVisibilityDocument,
+  DeleteProjectDocument,
   type GetProjectsQuery,
 } from "@/graphql/generated/graphql";
 import { DeleteProjectModal } from "@/features/projects/components/settings/DeleteProjectModal";
@@ -24,7 +25,7 @@ export function ProjectNavPopup({ projectId }: ProjectNavPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const { data } = useFindProjectQuery({
+  const { data } = useQuery(FindProjectDocument, {
     variables: { projectID: projectId },
     skip: !projectId,
     fetchPolicy: "cache-first",
@@ -36,8 +37,8 @@ export function ProjectNavPopup({ projectId }: ProjectNavPopupProps) {
   // The URL param is the shortId; mutations require the UUID from the query result
   const projectUUID = project?.id ?? "";
 
-  const [toggleVisibility] = useToggleProjectVisibilityMutation();
-  const [deleteProject] = useDeleteProjectMutation();
+  const [toggleVisibility] = useMutation(ToggleProjectVisibilityDocument);
+  const [deleteProject] = useMutation(DeleteProjectDocument);
 
   // Close popup on outside click
   useEffect(() => {

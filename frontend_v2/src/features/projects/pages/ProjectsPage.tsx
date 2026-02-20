@@ -2,10 +2,11 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Input } from "@/components/common";
 import { useProjectsData } from "@/features/projects/hooks/useProjects";
+import { useMutation } from "@apollo/client/react";
 import {
   GetProjectsDocument,
-  useCreateProjectMutation,
-  useCreateTeamMutation,
+  CreateProjectDocument,
+  CreateTeamDocument,
 } from "@/graphql/generated/graphql";
 
 /**
@@ -46,11 +47,11 @@ export function ProjectsPage() {
 
   const tileColors = [terracotta, sage, slate, ochre];
 
-  const [createTeam, { loading: creatingTeam }] = useCreateTeamMutation({
+  const [createTeam, { loading: creatingTeam }] = useMutation(CreateTeamDocument, {
     refetchQueries: [{ query: GetProjectsDocument }],
   });
   const [createProject, { loading: creatingProject }] =
-    useCreateProjectMutation({
+    useMutation(CreateProjectDocument, {
       refetchQueries: [{ query: GetProjectsDocument }],
     });
 

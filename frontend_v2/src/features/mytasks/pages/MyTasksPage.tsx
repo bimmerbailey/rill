@@ -7,13 +7,14 @@ import {
   CheckCircle2,
   X,
 } from "lucide-react";
+import { useQuery, useMutation } from "@apollo/client/react";
 import {
   MyTasksSort,
   MyTasksStatus,
-  useLegacyMyTasksQuery,
-  useSetTaskCompleteMutation,
-  useUpdateTaskNameMutation,
-  useUpdateTaskDueDateMutation,
+  LegacyMyTasksDocument,
+  SetTaskCompleteDocument,
+  UpdateTaskNameDocument,
+  UpdateTaskDueDateDocument,
   type LegacyMyTasksQuery,
 } from "@/graphql/generated/graphql";
 import { useDashboardData } from "@/features/dashboard/hooks/useDashboard";
@@ -473,14 +474,14 @@ export function MyTasksPage() {
 
   const { projects: dashboardProjects } = useDashboardData();
 
-  const { data, loading, error } = useLegacyMyTasksQuery({
+  const { data, loading, error } = useQuery(LegacyMyTasksDocument, {
     variables: { status, sort },
     fetchPolicy: "cache-and-network",
   });
 
-  const [setTaskCompleteMutation] = useSetTaskCompleteMutation();
-  const [updateTaskNameMutation] = useUpdateTaskNameMutation();
-  const [updateTaskDueDateMutation] = useUpdateTaskDueDateMutation();
+  const [setTaskCompleteMutation] = useMutation(SetTaskCompleteDocument);
+  const [updateTaskNameMutation] = useMutation(UpdateTaskNameDocument);
+  const [updateTaskDueDateMutation] = useMutation(UpdateTaskDueDateDocument);
 
   // Task detail modal
   const {

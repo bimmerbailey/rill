@@ -7,11 +7,12 @@ import type {
 } from "@/features/projects/types";
 import { LabelManager } from "./LabelManager";
 import { LabelEditor } from "./LabelEditor";
+import { useMutation } from "@apollo/client/react";
 import {
-  useCreateProjectLabelMutation,
-  useUpdateProjectLabelMutation,
-  useDeleteProjectLabelMutation,
-  useToggleTaskLabelMutation,
+  CreateProjectLabelDocument,
+  UpdateProjectLabelDocument,
+  DeleteProjectLabelDocument,
+  ToggleTaskLabelDocument,
 } from "@/graphql/generated/graphql";
 
 interface LabelManagerModalProps {
@@ -39,10 +40,10 @@ export function LabelManagerModal({
   const [editingLabel, setEditingLabel] = useState<ProjectLabel | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const [createLabel] = useCreateProjectLabelMutation();
-  const [updateLabel] = useUpdateProjectLabelMutation();
-  const [deleteLabel] = useDeleteProjectLabelMutation();
-  const [toggleLabel] = useToggleTaskLabelMutation();
+  const [createLabel] = useMutation(CreateProjectLabelDocument);
+  const [updateLabel] = useMutation(UpdateProjectLabelDocument);
+  const [deleteLabel] = useMutation(DeleteProjectLabelDocument);
+  const [toggleLabel] = useMutation(ToggleTaskLabelDocument);
 
   const surface1 = "var(--color-surface-0)";
   const border = "var(--color-border-strong)";

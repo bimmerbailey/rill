@@ -1,19 +1,20 @@
 import { useState } from "react";
+import { useQuery, useMutation } from "@apollo/client/react";
 import {
-  useGetMyProfileQuery,
-  useUpdateUserInfoMutation,
-  useUpdateUserPasswordMutation,
-  useClearProfileAvatarMutation,
+  GetMyProfileDocument,
+  UpdateUserInfoDocument,
+  UpdateUserPasswordDocument,
+  ClearProfileAvatarDocument,
 } from "@/graphql/generated/graphql";
 import { uploadAvatar, AvatarUploadError } from "../utils/uploadAvatar";
 import { showSuccess, showError } from "@/utils/toast";
 import type { UserInfoFormData } from "../utils/validation";
 
 export function useProfile() {
-  const { data, loading, error, refetch } = useGetMyProfileQuery();
-  const [updateUserInfoMutation] = useUpdateUserInfoMutation();
-  const [updatePasswordMutation] = useUpdateUserPasswordMutation();
-  const [clearAvatarMutation] = useClearProfileAvatarMutation();
+  const { data, loading, error, refetch } = useQuery(GetMyProfileDocument);
+  const [updateUserInfoMutation] = useMutation(UpdateUserInfoDocument);
+  const [updatePasswordMutation] = useMutation(UpdateUserPasswordDocument);
+  const [clearAvatarMutation] = useMutation(ClearProfileAvatarDocument);
 
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isUpdatingInfo, setIsUpdatingInfo] = useState(false);

@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, ChevronRight, Search, Loader2 } from "lucide-react";
-import { useGetProjectsQuery } from "@/graphql/generated/graphql";
+import { useQuery } from "@apollo/client/react";
+import { GetProjectsDocument } from "@/graphql/generated/graphql";
 
 // Persistent collapsed-teams state (survives re-mounts, not page refreshes)
 const collapsedTeamsCache = new Set<string>();
@@ -25,7 +26,7 @@ export function ProjectFinder({ onClose }: ProjectFinderProps) {
   );
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { data, loading } = useGetProjectsQuery({
+  const { data, loading } = useQuery(GetProjectsDocument, {
     fetchPolicy: "cache-and-network",
   });
 
