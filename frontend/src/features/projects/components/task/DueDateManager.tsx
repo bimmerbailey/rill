@@ -29,8 +29,9 @@ export function DueDateManager({
   const [includeTime, setIncludeTime] = useState(initialHasTime);
   const [viewMonth, setViewMonth] = useState(initDate.startOf("month"));
 
-  // Position popup relative to anchor
-  const [pos, setPos] = useState({ top: 0, left: 0 });
+  // Position popup relative to anchor.
+  // Initialize to null so the popup stays hidden until coords are measured.
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
   useEffect(() => {
     if (anchorRef?.current) {
       const rect = anchorRef.current.getBoundingClientRect();
@@ -115,8 +116,9 @@ export function DueDateManager({
       ref={popupRef}
       style={{
         position: isFixed ? "fixed" : "absolute",
-        top: isFixed ? pos.top : "calc(100% + 6px)",
-        left: isFixed ? pos.left : 0,
+        top: isFixed ? (pos?.top ?? 0) : "calc(100% + 6px)",
+        left: isFixed ? (pos?.left ?? 0) : 0,
+        visibility: isFixed && pos === null ? "hidden" : "visible",
         zIndex: 200,
         width: "280px",
         background: surface1,
