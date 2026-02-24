@@ -803,9 +803,9 @@ export function ProjectBoardPage() {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full h-full flex flex-col">
       <div
-        className="mb-6 relative z-20"
+        className="mb-6 relative z-20 flex-shrink-0"
         style={{ animation: "d2dFadeUp 0.7s ease-out both" }}
       >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -864,8 +864,8 @@ export function ProjectBoardPage() {
         </div>
       </div>
 
-      <div className="flex gap-6 flex-col">
-        <div className="flex-1 min-w-0 overflow-x-auto">
+      <div className="flex-1 relative min-h-0">
+        <div className="absolute inset-0 overflow-x-auto overflow-y-auto">
           {taskGroups.length === 0 ? (
             <div
               className="p-6"
@@ -887,7 +887,7 @@ export function ProjectBoardPage() {
               </p>
             </div>
           ) : (
-            <div className="flex gap-4 pb-4">
+            <div className="flex gap-4 pb-4 h-full">
               {taskGroups.map((group, groupIndex) => {
                 const displayTasks = getFilteredAndSortedTasks(group.tasks);
                 const isTaskDragDisabled =
@@ -996,7 +996,7 @@ export function ProjectBoardPage() {
                       </div>
                     }
                   >
-                    <div className="space-y-2 flex-1 min-h-[100px] p-4">
+                    <div className="space-y-2 flex-1 min-h-0 p-4 overflow-y-auto">
                       {displayTasks.map((task) => (
                         <DraggableTask
                           key={task.id}
@@ -1053,7 +1053,7 @@ export function ProjectBoardPage() {
                       )}
                     </div>
 
-                    <div className="p-4 pt-0">
+                    <div className="p-4">
                       <CardComposer
                         onCreateCard={(name) =>
                           handleCreateTask(group.id, name)

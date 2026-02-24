@@ -14,7 +14,7 @@ export function DashboardLayout() {
 
   return (
     <div
-      className="min-h-screen flex flex-col"
+      className="h-screen flex flex-col overflow-hidden"
       style={{
         background: `linear-gradient(160deg, ${base} 0%, ${surface0} 50%, ${base} 100%)`,
         color: textPrimary,
@@ -52,7 +52,7 @@ export function DashboardLayout() {
       </div>
 
       <TopNavbar />
-      <main className="flex-1 p-6 relative z-10 overflow-x-hidden">
+      <main className="flex-1 p-6 relative z-10 overflow-x-hidden overflow-y-auto min-h-0">
         <Outlet />
       </main>
     </div>

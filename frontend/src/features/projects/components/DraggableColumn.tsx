@@ -104,7 +104,7 @@ export function DraggableColumn({
   return (
     <div
       ref={columnRef}
-      className="flex-shrink-0 w-[320px] flex flex-col relative"
+      className="flex-shrink-0 w-[320px] flex flex-col relative h-full"
       style={{
         background: isDraggedOver ? surface2 : surface1,
         border: `1px solid ${border}`,

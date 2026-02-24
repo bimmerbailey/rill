@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface CardComposerProps {
   /** Called with the new task name when the user confirms */
@@ -64,7 +64,6 @@ export function CardComposer({ onCreateCard }: CardComposerProps) {
 
   const surface2 = "var(--color-surface-2)";
   const surface3 = "var(--color-surface-3)";
-  const border = "var(--color-border)";
   const borderStrong = "var(--color-border-strong)";
   const textPrimary = "var(--color-text-primary)";
   const textSecondary = "var(--color-text-secondary)";
@@ -76,22 +75,22 @@ export function CardComposer({ onCreateCard }: CardComposerProps) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors"
+        className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg text-sm transition-colors"
         style={{
-          color: textTertiary,
+          color: textSecondary,
           fontFamily: fontBody,
-          border: `1px dashed ${border}`,
+          border: `1px dashed ${borderStrong}`,
           background: "transparent",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = surface2;
-          e.currentTarget.style.color = textSecondary;
+          e.currentTarget.style.color = textPrimary;
           e.currentTarget.style.borderColor = borderStrong;
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.background = "transparent";
-          e.currentTarget.style.color = textTertiary;
-          e.currentTarget.style.borderColor = border;
+          e.currentTarget.style.color = textSecondary;
+          e.currentTarget.style.borderColor = borderStrong;
         }}
       >
         <svg
