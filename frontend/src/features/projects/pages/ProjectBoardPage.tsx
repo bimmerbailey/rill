@@ -2,7 +2,7 @@ import { useMemo, useState, useCallback, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useMutation } from "@apollo/client/react";
 import { gql } from "@apollo/client";
-import { Button, TaskDetailModal } from "@/components/common";
+import { TaskDetailModal } from "@/components/common";
 import {
   CREATE_TASK,
   CREATE_TASK_GROUP,
@@ -24,7 +24,7 @@ import { LabelManagerModal } from "@/features/projects/components/labels";
 import { MemberManagementModal } from "@/features/projects/components/members";
 import { ProjectSettingsModal } from "@/features/projects/components/settings";
 import { BoardControls } from "@/features/projects/components/controls";
-import { CardComposer } from "@/features/projects/components/task";
+import { CardComposer, AddGroupForm } from "@/features/projects/components/task";
 import {
   type TaskFilters,
   type TaskSorting,
@@ -124,9 +124,6 @@ export function ProjectBoardPage() {
   const [showLabelsModal, setShowLabelsModal] = useState(false);
   const [showMembersModal, setShowMembersModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
-
-  const [newGroupName, setNewGroupName] = useState("");
-  const [groupError, setGroupError] = useState<string | null>(null);
 
   const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
   const [editingGroupName, setEditingGroupName] = useState("");
@@ -468,25 +465,15 @@ export function ProjectBoardPage() {
     return Math.max(...taskGroups.map((group) => group.position)) + 1;
   }, [taskGroups]);
 
-  const handleCreateGroup = async () => {
+  const handleCreateGroup = async (name: string) => {
     if (!projectUUID) return;
-    if (!newGroupName.trim()) {
-      setGroupError("Group name is required.");
-      return;
-    }
-    setGroupError(null);
-    try {
-      await createTaskGroup({
-        variables: {
-          projectID: projectUUID,
-          name: newGroupName.trim(),
-          position: nextGroupPosition,
-        },
-      });
-      setNewGroupName("");
-    } catch {
-      setGroupError("Unable to create group. Please try again.");
-    }
+    await createTaskGroup({
+      variables: {
+        projectID: projectUUID,
+        name,
+        position: nextGroupPosition,
+      },
+    });
   };
 
   const handleCreateTask = async (groupId: string, taskName: string) => {
@@ -847,6 +834,7 @@ export function ProjectBoardPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <AddGroupForm onCreate={handleCreateGroup} loading={creatingGroup} />
             <ProjectSettingsMenu
               onOpenLabels={() => setShowLabelsModal(true)}
               onOpenMembers={() => setShowMembersModal(true)}
@@ -1079,64 +1067,6 @@ export function ProjectBoardPage() {
           )}
         </div>
 
-        <div
-          className="mt-6 p-4"
-          style={{
-            background: surface1,
-            border: `1px solid ${border}`,
-            borderRadius: "20px",
-          }}
-        >
-          <div className="flex gap-3">
-            <input
-              type="text"
-              placeholder="New group name..."
-              value={newGroupName}
-              onChange={(e) => setNewGroupName(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleCreateGroup();
-              }}
-              className="flex-1 px-4 py-2 rounded-lg"
-              style={{
-                background: surface3,
-                border: `1px solid ${border}`,
-                color: textPrimary,
-                fontFamily: fontBody,
-              }}
-            />
-            <Button
-              onClick={handleCreateGroup}
-              disabled={creatingGroup}
-              style={{
-                background: terracotta,
-                color: surface0,
-                borderRadius: "8px",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: fontBody,
-                  fontWeight: 500,
-                }}
-              >
-                {creatingGroup ? "Adding..." : "Add Group"}
-              </span>
-            </Button>
-          </div>
-          {groupError && (
-            <span
-              style={{
-                fontFamily: fontBody,
-                fontSize: "0.8rem",
-                color: terracotta,
-                marginTop: "0.5rem",
-                display: "block",
-              }}
-            >
-              {groupError}
-            </span>
-          )}
-        </div>
       </div>
 
       <TaskDetailModal
