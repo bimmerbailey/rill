@@ -1,135 +1,80 @@
 <p align="center">
- <img width="450px" src="./.github/taskcafe-full.png" align="center" alt="Taskcafe logo" />
-</p>
-<p align="center">
-  <a href="https://discord.gg/JkQDruh">
-    <img alt="Discord" src="https://img.shields.io/discord/745396499613220955" />
-  </a>
-  <a href="https://github.com/JordanKnott/taskcafe/releases">
-    <img alt="Releases" src="https://img.shields.io/github/v/release/JordanKnott/taskcafe" />
-  </a>
-  <a href="https://hub.docker.com/repository/docker/taskcafe/taskcafe">
-    <img alt="Dockerhub" src="https://img.shields.io/docker/v/taskcafe/taskcafe?label=docker&sort=semver" />
-  </a>
-  <a href="https://goreportcard.com/report/github.com/JordanKnott/taskcafe">
-    <img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/JordanKnott/taskcafe" />
-  </a>
-  <a href="">
-    <img alt="Docker pulls" src="https://img.shields.io/docker/pulls/taskcafe/taskcafe" />
-  </a>
+  <img src="./.github/rill-banner.svg" alt="Rill" width="600" />
 </p>
 
-  <p align="center">
-    <a href="https://github.com/JordanKnott/taskcafe/issues/new?assignees=&labels=&template=bug_report.md&title=">Report Bug</a>
-    ·
-    <a href="https://github.com/JordanKnott/taskcafe/discussions/new?category=ideas">Request Feature</a>
-     ·
-    <a href="https://github.com/JordanKnott/taskcafe/discussions/new?category=q-a">Ask a Question</a>
-  </p>
 <p align="center">
-Was this project useful? Please consider <a href="https://www.buymeacoffee.com/jordanknott">donating</a> to help me improve it!
+  A personal project management tool with a Kanban board interface.<br/>
+  Forked from <a href="https://github.com/JordanKnott/taskcafe">Taskcafe</a> and rebuilt to fit my workflow.
 </p>
-<p align="center">
- This project is still in <strong>alpha development</strong></p>
 
-![Taskcafe](./.github/taskcafe_preview.png)
+> **rill** (noun): a small stream -- chosen for its reference to nature and the steady flow of work.
+
+**This project is in active development.**
 
 ## Features
 
-The following features have been implemented:
-
-- Manage tasks through a Kanban board interface (set due dates, labels, add checklists)
-- View all your current assigned tasks through the My Tasks view
+- Manage tasks through a Kanban board interface (due dates, labels, checklists)
+- View all current assigned tasks through the My Tasks view
 - Personal projects
 - Task comments and activity
 
-This project is still in active development, so some options may not be fully implemented yet.
+## Project Structure
 
-**For updates on development, join the [Discord server](https://discord.gg/JkQDruh).**
-
-For a list of planned features, check out the [Roadmap](https://github.com/JordanKnott/taskcafe/wiki/Roadmap)!
-
-## Installation
-
-### With docker & docker-compose
-
-You'll need both [docker](https://www.docker.com/) & [docker-compose](https://docs.docker.com/compose/install/) installed.
-
-First clone the repository:
-
-``` bash
-git clone https://github.com/JordanKnott/taskcafe && cd taskcafe
+```
+frontend/          # React 19 frontend (TypeScript, Vite, Bun, Apollo Client, Zustand)
+internal/          # Go backend services
+cmd/               # Go CLI entrypoints
+migrations/        # Database migrations (PostgreSQL)
 ```
 
-Now do the following:
+## Getting Started
 
-``` bash
-docker-compose -p taskcafe up -d
+### With Docker Compose
+
+Requires [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/).
+
+```bash
+git clone https://github.com/bimmerbailey/rill.git && cd rill
+docker compose up -d
 ```
 
-This will start a postgres instance as well as a taskcafe instance.
+This starts a PostgreSQL database, Redis, and the Rill backend + frontend services.
 
-The second command runs the database schema migrations.
-
-If you visit [http://localhost:3333](http://localhost:3333), you will get redirected to the installation
-screen so that you can create the first system user.
+Visit [http://localhost:5173](http://localhost:5173) for the frontend dev server,
+or [http://localhost:3333](http://localhost:3333) for the backend API.
 
 ### From Source
 
-You'll need [Golang](https://golang.org/dl/) installed on your machine.
+#### Backend
 
-Next, clone the repository:
+You'll need [Go](https://golang.org/dl/) installed. This project uses [Mage](https://magefile.org/) as its build tool.
 
-``` bash
-git clone https://github.com/JordanKnott/taskcafe && cd taskcafe
-```
-
-Next we need to build the binary. This project uses [Mage](https://magefile.org/) for its build tool.
-
-``` bash
+```bash
 go run cmd/mage/main.go install
 go run cmd/mage/main.go build
 ```
 
-This will:
+#### Frontend
 
-- Install all yarn packages for the frontend
-- Build the React frontend
-- Embed the React frontend in the binary
-- Compile the final exectuable binary
+You'll need [Bun](https://bun.sh/) installed.
 
-The newly created `taskcafe` binary can be found in the __dist__ folder.
+```bash
+cd frontend
+bun install
+bun run dev
+```
 
-It contains everything neccessary to run except the config file. An example config file can be found in `conf/app.example.toml`.
+## Development
 
-For more information on configuration, please read the [wiki](https://github.com/JordanKnott/taskcafe/wiki/Configuration).
-The config will need to be copied to a `conf/app.toml` in the same place the binary is.
-
-Make sure to fill out the database section of the config in order to connect it to your database.
-
-Then run the database migrations with `taskcafe migrate`.
-
-Now you can run the web interface by running `taskcafe web`.
-
-[A more detailed guide for installing on Ubuntu/Debian](https://github.com/JordanKnott/taskcafe/wiki/Installation-(ubuntu-debian))
-
-## How is this different from X (Trello, NextCloud, etc)?
-
-One of the primary goals of Taskcafe is to provide a project management tool that I personally enjoy using for my
-own projects and fits my workflow.
-
-During alpha development, the current plan is to build the "basic" features - features that are pretty much
-standard across all kanban boards / project management tools.
-
-Once Taskcafe is out of alpha, there are many features that I plan on adding that will differentiate it from other products (check out the [Roadmap](https://github.com/JordanKnott/taskcafe/wiki/Roadmap) for ideas on future plans).
-
-## Contributing & community
-
-If you have questions regarding how to use Taskcafe, check out the [discord server](https://discord.gg/JkQDruh).
-
-If you're interesting in contributing to Taskcafe, please read the [contribution guide first](https://github.com/JordanKnott/taskcafe/blob/master/CONTRIBUTING.md)!
-
-There is also a [Code of Conduct](https://github.com/JordanKnott/taskcafe/blob/master/CODE_OF_CONDUCT.md) as well.
+| Command                         | Description                   |
+|---------------------------------|-------------------------------|
+| `bun run dev`                   | Start frontend dev server     |
+| `bun run build`                 | Build frontend for production |
+| `bun run lint`                  | Run ESLint + Prettier check   |
+| `bun run format`                | Format with Prettier          |
+| `bun run codegen`               | Generate GraphQL types        |
+| `go run cmd/mage/main.go build` | Build Go backend              |
+| `go run cmd/mage/main.go test`  | Run backend tests             |
 
 ## License
 

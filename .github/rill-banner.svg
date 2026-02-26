@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 160" width="600" height="160">
+  <rect width="600" height="160" fill="#527659" rx="8" />
+
+  <!-- Wordmark -->
+  <text x="200" y="98" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+        font-size="72" font-weight="300" letter-spacing="6" fill="#FFFFFF">
+    Rill
+  </text>
+  <text x="202" y="124" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+        font-size="14" font-weight="400" letter-spacing="3" fill="#D3E2D6">
+    project management
+  </text>
+  
+  <path d="M200,132 Q350,125 500,132" fill="none" stroke="#8FA866" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+</svg>
