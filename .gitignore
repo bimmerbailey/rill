@@ -10,4 +10,6 @@ conf/taskcafe.toml
 # Air live-reload temporary files
 tmp/
 air.log
-.task.md
+
+# Internal docs
+docs/_*
