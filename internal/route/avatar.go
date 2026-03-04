@@ -16,7 +16,7 @@ import (
 )
 
 // ProfileImageUpload handles a user uploading a new avatar profile image
-func (h *TaskcafeHandler) ProfileImageUpload(w http.ResponseWriter, r *http.Request) {
+func (h *RillHandler) ProfileImageUpload(w http.ResponseWriter, r *http.Request) {
 	log.Info("preparing to upload file")
 	userID, ok := r.Context().Value(utils.UserIDKey).(uuid.UUID)
 	if !ok {

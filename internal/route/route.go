@@ -19,8 +19,8 @@ import (
 	"github.com/bimmerbailey/rill/internal/logger"
 )
 
-// TaskcafeHandler contains all the route handlers
-type TaskcafeHandler struct {
+// RillHandler contains all the route handlers
+type RillHandler struct {
 	repo      db.Repository
 	AppConfig config.AppConfig
 }
@@ -53,17 +53,17 @@ func NewRouter(dbConnection *sqlx.DB, redisClient *redis.Client, jobServer *mach
 	}))
 
 	repository := db.NewRepository(dbConnection)
-	taskcafeHandler := TaskcafeHandler{*repository, appConfig}
+	rillHandler := RillHandler{*repository, appConfig}
 
 	var imgServer = http.FileServer(http.Dir("./uploads/"))
 	r.Group(func(mux chi.Router) {
-		mux.Mount("/auth", authResource{}.Routes(taskcafeHandler))
+		mux.Mount("/auth", authResource{}.Routes(rillHandler))
 		mux.Handle("/__graphql", graph.NewPlaygroundHandler("/graphql"))
 		mux.Mount("/uploads/", http.StripPrefix("/uploads/", imgServer))
-		mux.Post("/auth/confirm", taskcafeHandler.ConfirmUser)
-		mux.Post("/auth/register", taskcafeHandler.RegisterUser)
-		mux.Get("/settings", taskcafeHandler.PublicSettings)
-		mux.Post("/logger", taskcafeHandler.HandleClientLog)
+		mux.Post("/auth/confirm", rillHandler.ConfirmUser)
+		mux.Post("/auth/register", rillHandler.RegisterUser)
+		mux.Get("/settings", rillHandler.PublicSettings)
+		mux.Post("/logger", rillHandler.HandleClientLog)
 	})
 	auth := AuthenticationMiddleware{*repository}
 	jobQueue := jobs.JobQueue{
@@ -73,7 +73,7 @@ func NewRouter(dbConnection *sqlx.DB, redisClient *redis.Client, jobServer *mach
 	}
 	r.Group(func(mux chi.Router) {
 		mux.Use(auth.Middleware)
-		mux.Post("/users/me/avatar", taskcafeHandler.ProfileImageUpload)
+		mux.Post("/users/me/avatar", rillHandler.ProfileImageUpload)
 		mux.Mount("/graphql", graph.NewHandler(*repository, appConfig, jobQueue, redisClient))
 	})
 

@@ -91,7 +91,7 @@ export function TopNavbar() {
               fontFamily: fontHeading,
             }}
           >
-            Taskcafe
+            Rill
           </Link>
         </div>
 

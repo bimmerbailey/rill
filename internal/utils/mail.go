@@ -17,9 +17,9 @@ type EmailInvite struct {
 func SendEmailInvite(cfg config.EmailConfig, invite EmailInvite) error {
 	h := hermes.Hermes{
 		Product: hermes.Product{
-			Name: "Taskscafe",
+			Name: "Rill",
 			Link: cfg.SiteURL,
-			Logo: "https://github.com/JordanKnott/taskcafe/raw/master/.github/taskcafe-full.png",
+			Logo: "https://github.com/bimmerbailey/rill/raw/master/.github/rill-full.png",
 		},
 	}
 
@@ -27,11 +27,11 @@ func SendEmailInvite(cfg config.EmailConfig, invite EmailInvite) error {
 		Body: hermes.Body{
 			Name: invite.FullName,
 			Intros: []string{
-				"You have been invited to join Taskcafe",
+				"You have been invited to join Rill",
 			},
 			Actions: []hermes.Action{
 				{
-					Instructions: "To get started with Taskcafe, please click here:",
+					Instructions: "To get started with Rill, please click here:",
 					Button: hermes.Button{
 						Color:     "#7367F0", // Optional action button color
 						TextColor: "#FFFFFF",
@@ -64,7 +64,7 @@ func SendEmailInvite(cfg config.EmailConfig, invite EmailInvite) error {
 	m.SetHeader("To", invite.To)
 
 	// Set E-Mail subject
-	m.SetHeader("Subject", "You have been invited to Taskcafe")
+	m.SetHeader("Subject", "You have been invited to Rill")
 
 	// Set E-Mail body. You can set plain text or html with text/html
 	m.SetBody("text/html", emailBody)

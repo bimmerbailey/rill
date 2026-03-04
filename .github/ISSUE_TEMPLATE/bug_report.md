@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help improve Taskcafe
+about: Create a report to help improve Rill
 title: ""
 labels: ""
 assignees: ""
@@ -18,13 +18,13 @@ If applicable, add screenshots to help explain your problem.
 **Additional context**
 Add any other context about the problem here.
 
-Please send the Taskcafe web service logs if applicable.
+Please send the Rill web service logs if applicable.
 
 <!--
 
 Please read the contributing guide before working on any new pull requests!
 
 If you would like to ask a question regarding a possible bug or feature request, please
-join the Taskcafe discord - https://discord.gg/JkQDruh
+join the Rill discord - https://discord.gg/JkQDruh
 
 -->

@@ -12,14 +12,14 @@ upload_dir_path = 'uploads'
 
 [database]
 host = 'postgres'
-name = 'taskcafe'
-user = 'taskcafe'
-password = 'taskcafe_test'
+name = 'rill'
+user = 'rill'
+password = 'rill_test'
 
 [smtp]
-username = 'taskcafe@example.com'
+username = 'rill@example.com'
 password = ''
-from = 'no-reply@taskcafe.com'
+from = 'no-reply@rill.dev'
 host = 'localhost'
 port = 11500
 skip_verify = false

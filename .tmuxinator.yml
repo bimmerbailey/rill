@@ -1,4 +1,4 @@
-name: taskcafe
+name: rill
 root: .
 
 windows:
@@ -6,12 +6,12 @@ windows:
       root: ./
       panes:
         - api:
-          - go run cmd/taskcafe/main.go web
+          - go run cmd/rill/main.go web
         - yarn:
           - cd frontend
           - yarn start
         - worker:
-          - go run cmd/taskcafe/main.go worker
+          - go run cmd/rill/main.go worker
   - web/editor:
       root: ./frontend
       panes:
@@ -19,8 +19,8 @@ windows:
   - api/editor:
       root: ./
       panes:
-        - vim cmd/taskcafe/main.go
+        - vim cmd/rill/main.go
   - database:
       root: ./
       panes:
-        - pgcli postgres://taskcafe:taskcafe_test@localhost:8855/taskcafe
+        - pgcli postgres://rill:rill_test@localhost:8855/rill

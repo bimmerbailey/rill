@@ -1,6 +1,6 @@
 * **Please check if the PR fulfills these requirements**
-- [ ] You have read the contribution guidelines [guidelines](https://github.com/JordanKnott/taskcafe/blob/master/CONTRIBUTING.md)
-- [ ] The commit message follows our [guidelines](https://github.com/JordanKnott/taskcafe/blob/master/CONTRIBUTING.md#git-commit-message-style)
+- [ ] You have read the contribution guidelines [guidelines](https://github.com/bimmerbailey/rill/blob/master/CONTRIBUTING.md)
+- [ ] The commit message follows our [guidelines](https://github.com/bimmerbailey/rill/blob/master/CONTRIBUTING.md#git-commit-message-style)
 - [ ] Docs have been added / updated (for bug fixes / features)
 
 

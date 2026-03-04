@@ -19,7 +19,7 @@ type ClientLogs struct {
 	Logs []ClientLog `json:"logs"`
 }
 
-func (h *TaskcafeHandler) HandleClientLog(w http.ResponseWriter, r *http.Request) {
+func (h *RillHandler) HandleClientLog(w http.ResponseWriter, r *http.Request) {
 	var clientLogs ClientLogs
 	err := json.NewDecoder(r.Body).Decode(&clientLogs)
 	if err != nil {

@@ -4,8 +4,8 @@ uploads/*
 !uploads/.keep
 internal/frontend/frontend_generated.go
 internal/migrations/migrations_generated.go
-taskcafe
-conf/taskcafe.toml
+rill
+conf/rill.toml
 
 # Air live-reload temporary files
 tmp/

@@ -1,16 +1,16 @@
 ## Contributing
 
-Thanks for wanting to contribute to Taskcafe!
+Thanks for wanting to contribute to Rill!
 
 ### Where do I go from here?
 
-So you want to contribute to Taskcafe? Great!
+So you want to contribute to Rill? Great!
 
-If you have noticed a bug, please [create an issue](https://github.com/JordanKnott/taskcafe/issues/new/choose) for it before starting any work on a pull request.
+If you have noticed a bug, please [create an issue](https://github.com/bimmerbailey/rill/issues/new/choose) for it before starting any work on a pull request.
 
-If there is a [new feature you'd like added](https://github.com/JordanKnott/taskcafe/discussions/new?category=ideas) or [have a question](https://github.com/JordanKnott/taskcafe/discussions/new?category=q-a), please visit the [discussions section](https://github.com/JordanKnott/taskcafe/discussions)
+If there is a [new feature you'd like added](https://github.com/bimmerbailey/rill/discussions/new?category=ideas) or [have a question](https://github.com/bimmerbailey/rill/discussions/new?category=q-a), please visit the [discussions section](https://github.com/bimmerbailey/rill/discussions)
 
-Alternatively you can join the [Taskcafe discord](https://discord.gg/JkQDruh) and ask in the #questions channel.
+Alternatively you can join the [Rill discord](https://discord.gg/JkQDruh) and ask in the #questions channel.
 
 After the bug is validated or the feature is accepted by a project maintainer, the next step is to fork the repository!
 

@@ -53,7 +53,7 @@ func newWorkerCmd() *cobra.Command {
 			}
 			jobs.RegisterTasks(server, repo, appConfig, redisClient)
 
-			worker := server.NewWorker("taskcafe_worker", 10)
+			worker := server.NewWorker("rill_worker", 10)
 			log.Info("starting task queue worker")
 			err = worker.Launch()
 			if err != nil {

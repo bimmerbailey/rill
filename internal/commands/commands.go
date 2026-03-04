@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-const mainDescription = `Taskcafé is an open soure project management
+const mainDescription = `Rill is an open soure project management
 system written in Golang & React.`
 
 func VersionTemplate() string {
@@ -24,7 +24,7 @@ Built: %s`, info.Version, info.CommitHash, info.BuildDate+"\n")
 var cfgFile string
 
 var rootCmd = &cobra.Command{
-	Use:     "taskcafe",
+	Use:     "rill",
 	Long:    mainDescription,
 	Version: VersionTemplate(),
 }
@@ -46,11 +46,11 @@ func initConfig() {
 		// Search config in home directory with name ".cobra" (without extension).
 		viper.AddConfigPath("./conf")
 		viper.AddConfigPath(".")
-		viper.AddConfigPath("/etc/taskcafe")
-		viper.SetConfigName("taskcafe")
+		viper.AddConfigPath("/etc/rill")
+		viper.SetConfigName("rill")
 	}
 
-	viper.SetEnvPrefix("TASKCAFE")
+	viper.SetEnvPrefix("RILL")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
 	config.InitDefaults()
@@ -68,6 +68,14 @@ func initConfig() {
 // Execute the root cobra command
 func Execute() {
 	rootCmd.SetVersionTemplate(VersionTemplate())
-	rootCmd.AddCommand(newJobCmd(), newTokenCmd(), newWebCmd(), newMigrateCmd(), newWorkerCmd(), newResetPasswordCmd(), newSeedCmd())
+	rootCmd.AddCommand(
+		newJobCmd(),
+		newTokenCmd(),
+		newWebCmd(),
+		newMigrateCmd(),
+		newWorkerCmd(),
+		newResetPasswordCmd(),
+		newSeedCmd(),
+	)
 	rootCmd.Execute()
 }

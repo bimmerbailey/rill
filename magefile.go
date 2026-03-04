@@ -6,7 +6,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"regexp"
@@ -24,7 +24,7 @@ const (
 
 var semverRegex = regexp.MustCompile(`^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$`)
 
-var ldflags = "-X $PACKAGE/internal/utils.commitHash=$COMMIT_HASH -X $PACKAGE/internal/utils.buildDate=$BUILD_DATE -X $PACKAGE/internal/utils.version=$VERSION"
+var ldflags = "-s -w -X $PACKAGE/internal/utils.commitHash=$COMMIT_HASH -X $PACKAGE/internal/utils.buildDate=$BUILD_DATE -X $PACKAGE/internal/utils.version=$VERSION"
 
 func runWith(env map[string]string, cmd string, inArgs ...interface{}) error {
 	s := argsToStrings(inArgs...)
@@ -43,26 +43,26 @@ type Frontend mg.Namespace
 
 // Install the npm dependencies for the React frontend
 func (Frontend) Install() error {
-	return sh.RunV("bun", "run", "--cwd", "frontend_v2", "install")
+	return sh.RunV("bun", "run", "--cwd", "frontend", "install")
 }
 
 // Lint runs eslint on the frontend source
 func (Frontend) Lint() error {
-	return sh.RunV("bun", "run", "--cwd", "frontend_v2", "lint")
+	return sh.RunV("bun", "run", "--cwd", "frontend", "lint")
 }
 
 // Format runs prettier formatting
 func (Frontend) Format() error {
-	return sh.RunV("bun", "run", "--cwd", "frontend_v2", "format")
+	return sh.RunV("bun", "run", "--cwd", "frontend", "format")
 }
 
 // Build the React frontend
 func (Frontend) Build() error {
-	return sh.RunV("bun", "run", "--cwd", "frontend_v2", "build")
+	return sh.RunV("bun", "run", "--cwd", "frontend", "build")
 }
 
 func (Frontend) Dev() error {
-	return sh.RunV("bun", "run", "--cwd", "frontend_v2", "dev")
+	return sh.RunV("bun", "run", "--cwd", "frontend", "dev")
 }
 
 // Backend is the namespace for all commands that interact with the backend
@@ -86,31 +86,44 @@ func (Backend) GenMigrations() error {
 }
 
 func flagEnv() map[string]string {
-	hash, err := sh.Output("git", "rev-parse", "--short", "HEAD")
-	if err != nil {
-		fmt.Println("[ignore] fatal: no tag matches")
-	}
-	tag, err := sh.Output("git", "describe", "--exact-match", "--tags")
-	if err != nil {
+	hash, _ := sh.Output("git", "rev-parse", "--short", "HEAD")
+	tag, _ := sh.Output("bash", "-c", "git describe --tags 2>/dev/null")
+	if tag == "" {
 		tag = "nightly"
 	}
+
+	// Allow environment variables to override git-derived values.
+	// This is used during Docker builds where build args are passed as env vars.
+	if v := os.Getenv("VERSION"); v != "" {
+		tag = v
+	}
+	if v := os.Getenv("COMMIT_HASH"); v != "" {
+		hash = v
+	}
+	buildDate := time.Now().Format("2006-01-02T15:04:05Z0700")
+	if v := os.Getenv("BUILD_DATE"); v != "" {
+		buildDate = v
+	}
+
 	return map[string]string{
 		"PACKAGE":     packageName,
 		"COMMIT_HASH": hash,
-		"BUILD_DATE":  time.Now().Format("2006-01-02T15:04:05Z0700"),
+		"BUILD_DATE":  buildDate,
 		"VERSION":     tag,
 	}
 }
 
 // Build the Go api service
 func (Backend) Build() error {
-	fmt.Println("compiling binary dist/taskcafe")
-	return runWith(flagEnv(), "go", "build", "-ldflags", ldflags, "-tags", "prod", "-o", "dist/taskcafe", "cmd/taskcafe/main.go")
+	fmt.Println("compiling binary dist/rill")
+	env := flagEnv()
+	env["CGO_ENABLED"] = "0"
+	return runWith(env, "go", "build", "-trimpath", "-ldflags", ldflags, "-tags", "prod", "-o", "dist/rill", "./cmd/rill/")
 }
 
 // Schema merges GraphQL schema files into single schema & runs gqlgen
 func (Backend) Schema() error {
-	folders, err := ioutil.ReadDir("internal/graph/schema/")
+	folders, err := os.ReadDir("internal/graph/schema/")
 	if err != nil {
 		panic(err)
 	}
@@ -120,7 +133,7 @@ func (Backend) Schema() error {
 		}
 		var schema strings.Builder
 		filename := "internal/graph/schema/" + folder.Name()
-		files, err := ioutil.ReadDir(filename)
+		files, err := os.ReadDir(filename)
 		if err != nil {
 			panic(err)
 		}
@@ -129,13 +142,13 @@ func (Backend) Schema() error {
 			if err != nil {
 				panic(err)
 			}
-			content, err := ioutil.ReadAll(f)
+			content, err := io.ReadAll(f)
 			if err != nil {
 				panic(err)
 			}
 			fmt.Fprintln(&schema, string(content))
 		}
-		err = ioutil.WriteFile("internal/graph/schema/"+folder.Name()+".gql", []byte(schema.String()), os.FileMode(0644))
+		err = os.WriteFile("internal/graph/schema/"+folder.Name()+".gql", []byte(schema.String()), os.FileMode(0644))
 	}
 	if err != nil {
 		panic(err)
@@ -145,7 +158,7 @@ func (Backend) Schema() error {
 
 // Test run golang unit tests
 func (Backend) Test() error {
-	fmt.Println("running taskcafe backend unit tests")
+	fmt.Println("running rill backend unit tests")
 	return sh.RunV("go", "test", "./...")
 }
 
@@ -159,48 +172,101 @@ func Build() {
 	mg.SerialDeps(Backend.GenMigrations, Backend.Build)
 }
 
-// Release tags, builds, and upload a new release docker image
-func Release() error {
-	// mg.SerialDeps(Frontend.Eslint, Frontend.Tsc, Backend.Test)
-	version, ok := os.LookupEnv("TASKCAFE_RELEASE_VERSION")
-	if !ok {
-		return errors.New("TASKCAFE_RELEASE_VERSION must be set")
-	}
-	if !semverRegex.MatchString(version) {
-		return errors.New("TASKCAFE_RELEASE_VERSION must be a valid SemVer")
-	}
-	fmt.Println("Preparing " + version + " release...")
+const (
+	backendImage  = "ghcr.io/bimmerbailey/rill"
+	frontendImage = "ghcr.io/bimmerbailey/rill-frontend"
+	platforms     = "linux/amd64,linux/arm64"
+)
 
-	err := sh.RunV("git", "tag", version, "-m", "v"+version)
-	if err != nil {
-		return err
+// buildxPush builds a multi-platform Docker image and pushes it to the registry.
+func buildxPush(image, version, target, context string, extraBuildArgs []string) error {
+	args := []string{
+		"buildx", "build",
+		"--platform", platforms,
 	}
-	err = sh.RunV("git", "push", "origin", version)
-	if err != nil {
-		return err
+	if target != "" {
+		args = append(args, "--target", target)
 	}
-	err = sh.RunV("docker", "build", ".", "-t", "taskcafe/taskcafe:latest", "-t", "taskcafe/taskcafe:"+version)
-	if err != nil {
-		return err
-	}
-	err = sh.RunV("docker", "push", "taskcafe/taskcafe:latest")
-	if err != nil {
-		return err
-	}
-	err = sh.RunV("docker", "push", "taskcafe/taskcafe:"+version)
-	if err != nil {
-		return err
-	}
-	fmt.Println("Released version " + version)
-	return nil
+	args = append(args, extraBuildArgs...)
+	args = append(args,
+		"-t", image+":"+version,
+		"-t", image+":latest",
+		"--push",
+		context,
+	)
+	return sh.RunV("docker", args...)
 }
 
-// Latest is namespace for commands interacting with docker test setups
-type Latest mg.Namespace
+// Release validates, tags, builds multi-platform Docker images, and pushes them.
+//
+// Requires RILL_RELEASE_VERSION to be set to a valid SemVer string (e.g. "1.2.3").
+//
+// Two images are built and pushed:
+//   - ghcr.io/bimmerbailey/rill          (backend + worker, from ./Dockerfile)
+//   - ghcr.io/bimmerbailey/rill-frontend (frontend, from ./frontend/Dockerfile)
+//
+// The release process:
+//  1. Runs backend tests and frontend lint as pre-flight checks
+//  2. Validates the version is valid SemVer
+//  3. Creates a git tag (vX.Y.Z) and pushes it
+//  4. Builds multi-platform Docker images with version info embedded
+//  5. Pushes images tagged as both the version and "latest"
+func Release() error {
+	// --- Pre-flight validation ---
+	mg.SerialDeps(Frontend.Lint, Backend.Test)
 
-// Up starts the docker-compose file using the `latest` taskcafe image
-func (Latest) Up() error {
-	return sh.RunV("docker-compose", "-p", "taskcafe-latest", "-f", "testing/docker-compose.latest.yml", "up")
+	version, ok := os.LookupEnv("RILL_RELEASE_VERSION")
+	if !ok || strings.TrimSpace(version) == "" {
+		return errors.New("RILL_RELEASE_VERSION must be set (e.g. RILL_RELEASE_VERSION=1.0.0)")
+	}
+	if !semverRegex.MatchString(version) {
+		return fmt.Errorf("RILL_RELEASE_VERSION=%q is not valid SemVer", version)
+	}
+	fmt.Println("Preparing release v" + version + "...")
+
+	// --- Git tag ---
+	tag := "v" + version
+	err := sh.RunV("git", "tag", "-a", tag, "-m", "Release "+tag)
+	if err != nil {
+		return fmt.Errorf("creating git tag %s: %w", tag, err)
+	}
+	err = sh.RunV("git", "push", "origin", tag)
+	if err != nil {
+		return fmt.Errorf("pushing git tag %s: %w", tag, err)
+	}
+
+	// --- Build args for version embedding (backend only) ---
+	env := flagEnv()
+	env["VERSION"] = version // override with release version
+
+	backendBuildArgs := []string{
+		"--build-arg", "VERSION=" + env["VERSION"],
+		"--build-arg", "COMMIT_HASH=" + env["COMMIT_HASH"],
+		"--build-arg", "BUILD_DATE=" + env["BUILD_DATE"],
+	}
+
+	// --- Ensure buildx builder exists ---
+	_ = sh.RunV("docker", "buildx", "create", "--name", "rill-builder", "--use")
+	_ = sh.RunV("docker", "buildx", "use", "rill-builder")
+
+	// --- Build & push backend image (backend + worker) ---
+	fmt.Println("Building backend image...")
+	err = buildxPush(backendImage, version, "production", ".", backendBuildArgs)
+	if err != nil {
+		return fmt.Errorf("building backend image: %w", err)
+	}
+
+	// --- Build & push frontend image ---
+	fmt.Println("Building frontend image...")
+	err = buildxPush(frontendImage, version, "release", "./frontend", nil)
+	if err != nil {
+		return fmt.Errorf("building frontend image: %w", err)
+	}
+
+	fmt.Printf("Released v%s (%s)\n", version, platforms)
+	fmt.Printf("  %s:%s\n", backendImage, version)
+	fmt.Printf("  %s:%s\n", frontendImage, version)
+	return nil
 }
 
 // Dev is namespace for commands interacting with docker test setups
@@ -208,19 +274,12 @@ type Dev mg.Namespace
 
 // Up starts the docker-compose file using the current files
 func (Dev) Up() error {
-	return sh.RunV("docker-compose", "-p", "taskcafe-dev", "-f", "testing/docker-compose.dev.yml", "up")
+	return sh.RunV("docker-compose", "-p", "rill-dev", "-f", "testing/docker-compose.dev.yml", "up")
 }
 
 // Watch starts Air for hot-reloading the web server (local development)
 func (Dev) Watch() error {
 	return sh.RunV("go", "tool", "air", "-c", ".air.toml")
-}
-
-// DockerWatch starts the backend-dev service with Air in Docker
-func (Dev) DockerWatch() error {
-	fmt.Println("Starting Docker development environment with Air hot-reload...")
-	fmt.Println("Backend will be available at http://localhost:3334")
-	return sh.RunV("docker-compose", "-p", "taskcafe-dev", "up", "backend-dev", "postgres", "redis")
 }
 
 // Docker is namespace for commands interacting with docker
@@ -233,7 +292,7 @@ func (Docker) Up() error {
 
 // Migrate runs the migration command for the docker-compose network
 func (Docker) Migrate() error {
-	return sh.RunV("docker-compose", "-p", "taskcafe", "-f", "docker-compose.yml", "-f", "docker-compose.migrate.yml", "run", "--rm", "migrate")
+	return sh.RunV("docker", "compose", "backend", "run", "--rm", "migrate")
 }
 
 func argsToStrings(v ...interface{}) []string {

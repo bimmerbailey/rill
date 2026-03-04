@@ -44,7 +44,7 @@ type ConfirmUserRequestData struct {
 	ConfirmToken string
 }
 
-// InstallRequestData is the request data for installing new Taskcafe app
+// InstallRequestData is the request data for installing new Rill app
 type InstallRequestData struct {
 	User NewUserAccount
 }
@@ -81,7 +81,7 @@ type AvatarUploadResponseData struct {
 }
 
 // LogoutHandler removes all refresh tokens to log out user
-func (h *TaskcafeHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
+func (h *RillHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	c, err := r.Cookie("authToken")
 	if err != nil {
 		if err == http.ErrNoCookie {
@@ -101,7 +101,7 @@ func (h *TaskcafeHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) 
 }
 
 // LoginHandler creates a new refresh & access token for the user if given the correct credentials
-func (h *TaskcafeHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
+func (h *RillHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var requestData LoginRequestData
 	err := json.NewDecoder(r.Body).Decode(&requestData)
 	if err != nil {
@@ -155,7 +155,7 @@ func (h *TaskcafeHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(LoginResponseData{Complete: true, UserID: authToken.UserID.String()})
 }
 
-func (h *TaskcafeHandler) ConfirmUser(w http.ResponseWriter, r *http.Request) {
+func (h *RillHandler) ConfirmUser(w http.ResponseWriter, r *http.Request) {
 	usersExist, err := h.repo.HasActiveUser(r.Context())
 	if err != nil {
 		log.WithError(err).Error("issue checking if user accounts exist")
@@ -257,7 +257,7 @@ func (h *TaskcafeHandler) ConfirmUser(w http.ResponseWriter, r *http.Request) {
 	})
 	json.NewEncoder(w).Encode(LoginResponseData{Complete: true, UserID: authToken.UserID.String()})
 }
-func (h *TaskcafeHandler) ValidateAuthTokenHandler(w http.ResponseWriter, r *http.Request) {
+func (h *RillHandler) ValidateAuthTokenHandler(w http.ResponseWriter, r *http.Request) {
 	c, err := r.Cookie("authToken")
 	if err != nil {
 		if err == http.ErrNoCookie {
@@ -277,7 +277,7 @@ func (h *TaskcafeHandler) ValidateAuthTokenHandler(w http.ResponseWriter, r *htt
 	}
 }
 
-func (h *TaskcafeHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
+func (h *RillHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 	userExists, err := h.repo.HasAnyUser(r.Context())
 	if err != nil {
 		log.WithError(err).Error("issue checking if user accounts exist")
@@ -343,10 +343,10 @@ func (h *TaskcafeHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // Routes registers all authentication routes
-func (rs authResource) Routes(taskcafeHandler TaskcafeHandler) chi.Router {
+func (rs authResource) Routes(rillHandler RillHandler) chi.Router {
 	r := chi.NewRouter()
-	r.Post("/login", taskcafeHandler.LoginHandler)
-	r.Post("/logout", taskcafeHandler.LogoutHandler)
-	r.Post("/validate", taskcafeHandler.ValidateAuthTokenHandler)
+	r.Post("/login", rillHandler.LoginHandler)
+	r.Post("/logout", rillHandler.LogoutHandler)
+	r.Post("/validate", rillHandler.ValidateAuthTokenHandler)
 	return r
 }

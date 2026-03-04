@@ -1,9 +1,8 @@
 .git
 dist
 uploads
-frontend/node_modules
 internal/frontend/frontend_generated.go
 internal/migrations/migrations_generated.go
-taskcafe
-conf/taskcafe.toml
+rill
+conf/rill.toml
 frontend/node_modules/

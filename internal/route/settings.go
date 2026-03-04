@@ -12,7 +12,7 @@ type PublicSettingsResponse struct {
 	AllowPublicRegistration bool `json:"allowPublicRegistration"`
 }
 
-func (h *TaskcafeHandler) PublicSettings(w http.ResponseWriter, r *http.Request) {
+func (h *RillHandler) PublicSettings(w http.ResponseWriter, r *http.Request) {
 	userExists, err := h.repo.HasAnyUser(r.Context())
 	if err != nil {
 		log.WithError(err).Error("issue checking if user accounts exist")

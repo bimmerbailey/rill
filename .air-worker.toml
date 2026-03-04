@@ -7,16 +7,16 @@ tmp_dir = "tmp-worker"
 
 [build]
 # Build command - compile the Go binary
-cmd = "go build -o ./tmp-worker/taskcafe cmd/taskcafe/main.go"
+cmd = "go build -o ./tmp-worker/rill cmd/rill/main.go"
 
 # Binary file path (legacy field for backward compatibility)
-bin = "./tmp-worker/taskcafe"
+bin = "./tmp-worker/rill"
 
 # Full command to run the binary with arguments
-full_bin = "./tmp-worker/taskcafe worker"
+full_bin = "./tmp-worker/rill worker"
 
 # Entrypoint - how to run the compiled binary (newer field, may not work in all versions)
-# entrypoint = ["./tmp-worker/taskcafe", "worker"]
+# entrypoint = ["./tmp-worker/rill", "worker"]
 
 # Watch these filename extensions
 include_ext = ["go"]

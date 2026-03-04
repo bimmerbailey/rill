@@ -25,9 +25,9 @@ services:
       redis:
         condition: service_started
     environment:
-      TASKCAFE_DATABASE_HOST: postgres
-      TASKCAFE_MIGRATE: "true"
-      TASKCAFE_MESSAGE_QUEUE: redis:6379
+      RILL_DATABASE_HOST: postgres
+      RILL_MIGRATE: "true"
+      RILL_MESSAGE_QUEUE: redis:6379
     volumes:
       # Mount source code for hot-reload
       - ./cmd:/app/cmd
@@ -52,14 +52,14 @@ services:
       redis:
         condition: service_started
     environment:
-      TASKCAFE_DATABASE_HOST: postgres
-      TASKCAFE_DATABASE_NAME: taskcafe
-      TASKCAFE_DATABASE_USER: taskcafe
-      TASKCAFE_DATABASE_PASSWORD: taskcafe_test
-      TASKCAFE_JOB_BROKER: "redis://redis:6379"
-      TASKCAFE_JOB_STORE: "redis://redis:6379"
-      TASKCAFE_JOB_ENABLED: "true"
-      TASKCAFE_MESSAGE_QUEUE: "redis:6379"
+      RILL_DATABASE_HOST: postgres
+      RILL_DATABASE_NAME: rill
+      RILL_DATABASE_USER: rill
+      RILL_DATABASE_PASSWORD: rill_test
+      RILL_JOB_BROKER: "redis://redis:6379"
+      RILL_JOB_STORE: "redis://redis:6379"
+      RILL_JOB_ENABLED: "true"
+      RILL_MESSAGE_QUEUE: "redis:6379"
     volumes:
       # Mount source code for hot-reload
       - ./cmd:/app/cmd
@@ -82,14 +82,14 @@ services:
   postgres:
     image: postgres:18.1-alpine3.21
     environment:
-      POSTGRES_USER: taskcafe
-      POSTGRES_PASSWORD: taskcafe_test
-      POSTGRES_DB: taskcafe
+      POSTGRES_USER: rill
+      POSTGRES_PASSWORD: rill_test
+      POSTGRES_DB: rill
       PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U taskcafe -d taskcafe" ]
+      test: [ "CMD-SHELL", "pg_isready -U rill -d rill" ]
       interval: 5s
       timeout: 5s
       retries: 5
