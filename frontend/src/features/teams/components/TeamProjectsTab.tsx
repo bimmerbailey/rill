@@ -18,10 +18,12 @@ export function TeamProjectsTab() {
   const [projectName, setProjectName] = useState("");
   const [projectError, setProjectError] = useState<string | null>(null);
 
-  const [createProject, { loading: creatingProject }] =
-    useMutation(LegacyCreateProjectDocument, {
+  const [createProject, { loading: creatingProject }] = useMutation(
+    LegacyCreateProjectDocument,
+    {
       refetchQueries: ["getTeam"],
-    });
+    },
+  );
 
   // Dark palette
   const surface1 = "var(--color-surface-1)";

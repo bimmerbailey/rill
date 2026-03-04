@@ -15,12 +15,15 @@ interface UseTaskCommentsReturn {
 }
 
 export function useTaskComments(): UseTaskCommentsReturn {
-  const [createMutation, { loading: creating }] =
-    useMutation(CreateTaskCommentDocument);
-  const [updateMutation, { loading: updating }] =
-    useMutation(UpdateTaskCommentDocument);
-  const [deleteMutation, { loading: deleting }] =
-    useMutation(DeleteTaskCommentDocument);
+  const [createMutation, { loading: creating }] = useMutation(
+    CreateTaskCommentDocument,
+  );
+  const [updateMutation, { loading: updating }] = useMutation(
+    UpdateTaskCommentDocument,
+  );
+  const [deleteMutation, { loading: deleting }] = useMutation(
+    DeleteTaskCommentDocument,
+  );
 
   const createComment = useCallback(
     async (taskID: string, message: string) => {

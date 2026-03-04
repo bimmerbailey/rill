@@ -37,21 +37,19 @@ export function useNotifications(
   const [hasNextPage, setHasNextPage] = useState(false);
   const [cursor, setCursor] = useState<string | null>(null);
 
-  const { loading, data: notificationsData, refetch: refetchList } = useQuery(NotificationsDocument, {
+  const { loading, refetch: refetchList } = useQuery(NotificationsDocument, {
     variables: { limit: PAGE_SIZE, filter },
     fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      setNotifications(data.notified.notified as NotificationEntry[]);
+      setHasNextPage(data.notified.pageInfo.hasNextPage);
+      setCursor(data.notified.pageInfo.endCursor ?? null);
+    },
   });
 
-  useEffect(() => {
-    if (notificationsData) {
-      setNotifications(notificationsData.notified.notified as NotificationEntry[]);
-      setHasNextPage(notificationsData.notified.pageInfo.hasNextPage);
-      setCursor(notificationsData.notified.pageInfo.endCursor ?? null);
-    }
-  }, [notificationsData]);
-
-  const { data: unreadData, refetch: refetchUnread } =
-    useQuery(HasUnreadNotificationsDocument);
+  const { data: unreadData, refetch: refetchUnread } = useQuery(
+    HasUnreadNotificationsDocument,
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {

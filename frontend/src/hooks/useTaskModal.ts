@@ -92,28 +92,37 @@ export function useTaskModal(): UseTaskModalReturn {
     skip: !taskId || !isOpen,
   });
 
-  const [updateNameMutation, { loading: updatingName }] =
-    useMutation(UpdateTaskNameDocument);
+  const [updateNameMutation, { loading: updatingName }] = useMutation(
+    UpdateTaskNameDocument,
+  );
   const [updateDescriptionMutation, { loading: updatingDescription }] =
     useMutation(UpdateTaskDescriptionDocument);
-  const [setCompleteMutation, { loading: updatingComplete }] =
-    useMutation(SetTaskCompleteDocument);
-  const [toggleWatchMutation, { loading: updatingWatch }] =
-    useMutation(ToggleTaskWatchDocument);
+  const [setCompleteMutation, { loading: updatingComplete }] = useMutation(
+    SetTaskCompleteDocument,
+  );
+  const [toggleWatchMutation, { loading: updatingWatch }] = useMutation(
+    ToggleTaskWatchDocument,
+  );
 
-  const [createCommentMutation, { loading: creatingComment }] =
-    useMutation(CreateTaskCommentDocument);
-  const [updateCommentMutation, { loading: updatingComment }] =
-    useMutation(UpdateTaskCommentDocument);
-  const [deleteCommentMutation, { loading: deletingComment }] =
-    useMutation(DeleteTaskCommentDocument);
+  const [createCommentMutation, { loading: creatingComment }] = useMutation(
+    CreateTaskCommentDocument,
+  );
+  const [updateCommentMutation, { loading: updatingComment }] = useMutation(
+    UpdateTaskCommentDocument,
+  );
+  const [deleteCommentMutation, { loading: deletingComment }] = useMutation(
+    DeleteTaskCommentDocument,
+  );
 
-  const [createChecklistMutation, { loading: creatingChecklist }] =
-    useMutation(CreateTaskChecklistDocument);
-  const [deleteChecklistMutation, { loading: deletingChecklist }] =
-    useMutation(DeleteTaskChecklistDocument);
-  const [renameChecklistMutation, { loading: renamingChecklist }] =
-    useMutation(UpdateTaskChecklistNameDocument);
+  const [createChecklistMutation, { loading: creatingChecklist }] = useMutation(
+    CreateTaskChecklistDocument,
+  );
+  const [deleteChecklistMutation, { loading: deletingChecklist }] = useMutation(
+    DeleteTaskChecklistDocument,
+  );
+  const [renameChecklistMutation, { loading: renamingChecklist }] = useMutation(
+    UpdateTaskChecklistNameDocument,
+  );
   const [createChecklistItemMutation, { loading: creatingChecklistItem }] =
     useMutation(CreateTaskChecklistItemDocument);
   const [deleteChecklistItemMutation, { loading: deletingChecklistItem }] =
@@ -123,25 +132,31 @@ export function useTaskModal(): UseTaskModalReturn {
   const [renameChecklistItemMutation, { loading: renamingChecklistItem }] =
     useMutation(UpdateTaskChecklistItemNameDocument);
 
-  const [toggleLabelMutation, { loading: togglingLabel }] =
-    useMutation(ToggleTaskLabelDocument);
-  const [assignMutation, { loading: assigning }] = useMutation(AssignTaskDocument);
+  const [toggleLabelMutation, { loading: togglingLabel }] = useMutation(
+    ToggleTaskLabelDocument,
+  );
+  const [assignMutation, { loading: assigning }] =
+    useMutation(AssignTaskDocument);
   const [unassignMutation, { loading: unassigning }] =
     useMutation(UnassignTaskDocument);
 
-  const [updateDueDateMutation, { loading: updatingDueDate }] =
-    useMutation(UpdateTaskDueDateDocument);
+  const [updateDueDateMutation, { loading: updatingDueDate }] = useMutation(
+    UpdateTaskDueDateDocument,
+  );
   const [createNotificationMutation, { loading: creatingNotification }] =
     useMutation(CreateDueDateNotificationsDocument);
   const [deleteNotificationMutation, { loading: deletingNotification }] =
     useMutation(DeleteDueDateNotificationsDocument);
 
-  const [createLabelMutation, { loading: creatingLabel }] =
-    useMutation(CreateProjectLabelDocument);
-  const [updateLabelMutation, { loading: updatingLabel }] =
-    useMutation(UpdateProjectLabelDocument);
-  const [deleteLabelMutation, { loading: deletingLabel }] =
-    useMutation(DeleteProjectLabelDocument);
+  const [createLabelMutation, { loading: creatingLabel }] = useMutation(
+    CreateProjectLabelDocument,
+  );
+  const [updateLabelMutation, { loading: updatingLabel }] = useMutation(
+    UpdateProjectLabelDocument,
+  );
+  const [deleteLabelMutation, { loading: deletingLabel }] = useMutation(
+    DeleteProjectLabelDocument,
+  );
 
   const openModal = useCallback((id: string) => {
     setTaskId(id);
@@ -338,11 +353,10 @@ export function useTaskModal(): UseTaskModalReturn {
                 ...prev,
                 findTask: {
                   ...prev.findTask,
-                  checklists: prev.findTask.checklists?.map(
-                    (c) =>
-                      c.id === checklistID
-                        ? { ...c, items: [...c.items, newItem] }
-                        : c,
+                  checklists: prev.findTask.checklists?.map((c) =>
+                    c.id === checklistID
+                      ? { ...c, items: [...c.items, newItem] }
+                      : c,
                   ),
                 },
               };
@@ -374,16 +388,13 @@ export function useTaskModal(): UseTaskModalReturn {
                 ...prev,
                 findTask: {
                   ...prev.findTask,
-                  checklists: prev.findTask.checklists?.map(
-                    (c) =>
-                      c.id === taskChecklistID
-                        ? {
-                            ...c,
-                            items: c.items.filter(
-                              (i) => i.id !== itemID,
-                            ),
-                          }
-                        : c,
+                  checklists: prev.findTask.checklists?.map((c) =>
+                    c.id === taskChecklistID
+                      ? {
+                          ...c,
+                          items: c.items.filter((i) => i.id !== itemID),
+                        }
+                      : c,
                   ),
                 },
               };

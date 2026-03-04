@@ -27,12 +27,15 @@ interface UseTaskDueDateReturn {
 }
 
 export function useTaskDueDate(): UseTaskDueDateReturn {
-  const [updateMutation, { loading: updating }] =
-    useMutation(UpdateTaskDueDateDocument);
-  const [createNotificationsMutation, { loading: creating }] =
-    useMutation(CreateDueDateNotificationsDocument);
-  const [deleteNotificationsMutation, { loading: deleting }] =
-    useMutation(DeleteDueDateNotificationsDocument);
+  const [updateMutation, { loading: updating }] = useMutation(
+    UpdateTaskDueDateDocument,
+  );
+  const [createNotificationsMutation, { loading: creating }] = useMutation(
+    CreateDueDateNotificationsDocument,
+  );
+  const [deleteNotificationsMutation, { loading: deleting }] = useMutation(
+    DeleteDueDateNotificationsDocument,
+  );
 
   const updateDueDate = useCallback(
     async (taskID: string, dueDate: string | null, hasTime: boolean) => {

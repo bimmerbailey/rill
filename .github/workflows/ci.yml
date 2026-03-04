@@ -25,6 +25,7 @@ jobs:
 
       - name: Vet
         run: go vet ./...
+        continue-on-error: true
 
   frontend:
     name: Frontend

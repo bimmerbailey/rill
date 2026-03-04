@@ -31,20 +31,27 @@ interface UseTaskChecklistsReturn {
 }
 
 export function useTaskChecklists(): UseTaskChecklistsReturn {
-  const [createChecklistMutation, { loading: creatingChecklist }] =
-    useMutation(CreateTaskChecklistDocument);
-  const [deleteChecklistMutation, { loading: deletingChecklist }] =
-    useMutation(DeleteTaskChecklistDocument);
-  const [renameChecklistMutation, { loading: renamingChecklist }] =
-    useMutation(UpdateTaskChecklistNameDocument);
-  const [createItemMutation, { loading: creatingItem }] =
-    useMutation(CreateTaskChecklistItemDocument);
-  const [toggleItemMutation, { loading: togglingItem }] =
-    useMutation(SetTaskChecklistItemCompleteDocument);
-  const [deleteItemMutation, { loading: deletingItem }] =
-    useMutation(DeleteTaskChecklistItemDocument);
-  const [renameItemMutation, { loading: renamingItem }] =
-    useMutation(UpdateTaskChecklistItemNameDocument);
+  const [createChecklistMutation, { loading: creatingChecklist }] = useMutation(
+    CreateTaskChecklistDocument,
+  );
+  const [deleteChecklistMutation, { loading: deletingChecklist }] = useMutation(
+    DeleteTaskChecklistDocument,
+  );
+  const [renameChecklistMutation, { loading: renamingChecklist }] = useMutation(
+    UpdateTaskChecklistNameDocument,
+  );
+  const [createItemMutation, { loading: creatingItem }] = useMutation(
+    CreateTaskChecklistItemDocument,
+  );
+  const [toggleItemMutation, { loading: togglingItem }] = useMutation(
+    SetTaskChecklistItemCompleteDocument,
+  );
+  const [deleteItemMutation, { loading: deletingItem }] = useMutation(
+    DeleteTaskChecklistItemDocument,
+  );
+  const [renameItemMutation, { loading: renamingItem }] = useMutation(
+    UpdateTaskChecklistItemNameDocument,
+  );
 
   const createChecklist = useCallback(
     async (taskID: string, name: string, position: number) => {
@@ -129,17 +136,15 @@ export function useTaskChecklists(): UseTaskChecklistsReturn {
               ...prev,
               findTask: {
                 ...prev.findTask,
-                checklists: prev.findTask.checklists?.map(
-                  (checklist) => {
-                    if (checklist.id === checklistID) {
-                      return {
-                        ...checklist,
-                        items: [...checklist.items, newItem],
-                      };
-                    }
-                    return checklist;
-                  },
-                ),
+                checklists: prev.findTask.checklists?.map((checklist) => {
+                  if (checklist.id === checklistID) {
+                    return {
+                      ...checklist,
+                      items: [...checklist.items, newItem],
+                    };
+                  }
+                  return checklist;
+                }),
               },
             };
           });
@@ -169,19 +174,17 @@ export function useTaskChecklists(): UseTaskChecklistsReturn {
               ...prev,
               findTask: {
                 ...prev.findTask,
-                checklists: prev.findTask.checklists?.map(
-                  (checklist) => {
-                    if (checklist.id === taskChecklistID) {
-                      return {
-                        ...checklist,
-                        items: checklist.items.filter(
-                          (item) => item.id !== itemID,
-                        ),
-                      };
-                    }
-                    return checklist;
-                  },
-                ),
+                checklists: prev.findTask.checklists?.map((checklist) => {
+                  if (checklist.id === taskChecklistID) {
+                    return {
+                      ...checklist,
+                      items: checklist.items.filter(
+                        (item) => item.id !== itemID,
+                      ),
+                    };
+                  }
+                  return checklist;
+                }),
               },
             };
           });

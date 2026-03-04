@@ -243,9 +243,7 @@ export function TaskDueDate({
                     {getDurationLabel(notification.duration)} before
                   </span>
                   <button
-                    onClick={() =>
-                      handleDeleteNotification(notification.id)
-                    }
+                    onClick={() => handleDeleteNotification(notification.id)}
                     disabled={isSubmitting}
                     className="p-1 rounded hover:bg-[color-mix(in srgb, var(--color-text-primary) 10%, transparent)]"
                     style={{ color: theme.textSecondary }}

@@ -47,13 +47,18 @@ export function ProjectsPage() {
 
   const tileColors = [terracotta, sage, slate, ochre];
 
-  const [createTeam, { loading: creatingTeam }] = useMutation(CreateTeamDocument, {
-    refetchQueries: [{ query: GetProjectsDocument }],
-  });
-  const [createProject, { loading: creatingProject }] =
-    useMutation(CreateProjectDocument, {
+  const [createTeam, { loading: creatingTeam }] = useMutation(
+    CreateTeamDocument,
+    {
       refetchQueries: [{ query: GetProjectsDocument }],
-    });
+    },
+  );
+  const [createProject, { loading: creatingProject }] = useMutation(
+    CreateProjectDocument,
+    {
+      refetchQueries: [{ query: GetProjectsDocument }],
+    },
+  );
 
   const teamOptions = useMemo(
     () => [{ id: "no-team", name: "No team" }, ...teams],

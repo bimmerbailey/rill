@@ -24,7 +24,10 @@ import { LabelManagerModal } from "@/features/projects/components/labels";
 import { MemberManagementModal } from "@/features/projects/components/members";
 import { ProjectSettingsModal } from "@/features/projects/components/settings";
 import { BoardControls } from "@/features/projects/components/controls";
-import { CardComposer, AddGroupForm } from "@/features/projects/components/task";
+import {
+  CardComposer,
+  AddGroupForm,
+} from "@/features/projects/components/task";
 import {
   type TaskFilters,
   type TaskSorting,
@@ -251,7 +254,9 @@ export function ProjectBoardPage() {
     ? [{ query: GET_PROJECT_BOARD, variables: { projectID: projectUUID } }]
     : [];
 
-  const [assignTask] = useMutation(AssignTaskDocument, { refetchQueries: refetchBoard });
+  const [assignTask] = useMutation(AssignTaskDocument, {
+    refetchQueries: refetchBoard,
+  });
   const [unassignTask] = useMutation(UnassignTaskDocument, {
     refetchQueries: refetchBoard,
   });
@@ -386,7 +391,10 @@ export function ProjectBoardPage() {
     },
   });
 
-  const [updateTaskGroupLocation] = useMutation(UpdateTaskGroupLocationDocument, {});
+  const [updateTaskGroupLocation] = useMutation(
+    UpdateTaskGroupLocationDocument,
+    {},
+  );
 
   const handleTaskMove = useCallback(
     (variables: {
@@ -834,7 +842,10 @@ export function ProjectBoardPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <AddGroupForm onCreate={handleCreateGroup} loading={creatingGroup} />
+            <AddGroupForm
+              onCreate={handleCreateGroup}
+              loading={creatingGroup}
+            />
             <ProjectSettingsMenu
               onOpenLabels={() => setShowLabelsModal(true)}
               onOpenMembers={() => setShowMembersModal(true)}
@@ -1066,7 +1077,6 @@ export function ProjectBoardPage() {
             </div>
           )}
         </div>
-
       </div>
 
       <TaskDetailModal

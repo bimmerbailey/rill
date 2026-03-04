@@ -19,7 +19,9 @@ export function NotificationBell({
 
   // pollInterval is broken in Apollo Client v4.x — use setInterval + refetch instead
   useEffect(() => {
-    const id = setInterval(() => { refetch(); }, pollInterval);
+    const id = setInterval(() => {
+      refetch();
+    }, pollInterval);
     return () => clearInterval(id);
   }, [refetch, pollInterval]);
 

@@ -5,14 +5,13 @@ Open-source project management tool with Kanban board interface. Built with Go b
 ## Project Structure
 
 ```
-frontend_v2/          # React 19 frontend (active development)
-frontend/             # Legacy frontend (deprecated)
+frontend/             # React 19 frontend
 internal/             # Go backend services
 cmd/                  # Go CLI entrypoints
 migrations/           # Database migrations
 ```
 
-## Frontend V2 (`frontend_v2/`)
+## Frontend (`frontend/`)
 
 **Stack:** React 19, TypeScript, Vite, Bun, Apollo Client, Zustand, styled-components
 
@@ -46,6 +45,6 @@ go run cmd/mage/main.go test     # Run tests
 ```
 
 ## For detailed guides, see:
-- State management patterns: @frontend_v2/docs/state-management.md
-- Architecture patterns: @frontend_v2/docs/architecture.md
-- Styling guidelines: @frontend_v2/docs/styling.md
+- State management patterns: @frontend/docs/state-management.md
+- Architecture patterns: @frontend/docs/architecture.md
+- Styling guidelines: @frontend/docs/styling.md

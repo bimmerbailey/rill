@@ -12,7 +12,8 @@ interface UseTaskAssigneesReturn {
 }
 
 export function useTaskAssignees(): UseTaskAssigneesReturn {
-  const [assignMutation, { loading: assigning }] = useMutation(AssignTaskDocument);
+  const [assignMutation, { loading: assigning }] =
+    useMutation(AssignTaskDocument);
   const [unassignMutation, { loading: unassigning }] =
     useMutation(UnassignTaskDocument);
 

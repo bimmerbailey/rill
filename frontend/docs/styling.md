@@ -2,13 +2,13 @@
 
 ## Global Style Files
 
-Global styles live in `frontend_v2/src/styles/` and are imported from `frontend_v2/src/styles/global.css`:
+Global styles live in `frontend/src/styles/` and are imported from `frontend/src/styles/global.css`:
 
-- `frontend_v2/src/styles/fonts.css` (Google Fonts: DM Sans, Libre Baskerville, JetBrains Mono)
-- `frontend_v2/src/styles/normalize.css` (CSS reset)
-- `frontend_v2/src/styles/base.css` (base element styles, focus, scrollbar)
-- `frontend_v2/src/styles/global.css` (CSS variables + Tailwind theme tokens)
-- `frontend_v2/src/styles/theme.ts` (TypeScript theme tokens for JS usage)
+- `frontend/src/styles/fonts.css` (Google Fonts: DM Sans, Libre Baskerville, JetBrains Mono)
+- `frontend/src/styles/normalize.css` (CSS reset)
+- `frontend/src/styles/base.css` (base element styles, focus, scrollbar)
+- `frontend/src/styles/global.css` (CSS variables + Tailwind theme tokens)
+- `frontend/src/styles/theme.ts` (TypeScript theme tokens for JS usage)
 
 ## Theme Colors
 

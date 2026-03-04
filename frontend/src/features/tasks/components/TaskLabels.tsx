@@ -62,7 +62,7 @@ export function TaskLabels({
     setEditingLabel(null);
   };
 
-  const { anchorRef, popupRef, pos, isOpen, toggle, close } =
+  const { anchorRef, popupRef, pos, isOpen, toggle } =
     useFixedPopup<HTMLButtonElement>(resetState);
 
   const isLabelActive = (projectLabelId: string): boolean => {

@@ -97,10 +97,7 @@ export function TaskAssignees({
                   fullName={user.fullName}
                   size="xs"
                 />
-                <span
-                  className="text-sm"
-                  style={{ color: theme.textPrimary }}
-                >
+                <span className="text-sm" style={{ color: theme.textPrimary }}>
                   {user.fullName}
                 </span>
                 <button

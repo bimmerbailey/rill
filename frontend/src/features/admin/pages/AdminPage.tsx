@@ -179,11 +179,16 @@ export function AdminPage() {
   const slate = "var(--color-slate)";
 
   // GraphQL operations
-  const { data, loading, error, refetch } = useQuery<GetUsersQueryResult>(GET_USERS);
+  const { data, loading, error, refetch } =
+    useQuery<GetUsersQueryResult>(GET_USERS);
 
-  const [createUser, { loading: creatingUser }] = useMutation(CREATE_USER_ACCOUNT);
-  const [deleteUser, { loading: deletingUser }] = useMutation(DELETE_USER_ACCOUNT);
-  const [deleteInvitedUser, { loading: deletingInvitedUser }] = useMutation(DELETE_INVITED_USER_ACCOUNT);
+  const [createUser, { loading: creatingUser }] =
+    useMutation(CREATE_USER_ACCOUNT);
+  const [deleteUser, { loading: deletingUser }] =
+    useMutation(DELETE_USER_ACCOUNT);
+  const [deleteInvitedUser, { loading: deletingInvitedUser }] = useMutation(
+    DELETE_INVITED_USER_ACCOUNT,
+  );
 
   const users: User[] = data?.users || [];
   const invitedUsers: InvitedUser[] = data?.invitedUsers || [];
@@ -225,7 +230,9 @@ export function AdminPage() {
       setFormErrors({});
       refetch();
     } catch (err) {
-      setFormErrors({ email: err instanceof Error ? err.message : "An error occurred" });
+      setFormErrors({
+        email: err instanceof Error ? err.message : "An error occurred",
+      });
     }
   };
 
