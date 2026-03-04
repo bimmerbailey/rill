@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo, useReducer } from "react";
 import { useQuery, useMutation, useSubscription } from "@apollo/client/react";
 import {
   NotificationsDocument,
@@ -29,23 +29,111 @@ export interface NotificationEntry {
   };
 }
 
+/**
+ * Overlay state tracks local modifications on top of Apollo query data.
+ * This avoids syncing query data into state via useEffect (which triggers
+ * the react-hooks/set-state-in-effect rule). Instead, useMemo merges the
+ * query base with these deltas.
+ */
+interface OverlayState {
+  /** Entries prepended by subscriptions (newest first). */
+  prepended: NotificationEntry[];
+  /** Entries appended by fetchMore. */
+  appended: NotificationEntry[];
+  /** Per-entry read-state overrides from toggle mutations. */
+  readOverrides: Map<string, { read: boolean; readAt: string | null }>;
+  /** When true, all entries are marked read locally. */
+  allRead: boolean;
+}
+
+type OverlayAction =
+  | { type: "prepend"; entry: NotificationEntry }
+  | { type: "append"; entries: NotificationEntry[] }
+  | { type: "update_read"; id: string; read: boolean; readAt: string | null }
+  | { type: "mark_all_read" }
+  | { type: "reset" };
+
+const initialOverlay: OverlayState = {
+  prepended: [],
+  appended: [],
+  readOverrides: new Map(),
+  allRead: false,
+};
+
+function overlayReducer(
+  state: OverlayState,
+  action: OverlayAction,
+): OverlayState {
+  switch (action.type) {
+    case "prepend":
+      return { ...state, prepended: [action.entry, ...state.prepended] };
+    case "append":
+      return { ...state, appended: [...state.appended, ...action.entries] };
+    case "update_read": {
+      const next = new Map(state.readOverrides);
+      next.set(action.id, { read: action.read, readAt: action.readAt });
+      return { ...state, readOverrides: next };
+    }
+    case "mark_all_read":
+      return { ...state, allRead: true };
+    case "reset":
+      return initialOverlay;
+  }
+}
+
 export function useNotifications(
   initialFilter: NotificationFilter = NotificationFilter.Unread,
 ) {
   const [filter, setFilter] = useState<NotificationFilter>(initialFilter);
-  const [notifications, setNotifications] = useState<NotificationEntry[]>([]);
-  const [hasNextPage, setHasNextPage] = useState(false);
-  const [cursor, setCursor] = useState<string | null>(null);
+  const [paginationState, setPaginationState] = useState<{
+    hasNextPage: boolean;
+    cursor: string | null;
+  }>({ hasNextPage: false, cursor: null });
+  const [overlay, dispatch] = useReducer(overlayReducer, initialOverlay);
 
-  const { loading, refetch: refetchList } = useQuery(NotificationsDocument, {
+  const {
+    loading,
+    data: notificationsData,
+    refetch: refetchList,
+  } = useQuery(NotificationsDocument, {
     variables: { limit: PAGE_SIZE, filter },
     fetchPolicy: "network-only",
-    onCompleted: (data) => {
-      setNotifications(data.notified.notified as NotificationEntry[]);
-      setHasNextPage(data.notified.pageInfo.hasNextPage);
-      setCursor(data.notified.pageInfo.endCursor ?? null);
-    },
   });
+
+  // Derive the final notifications list by merging query data with local overlay.
+  // No useEffect needed — this recomputes whenever query data or overlay changes.
+  const notifications = useMemo(() => {
+    const base = (notificationsData?.notified.notified ??
+      []) as NotificationEntry[];
+
+    // Apply read overrides and allRead to a single entry.
+    const applyReadState = (entry: NotificationEntry): NotificationEntry => {
+      const override = overlay.readOverrides.get(entry.id);
+      if (override) {
+        return { ...entry, read: override.read, readAt: override.readAt };
+      }
+      if (overlay.allRead) {
+        return { ...entry, read: true };
+      }
+      return entry;
+    };
+
+    return [
+      ...overlay.prepended.map(applyReadState),
+      ...base.map(applyReadState),
+      ...overlay.appended.map(applyReadState),
+    ];
+  }, [notificationsData, overlay]);
+
+  // Derive pagination from query data, overridden by fetchMore updates.
+  const hasNextPage =
+    paginationState.cursor !== null
+      ? paginationState.hasNextPage
+      : (notificationsData?.notified.pageInfo.hasNextPage ?? false);
+  const cursor =
+    paginationState.cursor ??
+    notificationsData?.notified.pageInfo.endCursor ??
+    null;
 
   const { data: unreadData, refetch: refetchUnread } = useQuery(
     HasUnreadNotificationsDocument,
@@ -62,10 +150,10 @@ export function useNotifications(
     onData: ({ data }) => {
       const newNotification = data.data?.notificationAdded;
       if (newNotification) {
-        setNotifications((prev) => [
-          newNotification as NotificationEntry,
-          ...prev,
-        ]);
+        dispatch({
+          type: "prepend",
+          entry: newNotification as NotificationEntry,
+        });
         refetchUnread();
       }
     },
@@ -84,20 +172,21 @@ export function useNotifications(
     });
 
     if (data) {
-      setNotifications((prev) => [
-        ...prev,
-        ...(data.notified.notified as NotificationEntry[]),
-      ]);
-      setHasNextPage(data.notified.pageInfo.hasNextPage);
-      setCursor(data.notified.pageInfo.endCursor ?? null);
+      dispatch({
+        type: "append",
+        entries: data.notified.notified as NotificationEntry[],
+      });
+      setPaginationState({
+        hasNextPage: data.notified.pageInfo.hasNextPage,
+        cursor: data.notified.pageInfo.endCursor ?? null,
+      });
     }
   }, [hasNextPage, cursor, filter, refetchList]);
 
   const changeFilter = useCallback((newFilter: NotificationFilter) => {
     setFilter(newFilter);
-    setNotifications([]);
-    setCursor(null);
-    setHasNextPage(false);
+    dispatch({ type: "reset" });
+    setPaginationState({ hasNextPage: false, cursor: null });
   }, []);
 
   const toggleRead = useCallback(
@@ -113,17 +202,12 @@ export function useNotifications(
         },
       });
       if (result.data) {
-        setNotifications((prev) =>
-          prev.map((n) =>
-            n.id === result.data!.notificationToggleRead.id
-              ? {
-                  ...n,
-                  read: result.data!.notificationToggleRead.read,
-                  readAt: result.data!.notificationToggleRead.readAt,
-                }
-              : n,
-          ),
-        );
+        dispatch({
+          type: "update_read",
+          id: result.data.notificationToggleRead.id,
+          read: result.data.notificationToggleRead.read,
+          readAt: result.data.notificationToggleRead.readAt ?? null,
+        });
         refetchUnread();
       }
     },
@@ -132,7 +216,7 @@ export function useNotifications(
 
   const markAllRead = useCallback(async () => {
     await markAllReadMutation();
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    dispatch({ type: "mark_all_read" });
     refetchUnread();
   }, [markAllReadMutation, refetchUnread]);
 
