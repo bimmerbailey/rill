@@ -15,7 +15,7 @@ Global styles live in `frontend/src/styles/` and are imported from `frontend/src
 Dark theme palette "Soft Canvas — Evening" (CSS variables):
 
 | Variable               | Value                  | Usage                |
-| ---------------------- | ---------------------- | -------------------- |
+|------------------------|------------------------|----------------------|
 | --color-surface-base   | #141211                | Deep background      |
 | --color-surface-0      | #1c1917                | Canvas background    |
 | --color-surface-1      | #231f1c                | Primary background   |
@@ -41,6 +41,7 @@ Dark theme palette "Soft Canvas — Evening" (CSS variables):
 
 Prefer CSS variables for colors and fonts instead of hardcoded hex/rgba.
 
-## styled-components
+## Tailwind CSS
 
-Used for component styling. See existing components for patterns.
+Tailwind CSS v4 (via `@tailwindcss/vite`) for component styling; `polished` for color
+manipulation in TypeScript. Do not use styled-components — it is not installed.

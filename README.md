@@ -21,8 +21,8 @@
 ## Project Structure
 
 ```
-frontend/          # React 19 frontend (TypeScript, Vite, Bun, Apollo Client, Zustand)
-internal/          # Go backend services
+frontend/          # React 19 frontend (TypeScript, Vite, Bun, Apollo Client, Zustand, Tailwind CSS)
+internal/          # Go backend services (GraphQL via gqlgen, chi router, sqlc data layer)
 cmd/               # Go CLI entrypoints
 migrations/        # Database migrations (PostgreSQL)
 ```
@@ -38,7 +38,8 @@ git clone https://github.com/bimmerbailey/rill.git && cd rill
 docker compose up -d
 ```
 
-This starts a PostgreSQL database, Redis, and the Rill backend + frontend services.
+This starts PostgreSQL, Redis, the Rill backend (with migrations applied automatically), a background job worker, and
+the frontend dev server.
 
 Visit [http://localhost:5173](http://localhost:5173) for the frontend dev server,
 or [http://localhost:3333](http://localhost:3333) for the backend API.
@@ -47,12 +48,16 @@ or [http://localhost:3333](http://localhost:3333) for the backend API.
 
 #### Backend
 
-You'll need [Go](https://golang.org/dl/) installed. This project uses [Mage](https://magefile.org/) as its build tool.
+You'll need [Go](https://golang.org/dl/) 1.25+ installed, plus running PostgreSQL and Redis instances.
+This project uses [Mage](https://magefile.org/) as its build tool.
 
 ```bash
-go run cmd/mage/main.go install
 go run cmd/mage/main.go build
+./dist/rill web --migrate
 ```
+
+Configuration comes from `conf/rill.toml` (see `conf/rill.example.toml`) or `RILL_`-prefixed
+environment variables. The API listens on port 3333; the GraphQL playground is at `/__graphql`.
 
 #### Frontend
 
@@ -66,15 +71,17 @@ bun run dev
 
 ## Development
 
-| Command                         | Description                   |
-|---------------------------------|-------------------------------|
-| `bun run dev`                   | Start frontend dev server     |
-| `bun run build`                 | Build frontend for production |
-| `bun run lint`                  | Run ESLint + Prettier check   |
-| `bun run format`                | Format with Prettier          |
-| `bun run codegen`               | Generate GraphQL types        |
-| `go run cmd/mage/main.go build` | Build Go backend              |
-| `go run cmd/mage/main.go test`  | Run backend tests             |
+| Command                                  | Description                     |
+|------------------------------------------|---------------------------------|
+| `bun run dev`                            | Start frontend dev server       |
+| `bun run build`                          | Build frontend for production   |
+| `bun run lint`                           | Run ESLint + Prettier check     |
+| `bun run format`                         | Format with Prettier            |
+| `bun run codegen`                        | Generate frontend GraphQL types |
+| `go run cmd/mage/main.go build`          | Build Go backend                |
+| `go run cmd/mage/main.go backend:test`   | Run backend tests               |
+| `go run cmd/mage/main.go backend:schema` | Regenerate gqlgen code          |
+| `sqlc generate`                          | Regenerate DB layer from SQL    |
 
 ## License
 
